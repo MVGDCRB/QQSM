@@ -29,48 +29,40 @@ class State(rx.State):
 
     opcionCorrecta: int = -1
 
-    numAcertadas: int = 0
+    numRonda: int = 1
 
-    def toggle_page(self):
+    def toggle_page(self): # Provisional, para decidir si se muestra la pagina de inicio o la de preguntas
         self.show_page_one = not self.show_page_one
 
-    def seleccionarPreguntaAleatoria(self):
-        self.textoPregunta, self.textoOpciones, self.opcionCorrecta = random.choice(self.quiz_questions)
+    def seleccionarPregunta(self): #Coge la pregunta que toque
+        self.textoPregunta, self.textoOpciones, self.opcionCorrecta = self.quiz_questions[self.numRonda-1]
 
-    def verificar_respuesta(self, seleccion: int):
+    def verificar_respuesta(self, seleccion: int): #Vuelve al principio si se ha fallado o sigue con la siguiente
         if seleccion == self.opcionCorrecta:
             print("✅ Respuesta correcta")
-            self.numAcertadas = self.numAcertadas + 1
-            rx.toast(
-                "✅ Respuesta correcta",
-                description="Cargando nueva pregunta...",
-                duration=1500,  # Se muestra por 1.5 segundos
-            )
-            if self.numAcertadas == self.totalPreguntas:
-                self.numAcertadas = 0
+            self.numRonda = self.numRonda + 1
+           
+            if self.numRonda == self.totalPreguntas:
+                self.numRonda = 1
                 self.toggle_page()
             else:
-                self.seleccionarPreguntaAleatoria()  # ✅ Nueva pregunta después del toast
+                self.seleccionarPregunta()  
         else:
             print("❌ Respuesta incorrecta")
-            rx.toast(
-                "❌ Respuesta incorrecta",
-                description="Regresando a la página anterior...",
-                duration=1500,
-            )
-            self.toggle_page()  # ✅ Cambia de página después del toast
+            self.toggle_page() 
+            self.numRonda = 1
 
 
-def index() -> rx.Component:
+def index() -> rx.Component: #Pagina principal, en este caso muestra la uno o la dos según un booleano
     return rx.cond(State.show_page_one, page_one(), page_two())
 
-def page_one():
+def page_one(): #Pagina de inicio
     return rx.center(
         rx.vstack(
             rx.text("Bienvenido a QQSM", font_size="2em"),
             rx.button("Comenzar", on_click=[
                 State.toggle_page,
-                State.seleccionarPreguntaAleatoria
+                State.seleccionarPregunta
             ]
                 
                 )
@@ -78,26 +70,26 @@ def page_one():
         )
     )
 
-def page_two():
+def page_two():#Pagina con la pregunta y opciones
     return rx.center(
         rx.vstack(
             rx.text(State.textoPregunta, font_size="2em"),
             rx.hstack(
                 *[
                     rx.button(
-                        State.tituloOpciones[i] + " " + State.textoOpciones[i],  # Texto del botón
+                        State.tituloOpciones[i] + " " + State.textoOpciones[i],
                         width="150px",
                         height="80px",
                         border="1px solid black",
                         padding="10px",
                         margin="5px",
                         align="center",
-                        on_click=lambda i=i: State.verificar_respuesta(i),  # Llama a una función con el índice
+                        on_click=lambda i=i: State.verificar_respuesta(i),
                     )
                     for i in range(4)
                 ]
             ),
-            rx.text(f"Aciertos: {State.numAcertadas} / {State.totalPreguntas}", font_size="1.5em", color="blue"),  # ✅ Mostramos el contador          
+            rx.text(f"Ronda: {State.numRonda} / {State.totalPreguntas}", font_size="1.5em", color="blue"),     
         )
     )
 
