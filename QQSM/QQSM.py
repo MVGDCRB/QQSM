@@ -15,6 +15,16 @@ class State(rx.State):
     ("¿Quién escribió 'Don Quijote de la Mancha'?", ["Cervantes", "Lorca", "Quevedo", "Góngora"], 0),
     ("¿Cuál es el resultado de 5 + 7?", ["10", "11", "12", "13"], 2),
     ("¿Qué gas respiramos principalmente?", ["Oxígeno", "Nitrógeno", "Dióxido de carbono", "Helio"], 0),
+    ("¿En qué continente se encuentra Egipto?", ["Asia", "África", "Europa", "América"], 1),
+    ("¿Cuántos lados tiene un hexágono?", ["4", "5", "6", "7"], 2),
+    ("¿Qué país tiene la mayor población del mundo?", ["India", "Estados Unidos", "China", "Brasil"], 2),
+    ("¿Quién pintó la Mona Lisa?", ["Van Gogh", "Picasso", "Da Vinci", "Rembrandt"], 2),
+    ("¿Cuál es el metal más abundante en la corteza terrestre?", ["Hierro", "Aluminio", "Cobre", "Plata"], 1),
+    ("¿En qué año llegó el hombre a la Luna?", ["1965", "1969", "1972", "1980"], 1),
+    ("¿Cómo se llama el proceso por el cual las plantas producen oxígeno?", ["Respiración", "Fotosíntesis", "Fermentación", "Digestión"], 1),
+    ("¿Qué instrumento mide la presión atmosférica?", ["Termómetro", "Barómetro", "Higrómetro", "Altímetro"], 1),
+    ("¿Cuál es el país más grande del mundo por superficie?", ["Canadá", "Estados Unidos", "Rusia", "China"], 2),
+    ("¿Qué escritor creó el personaje de Sherlock Holmes?", ["Agatha Christie", "J.K. Rowling", "Arthur Conan Doyle", "Edgar Allan Poe"], 2),
 ]
 
     totalPreguntas = len(quiz_questions)
