@@ -5,7 +5,7 @@ import random
 from QQSM.db import init_db, SessionLocal
 
 
-# Inicializa la base de datos y crea las tablas antes de ejecutar Reflex
+# Inicializa la base de datos y crea las tablas antes de ejecutar Reflex  
 init_db()
 
 class State(rx.State):
