@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from QQSM.models import Base
 
 
-# URL de conexión a PostgreSQL (reemplaza con los datos correctos)
+# URL de conexión a PostgreSQL 
 DATABASE_URL = "postgresql://postgres:5555@localhost:5432/qqsm_db"
 
 # Configuración de la base de datos

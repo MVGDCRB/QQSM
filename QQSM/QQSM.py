@@ -62,9 +62,9 @@ class State(rx.State):
 
     def handle_register(self):
         """Función de registro del usuario"""
-        db = SessionLocal()
+        db = SessionLocal() #guardo la sesionLocal en una variable
         try:
-            create_user(self.username, self.password, db)  # se pasa db
+            create_user(self.username, self.password, db)  # se pasa db junto al usuario y contraseña hasheada
             print("✅ Usuario registrado con éxito")
         except Exception as e:
             print(f"❌ Error al registrar usuario: {e}")
@@ -81,10 +81,10 @@ class State(rx.State):
 
 
 def index() -> rx.Component:
-    return rx.cond(State.is_authenticated, game_page(), login_page())
+    return rx.cond(State.is_authenticated, game_page(), login_page()) #si esta registrado te manda al index sino al login
 
 
-def login_page():
+def login_page(): #TODO cambiar el login en login y registro por separado
     return rx.center(
         rx.vstack(
             rx.text("Iniciar sesión o registrarse", font_size="2em"),
