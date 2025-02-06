@@ -1,86 +1,115 @@
-"""Welcome to Reflex! This file outlines the steps to create a basic app."""
-
 import reflex as rx
-
 from rxconfig import config
-
+from QQSM.auth import create_user, login_user
 import random
+from QQSM.db import init_db, SessionLocal
 
+
+# Inicializa la base de datos y crea las tablas antes de ejecutar Reflex
+init_db()
 
 class State(rx.State):
-    
     quiz_questions = [
-    ("¿Cuál es la capital de Francia?", ["Madrid", "Berlín", "París", "Lisboa"], 2),
-    ("¿Cuántos planetas hay en el sistema solar?", ["7", "8", "9", "10"], 1),
-    ("¿Quién escribió 'Don Quijote de la Mancha'?", ["Cervantes", "Lorca", "Quevedo", "Góngora"], 0),
-    ("¿Cuál es el resultado de 5 + 7?", ["10", "11", "12", "13"], 2),
-    ("¿Qué gas respiramos principalmente?", ["Oxígeno", "Nitrógeno", "Dióxido de carbono", "Helio"], 0),
-    ("¿En qué continente se encuentra Egipto?", ["Asia", "África", "Europa", "América"], 1),
-    ("¿Cuántos lados tiene un hexágono?", ["4", "5", "6", "7"], 2),
-    ("¿Qué país tiene la mayor población del mundo?", ["India", "Estados Unidos", "China", "Brasil"], 2),
-    ("¿Quién pintó la Mona Lisa?", ["Van Gogh", "Picasso", "Da Vinci", "Rembrandt"], 2),
-    ("¿Cuál es el metal más abundante en la corteza terrestre?", ["Hierro", "Aluminio", "Cobre", "Plata"], 1),
-    ("¿En qué año llegó el hombre a la Luna?", ["1965", "1969", "1972", "1980"], 1),
-    ("¿Cómo se llama el proceso por el cual las plantas producen oxígeno?", ["Respiración", "Fotosíntesis", "Fermentación", "Digestión"], 1),
-    ("¿Qué instrumento mide la presión atmosférica?", ["Termómetro", "Barómetro", "Higrómetro", "Altímetro"], 1),
-    ("¿Cuál es el país más grande del mundo por superficie?", ["Canadá", "Estados Unidos", "Rusia", "China"], 2),
-    ("¿Qué escritor creó el personaje de Sherlock Holmes?", ["Agatha Christie", "J.K. Rowling", "Arthur Conan Doyle", "Edgar Allan Poe"], 2),
-]
+        ("¿Cuál es la capital de Francia?", ["Madrid", "Berlín", "París", "Lisboa"], 2),
+        ("¿Cuántos planetas hay en el sistema solar?", ["7", "8", "9", "10"], 1),
+        ("¿Quién escribió 'Don Quijote de la Mancha'?", ["Cervantes", "Lorca", "Quevedo", "Góngora"], 0),
+        ("¿Cuál es el resultado de 5 + 7?", ["10", "11", "12", "13"], 2),
+        ("¿Qué gas respiramos principalmente?", ["Oxígeno", "Nitrógeno", "Dióxido de carbono", "Helio"], 0),
+    ]
 
     totalPreguntas = len(quiz_questions)
-    
     show_page_one: bool = True
-
     textoPregunta: str = None
-
     tituloOpciones: list[str] = ["A)", "B)", "C)", "D)"]
-
     textoOpciones: list[str] = []
-
     opcionCorrecta: int = -1
-
     numRonda: int = 1
 
-    def toggle_page(self): # Provisional, para decidir si se muestra la pagina de inicio o la de preguntas
+    # Variables de usuario
+    username: str = ""
+    password: str = ""
+    is_authenticated: bool = False
+
+    def set_username(self, username: str):
+        """Método para actualizar el estado de username"""
+        self.username = username
+
+    def set_password(self, password: str):
+        """Método para actualizar el estado de la contraseña"""
+        self.password = password
+
+    def toggle_page(self):
         self.show_page_one = not self.show_page_one
 
-    def seleccionarPregunta(self): #Coge la pregunta que toque
-        self.textoPregunta, self.textoOpciones, self.opcionCorrecta = self.quiz_questions[self.numRonda-1]
+    def seleccionarPregunta(self):
+        self.textoPregunta, self.textoOpciones, self.opcionCorrecta = self.quiz_questions[self.numRonda - 1]
 
-    def verificar_respuesta(self, seleccion: int): #Vuelve al principio si se ha fallado o sigue con la siguiente
+    def verificar_respuesta(self, seleccion: int):
         if seleccion == self.opcionCorrecta:
             print("✅ Respuesta correcta")
-            self.numRonda = self.numRonda + 1
-           
+            self.numRonda += 1
+
             if self.numRonda == self.totalPreguntas:
                 self.numRonda = 1
                 self.toggle_page()
             else:
-                self.seleccionarPregunta()  
+                self.seleccionarPregunta()
         else:
             print("❌ Respuesta incorrecta")
-            self.toggle_page() 
+            self.toggle_page()
             self.numRonda = 1
 
 
-def index() -> rx.Component: #Pagina principal, en este caso muestra la uno o la dos según un booleano
-    return rx.cond(State.show_page_one, page_one(), page_two())
+    def handle_register(self):
+        """Función de registro del usuario"""
+        db = SessionLocal()
+        try:
+            create_user(self.username, self.password, db)  # se pasa db
+            print("✅ Usuario registrado con éxito")
+        except Exception as e:
+            print(f"❌ Error al registrar usuario: {e}")
+        finally:
+            db.close()
 
-def page_one(): #Pagina de inicio
+    def handle_login(self):
+        """Función de inicio de sesión del usuario"""
+        if login_user(self.username, self.password):
+            print("✅ Login exitoso")
+            self.is_authenticated = True
+        else:
+            print("❌ Error de autenticación")
+
+
+def index() -> rx.Component:
+    return rx.cond(State.is_authenticated, game_page(), login_page())
+
+
+def login_page():
     return rx.center(
         rx.vstack(
-            rx.text("Bienvenido a QQSM", font_size="2em"),
-            rx.button("Comenzar", on_click=[
-                State.toggle_page,
-                State.seleccionarPregunta
-            ]
-                
-                )
-
+            rx.text("Iniciar sesión o registrarse", font_size="2em"),
+            rx.input(placeholder="Usuario", on_blur=lambda: State.set_username(State.username)),  
+            rx.input(placeholder="Contraseña", type="password", on_blur=lambda: State.set_password(State.password)),
+            rx.button("Iniciar sesión", on_click=State.handle_login),
+            rx.button("Registrar usuario", on_click=State.handle_register),
         )
     )
 
-def page_two():#Pagina con la pregunta y opciones
+
+def game_page():
+    return rx.cond(State.show_page_one, page_one(), page_two())
+
+
+def page_one():
+    return rx.center(
+        rx.vstack(
+            rx.text("Bienvenido a QQSM", font_size="2em"),
+            rx.button("Comenzar", on_click=[State.toggle_page, State.seleccionarPregunta])
+        )
+    )
+
+
+def page_two():
     return rx.center(
         rx.vstack(
             rx.text(State.textoPregunta, font_size="2em"),
@@ -99,9 +128,10 @@ def page_two():#Pagina con la pregunta y opciones
                     for i in range(4)
                 ]
             ),
-            rx.text(f"Ronda: {State.numRonda} / {State.totalPreguntas}", font_size="1.5em", color="blue"),     
+            rx.text(f"Ronda: {State.numRonda} / {State.totalPreguntas}", font_size="1.5em", color="blue"),
         )
     )
+
 
 app = rx.App()
 app.add_page(index)

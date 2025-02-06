@@ -1,0 +1,3 @@
+CREATE DATABASE qqsm_db;
+CREATE USER usuario WITH PASSWORD 'password';
+GRANT ALL PRIVILEGES ON DATABASE qqsm_db TO usuario;
