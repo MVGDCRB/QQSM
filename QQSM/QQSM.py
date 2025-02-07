@@ -9,6 +9,26 @@ from QQSM.db import init_db, SessionLocal
 init_db()
 
 class State(rx.State):
+
+    form_data: dict = {}
+
+    @rx.event
+    def handle_login(self, form_data : dict):
+        """Función de inicio de sesión del usuario"""
+        #hacer funcion que redirija si todo esta bien a la pagina del juego
+
+    @rx.event
+    def handle_register(self, form_data : dict):        
+        """Función de registro del usuario"""
+        db = SessionLocal() #guardo la sesionLocal en una variable
+        try:
+            create_user(form_data["usuario"], form_data["password"], db)  # se pasa db junto al usuario y contraseña hasheada
+            print("✅ Usuario registrado con éxito")
+        except Exception as e:
+            print(f"❌ Error al registrar usuario: {e}")
+        finally:
+            db.close()
+
     quiz_questions = [
         ("¿Cuál es la capital de Francia?", ["Madrid", "Berlín", "París", "Lisboa"], 2),
         ("¿Cuántos planetas hay en el sistema solar?", ["7", "8", "9", "10"], 1),
@@ -60,41 +80,58 @@ class State(rx.State):
             self.numRonda = 1
 
 
-    def handle_register(self):
-        """Función de registro del usuario"""
-        db = SessionLocal() #guardo la sesionLocal en una variable
-        try:
-            create_user(self.username, self.password, db)  # se pasa db junto al usuario y contraseña hasheada
-            print("✅ Usuario registrado con éxito")
-        except Exception as e:
-            print(f"❌ Error al registrar usuario: {e}")
-        finally:
-            db.close()
-
-    def handle_login(self):
-        """Función de inicio de sesión del usuario"""
-        if login_user(self.username, self.password):
-            print("✅ Login exitoso")
-            self.is_authenticated = True
-        else:
-            print("❌ Error de autenticación")
 
 
 def index() -> rx.Component:
-    return rx.cond(State.is_authenticated, game_page(), login_page()) #si esta registrado te manda al index sino al login
+    return rx.cond(State.is_authenticated, game_page(), register_page()) #si esta registrado te manda al index sino al login
 
 
-def login_page(): #TODO cambiar el login en login y registro por separado
+def register_page(): 
     return rx.center(
-        rx.vstack(
-            rx.text("Iniciar sesión o registrarse", font_size="2em"),
-            rx.input(placeholder="Usuario", on_blur=lambda: State.set_username(State.username)),  
-            rx.input(placeholder="Contraseña", type="password", on_blur=lambda: State.set_password(State.password)),
-            rx.button("Iniciar sesión", on_click=State.handle_login),
-            rx.button("Registrar usuario", on_click=State.handle_register),
-        )
+        rx.form(
+            rx.vstack(
+                rx.text("Registrarse", font_size="2em"),
+                rx.input(
+                    placeholder="Usuario", 
+                    name = "usuario"
+                    ),  
+                rx.input(
+                    placeholder="Password",
+                    type= "password",
+                    name = "password"
+                    ),              
+                rx.button("Registrar usuario", type = "submit"),
+                rx.divider(),
+                rx.button("Ya tengo cuenta")#hacer redireccion a login_page
+            ),
+            on_submit=State.handle_register, 
+            reset_on_submit=True,
+        ),
     )
 
+def login_page():
+    return rx.center(
+        rx.form(
+            rx.vstack(
+                rx.text("Inicio Sesión", font_size="2em"),
+                rx.input(
+                    placeholder="Usuario", 
+                    name = "usuario"
+                    ),  
+                rx.input(
+                    placeholder="Password",
+                    type= "password",
+                    name = "password"
+                    ),              
+                rx.button("Login usuario", type = "submit"),
+                rx.divider(),
+                rx.button("No tengo cuenta") #hacer redireccion a register_page
+
+            ),
+            on_submit=State.handle_login, 
+            reset_on_submit=True,
+        ),
+    )
 
 def game_page():
     return rx.cond(State.show_page_one, page_one(), page_two())
