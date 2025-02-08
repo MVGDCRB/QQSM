@@ -2,7 +2,7 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from QQSM.models import Base
+from db.models import Base
 
 
 # URL de conexión a PostgreSQL 

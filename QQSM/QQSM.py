@@ -1,173 +1,18 @@
 import reflex as rx
+import random
+
 from rxconfig import config
 from QQSM.auth import create_user, login_user
-import random
-from QQSM.db import init_db, SessionLocal
-
+from db.database import init_db
+from QQSM.pages import register_page, login_page, game_page
+from QQSM.state import State
 
 # Inicializa la base de datos y crea las tablas antes de ejecutar Reflex  
 init_db()
 
-class State(rx.State):
-
-    form_data: dict = {}
-
-    @rx.event
-    def handle_login(self, form_data : dict):
-        """Función de inicio de sesión del usuario"""
-        #hacer funcion que redirija si todo esta bien a la pagina del juego
-
-    @rx.event
-    def handle_register(self, form_data : dict):        
-        """Función de registro del usuario"""
-        db = SessionLocal() #guardo la sesionLocal en una variable
-        try:
-            create_user(form_data["usuario"], form_data["password"], db)  # se pasa db junto al usuario y contraseña hasheada
-            print("✅ Usuario registrado con éxito")
-        except Exception as e:
-            print(f"❌ Error al registrar usuario: {e}")
-        finally:
-            db.close()
-
-    quiz_questions = [
-        ("¿Cuál es la capital de Francia?", ["Madrid", "Berlín", "París", "Lisboa"], 2),
-        ("¿Cuántos planetas hay en el sistema solar?", ["7", "8", "9", "10"], 1),
-        ("¿Quién escribió 'Don Quijote de la Mancha'?", ["Cervantes", "Lorca", "Quevedo", "Góngora"], 0),
-        ("¿Cuál es el resultado de 5 + 7?", ["10", "11", "12", "13"], 2),
-        ("¿Qué gas respiramos principalmente?", ["Oxígeno", "Nitrógeno", "Dióxido de carbono", "Helio"], 0),
-    ]
-
-    totalPreguntas = len(quiz_questions)
-    show_page_one: bool = True
-    textoPregunta: str = None
-    tituloOpciones: list[str] = ["A)", "B)", "C)", "D)"]
-    textoOpciones: list[str] = []
-    opcionCorrecta: int = -1
-    numRonda: int = 1
-
-    # Variables de usuario
-    username: str = ""
-    password: str = ""
-    is_authenticated: bool = False
-
-    def set_username(self, username: str):
-        """Método para actualizar el estado de username"""
-        self.username = username
-
-    def set_password(self, password: str):
-        """Método para actualizar el estado de la contraseña"""
-        self.password = password
-
-    def toggle_page(self):
-        self.show_page_one = not self.show_page_one
-
-    def seleccionarPregunta(self):
-        self.textoPregunta, self.textoOpciones, self.opcionCorrecta = self.quiz_questions[self.numRonda - 1]
-
-    def verificar_respuesta(self, seleccion: int):
-        if seleccion == self.opcionCorrecta:
-            print("✅ Respuesta correcta")
-            self.numRonda += 1
-
-            if self.numRonda == self.totalPreguntas:
-                self.numRonda = 1
-                self.toggle_page()
-            else:
-                self.seleccionarPregunta()
-        else:
-            print("❌ Respuesta incorrecta")
-            self.toggle_page()
-            self.numRonda = 1
-
-
-
 
 def index() -> rx.Component:
-    return rx.cond(State.is_authenticated, game_page(), register_page()) #si esta registrado te manda al index sino al login
-
-
-def register_page(): 
-    return rx.center(
-        rx.form(
-            rx.vstack(
-                rx.text("Registrarse", font_size="2em"),
-                rx.input(
-                    placeholder="Usuario", 
-                    name = "usuario"
-                    ),  
-                rx.input(
-                    placeholder="Password",
-                    type= "password",
-                    name = "password"
-                    ),              
-                rx.button("Registrar usuario", type = "submit"),
-                rx.divider(),
-                rx.button("Ya tengo cuenta")#hacer redireccion a login_page
-            ),
-            on_submit=State.handle_register, 
-            reset_on_submit=True,
-        ),
-    )
-
-def login_page():
-    return rx.center(
-        rx.form(
-            rx.vstack(
-                rx.text("Inicio Sesión", font_size="2em"),
-                rx.input(
-                    placeholder="Usuario", 
-                    name = "usuario"
-                    ),  
-                rx.input(
-                    placeholder="Password",
-                    type= "password",
-                    name = "password"
-                    ),              
-                rx.button("Login usuario", type = "submit"),
-                rx.divider(),
-                rx.button("No tengo cuenta") #hacer redireccion a register_page
-
-            ),
-            on_submit=State.handle_login, 
-            reset_on_submit=True,
-        ),
-    )
-
-def game_page():
-    return rx.cond(State.show_page_one, page_one(), page_two())
-
-
-def page_one():
-    return rx.center(
-        rx.vstack(
-            rx.text("Bienvenido a QQSM", font_size="2em"),
-            rx.button("Comenzar", on_click=[State.toggle_page, State.seleccionarPregunta])
-        )
-    )
-
-
-def page_two():
-    return rx.center(
-        rx.vstack(
-            rx.text(State.textoPregunta, font_size="2em"),
-            rx.hstack(
-                *[
-                    rx.button(
-                        State.tituloOpciones[i] + " " + State.textoOpciones[i],
-                        width="150px",
-                        height="80px",
-                        border="1px solid black",
-                        padding="10px",
-                        margin="5px",
-                        align="center",
-                        on_click=lambda i=i: State.verificar_respuesta(i),
-                    )
-                    for i in range(4)
-                ]
-            ),
-            rx.text(f"Ronda: {State.numRonda} / {State.totalPreguntas}", font_size="1.5em", color="blue"),
-        )
-    )
+    return rx.cond(State.is_authenticated, game_page.game_page(), register_page.register_page()) #si esta registrado te manda al index sino al login
 
 
 app = rx.App()
