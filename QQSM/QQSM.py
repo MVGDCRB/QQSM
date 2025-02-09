@@ -22,8 +22,8 @@ def index() -> rx.Component:
 app = rx.App()
 
 app.add_page(index)
-app.add_page(register_page, route="registro")
-app.add_page(login_page, route="login")  # Ruta como string y la función como segundo parámetro
+app.add_page(register_page, route="/registro")
+app.add_page(login_page, route="/login")  # Ruta como string y la función como segundo parámetro
 
 if __name__ == "__main__":
     app.run()
