@@ -19,9 +19,9 @@ def register_page():
                     ),              
                 rx.button("Registrar usuario", type = "submit"),
                 rx.divider(),
-                rx.button("Ya tengo cuenta")#hacer redireccion a login_page
+                rx.button("Ya tengo cuenta", on_click=rx.redirect("/login"))#hacer redireccion a login_page
             ),
             on_submit=State.handle_register, 
             reset_on_submit=True,
         ),
-    )
+    )   
