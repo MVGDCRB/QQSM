@@ -23,6 +23,7 @@ app = rx.App()
 app.add_page(index, route="/")
 app.add_page(register_page, route="/registro")
 app.add_page(login_page, route="/login")  # Ruta como string y la función como segundo parámetro
+app.add_page(game_page, route="/game")
 
 if __name__ == "__main__":
     app.run()
