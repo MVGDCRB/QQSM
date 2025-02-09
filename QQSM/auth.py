@@ -30,7 +30,7 @@ def create_user(username: str, password: str, db: Session):
     db.commit()
     db.close()
 
-def login_user(username: str, password: str) -> bool:
+def login_user(username: str, password: str, db: Session) -> bool:
     """Verifica si el usuario puede iniciar sesión."""
     db: Session = SessionLocal()
     user = db.query(User).filter(User.username == username).first()

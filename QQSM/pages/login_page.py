@@ -1,5 +1,5 @@
 import reflex as rx
-from QQSM.state import State
+from QQSM.states.login_state import LoginState
 
 def login_page():
     return rx.center(
@@ -17,10 +17,11 @@ def login_page():
                     ),              
                 rx.button("Login usuario", type = "submit"),
                 rx.divider(),
-                rx.button("No tengo cuenta", on_click=rx.redirect("/registro")) #hacer redireccion a register_page
+                rx.button("No tengo cuenta", on_click=LoginState.clear_and_redirect()) #hacer redireccion a register_page
 
             ),
-            on_submit=State.handle_login, 
+            on_submit=LoginState.handle_login, 
             reset_on_submit=True,
         ),
+        rx.text(LoginState.login_message),  # Display the message
     )

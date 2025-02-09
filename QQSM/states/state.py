@@ -7,23 +7,6 @@ class State(rx.State):
 
     form_data: dict = {}
 
-    @rx.event
-    def handle_login(self, form_data : dict):
-        """Función de inicio de sesión del usuario"""
-        #hacer funcion que redirija si todo esta bien a la pagina del juego
-
-    @rx.event
-    def handle_register(self, form_data : dict):        
-        """Función de registro del usuario"""
-        db = SessionLocal() #guardo la sesionLocal en una variable
-        try:
-            create_user(form_data["usuario"], form_data["password"], db)  # se pasa db junto al usuario y contraseña hasheada
-            print("✅ Usuario registrado con éxito")
-        except Exception as e:
-            print(f"❌ Error al registrar usuario: {e}")
-        finally:
-            db.close()
-
     quiz_questions = [
         ("¿Cuál es la capital de Francia?", ["Madrid", "Berlín", "París", "Lisboa"], 2),
         ("¿Cuántos planetas hay en el sistema solar?", ["7", "8", "9", "10"], 1),

@@ -1,5 +1,5 @@
 import reflex as rx
-from QQSM.state import State
+from QQSM.states.state import State
 
 def game_page():
     return rx.cond(State.show_page_one, page_one(), page_two())
