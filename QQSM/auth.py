@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from db.models import User
 from db.database import SessionLocal
+from datetime import datetime
 
 # Configuración para el hash de contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -25,7 +26,12 @@ def create_user(username: str, password: str, db: Session):
     
     # Crear el usuario
     hashed_password = get_password_hash(password)
-    new_user = User(username=username, password=hashed_password)
+    new_user = new_user = User(
+        username=username, 
+        password=hashed_password, 
+        fecha_union=datetime.now(),  # Fecha de unión del usuario
+        tema_stats={}  # Inicializamos las estadísticas de los temas vacías
+    )
     db.add(new_user)
     db.commit()
     db.close()
