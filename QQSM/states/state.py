@@ -7,22 +7,6 @@ class State(rx.State):
 
     form_data: dict = {}
 
-    quiz_questions = [
-        ("¿Cuál es la capital de Francia?", ["Madrid", "Berlín", "París", "Lisboa"], 2),
-        ("¿Cuántos planetas hay en el sistema solar?", ["7", "8", "9", "10"], 1),
-        ("¿Quién escribió 'Don Quijote de la Mancha'?", ["Cervantes", "Lorca", "Quevedo", "Góngora"], 0),
-        ("¿Cuál es el resultado de 5 + 7?", ["10", "11", "12", "13"], 2),
-        ("¿Qué gas respiramos principalmente?", ["Oxígeno", "Nitrógeno", "Dióxido de carbono", "Helio"], 0),
-    ]
-
-    totalPreguntas = len(quiz_questions)
-    show_page_one: bool = True
-    textoPregunta: str = None
-    tituloOpciones: list[str] = ["A)", "B)", "C)", "D)"]
-    textoOpciones: list[str] = []
-    opcionCorrecta: int = -1
-    numRonda: int = 1
-
     # Variables de usuario
     username: str = ""
     password: str = ""
@@ -39,20 +23,4 @@ class State(rx.State):
     def toggle_page(self):
         self.show_page_one = not self.show_page_one
 
-    def seleccionarPregunta(self):
-        self.textoPregunta, self.textoOpciones, self.opcionCorrecta = self.quiz_questions[self.numRonda - 1]
-
-    def verificar_respuesta(self, seleccion: int):
-        if seleccion == self.opcionCorrecta:
-            print("✅ Respuesta correcta")
-            self.numRonda += 1
-
-            if self.numRonda == self.totalPreguntas:
-                self.numRonda = 1
-                self.toggle_page()
-            else:
-                self.seleccionarPregunta()
-        else:
-            print("❌ Respuesta incorrecta")
-            self.toggle_page()
-            self.numRonda = 1
+    

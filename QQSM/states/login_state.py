@@ -30,7 +30,7 @@ class LoginState(rx.State):
             if login_user(username, password, db):
                 State.is_authenticated = True
                 self.login_message = f"✅ Usuario '{username}' autenticado correctamente."
-                return rx.redirect("/game")
+                return rx.redirect("/menu")
             else:
                 self.login_message = "❌ Usuario o contraseña incorrectos."
         except Exception as e:
