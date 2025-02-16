@@ -22,11 +22,15 @@ class Game:
         self.topics = ["arte", "fisica", "historia", "quimica", "musica", "matematicas",
                        "literatura", "biologia", "historia de la television", "videojuegos",
                        "moda", "tecnologia", "cocina", "deportes", "geografia"]
+        self.fifty = 1
+        self.public = 1
 
     def generate_question(self, difficulty, topic):
         question = ("quiero que me hagas una pregunta como si fuera quien quiere ser millonario con una dificultad " +
                     str(difficulty) + "/100 y que el tema de la pregunta sea " + topic +
-                    ". Tambien quiero que el formato este separado por punto y coma donde me muestre la pregunta las cuatro respuestas y la pregunta correcta.Como ejemplo ;Pregunta:;¿cual es la capital de España?;Paris;Roma;Madrid;Wansinton;Madrid; Pasame solo el mensaje sin nada extra")
+                    ". Tambien quiero que el formato este separado por punto y coma donde me muestre la pregunta las "
+                    "cuatro respuestas y la pregunta correcta.Como ejemplo ;Pregunta:;¿cual es la capital de "
+                    "España?;Paris;Roma;Madrid;Wansinton;Madrid; Pasame solo el mensaje sin nada extra")
         answer = self._model.generate_content(question).text
         answer = answer.split(";")
         if answer[0] == " ":
@@ -56,3 +60,51 @@ class Game:
         while random_topic == self.topic:
             random_topic = random.choice(self.topics)
         return random_topic
+
+    def validate_question(self, option):
+        next_question = False
+        if option == self.correct:
+            self.number_question += 1
+            next_question = True
+        return next_question
+
+    def fifty_option(self):
+        if self.fifty > 0:
+            list_answer = [self.option_a, self.option_b, self.option_c, self.option_d]
+            random_question = random.choice(list_answer)
+            while random_question == self.correct:
+                random_question = random.choice(list_answer)
+
+            for answer in list_answer:
+                if answer != random_question and answer != self.correct:
+                    match answer:
+                        case self.option_a:
+                            self.option_a = ""
+                        case self.option_b:
+                            self.option_b = ""
+                        case self.option_c:
+                            self.option_c = ""
+                        case self.option_d:
+                            self.option_d = ""
+
+            self.fifty -= 1
+        else:
+            return "No se puede usar el comodin porque ya ha sido usado"
+
+    def public_option(self):
+        if self.public > 0:
+            public = ("Estoy jugando a quien quiere ser millonario y me preguntan" + self.question + "con estas posibles "
+                                                                                                     "respuestas"
+                      + self.option_a + self.option_b + self.option_c + self.option_d +
+                      "y quiero usar el comodin del publico. Quero que solo me muestres el texto del comodin del publico "
+                      "de la siguiente forma como en el ejemplo : Courrèges:15%;Miyake:60%;Ungaro:5%Cardin:20% .Pasame "
+                      "solo el mensaje sin nada extra ")
+            statistics = self._model.generate_content(public).text
+            statistics = statistics.split(";")
+            if statistics[-1] == "\n":
+                del statistics[-1]
+            statistics[-1] = statistics[-1].replace("\n", "")
+            self.public -= 1
+            return statistics
+        else:
+            return "No se puede usar el comodin porque ya ha sido usado"

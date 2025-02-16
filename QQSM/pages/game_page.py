@@ -9,7 +9,7 @@ from prompt_toolkit.utils import to_str
 gia.configure(api_key="AIzaSyDpS75LFcrsDFQz1UTLnX1Dfr-W9P-EgAI")  # Reemplaza con tu clave de API
 model = gia.GenerativeModel("gemini-2.0-flash") # Especifica el modelo Gemini que quieres usar
 """
-from docutils.nodes import topic
+# from docutils.nodes import topic
 
 """
 def game_page():
@@ -75,7 +75,7 @@ question[-1] = question[-1].replace("\n", "")
 print(question)
 """
 
-from QQSM.Game import Game
+from QQSM.pages.Game import Game
 
 quiz = Game(number_question=1)
 n_question = 15
@@ -85,3 +85,6 @@ question_quiz = quiz.generate_question(difficulty_quiz, topic_quiz)
 quiz.set_question(question_quiz, n_question, difficulty_quiz, topic_quiz)
 print(quiz.question, "\n", quiz.option_a, "\n", quiz.option_b, "\n", quiz.option_c, "\n", quiz.option_d, "\n",
       quiz.correct)
+print(quiz.public_option())
+quiz.fifty_option()
+print(" X: ", quiz.option_a, "\n", "X: ", quiz.option_b, "\n", "X: ", quiz.option_c, "\n", "X: ", quiz.option_d, "\n")
