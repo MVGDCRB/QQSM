@@ -17,6 +17,21 @@ class GameState(rx.State):
     fifty_used: bool = False
     public_used: bool = False
     public_stats: str = ""
+    chosen_answer: bool = False
+    correct_answer: bool = False
+
+
+    @rx.event
+    def initialize_game(self):
+        self.fifty_used = False
+        self.public_used = False
+        self.public_stats = ""
+        self.chosen_answer = False
+        self.correct_answer = False
+        self.number_question = 1
+        self.difficulty = 0
+        self.generate_question()
+        return rx.redirect("/game")
 
     @rx.event
     def generate_question(self):
@@ -36,6 +51,18 @@ class GameState(rx.State):
         self.topic = topic
         self.difficulty = difficulty
         self.feedback = ""
+        self.public_stats = ""
+        
+
+    @rx.event
+    def next_round(self):
+        self.chosen_answer = False
+        self.correct_answer = False
+        if self.number_question == 15:
+            self.feedback = "¡Enhorabuena! ¡Has contestado correctamente a todas las preguntas!"
+        else:
+            self.number_question += 1
+            self.generate_question()
 
     @rx.event
     def validate_answer(self, option: str):
@@ -51,14 +78,14 @@ class GameState(rx.State):
             difficulty=self.difficulty,
             topic=self.topic
         )
+        
+        self.chosen_answer = True
+        self.correct_answer = game.validate_question(option)
 
-        if game.validate_question(option):  # Si la respuesta es correcta
+        if self.correct_answer:  # Si la respuesta es correcta
             self.feedback = "✅ ¡Correcto!"
-            self.number_question += 1
-            self.generate_question()  # Generar la siguiente pregunta
         else:
-            self.feedback = "❌ Incorrecto, intenta de nuevo."
-
+            self.feedback = "❌ ¡Incorrecto!"
     @rx.event
     def use_fifty_option(self):
         """Usa el comodín 50:50 para eliminar dos respuestas incorrectas."""

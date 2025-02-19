@@ -18,10 +18,10 @@ def game_page():
 
             # Botones con opciones A, B, C, D con validación
             rx.vstack(
-                rx.button(f"A) {GameState.option_a}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_a)),  
-                rx.button(f"B) {GameState.option_b}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_b)),  
-                rx.button(f"C) {GameState.option_c}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_c)),  
-                rx.button(f"D) {GameState.option_d}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_d)),  
+                rx.button(f"A) {GameState.option_a}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_a),disabled=GameState.chosen_answer),  
+                rx.button(f"B) {GameState.option_b}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_b),disabled=GameState.chosen_answer),  
+                rx.button(f"C) {GameState.option_c}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_c),disabled=GameState.chosen_answer),  
+                rx.button(f"D) {GameState.option_d}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_d),disabled=GameState.chosen_answer),  
                 spacing="5",
                 align_items="center",
             ),
@@ -29,15 +29,18 @@ def game_page():
             rx.text(GameState.feedback, font_size="20", color="red", margin_top="10px"),  # Mensaje de validación
 
             rx.hstack(
-                rx.button("🃏 Usar 50:50", on_click=GameState.use_fifty_option, disabled=GameState.fifty_used),
-                rx.button("📊 Usar Comodín del Público", on_click=GameState.use_public_option, disabled=GameState.public_used),
+                rx.button("🃏 Usar 50:50", on_click=GameState.use_fifty_option, disabled=GameState.fifty_used | GameState.chosen_answer),
+                rx.button("📊 Usar Comodín del Público", on_click=GameState.use_public_option, disabled=GameState.public_used | GameState.chosen_answer),
                 spacing="5"
             ),
 
             # Mostrar el resultado del comodín del público
             rx.cond(GameState.public_used, rx.text(GameState.public_stats, font_size="16", color="green")),
 
-            rx.button("Siguiente Pregunta", on_click=GameState.generate_question, margin_top="15px"),
+            rx.cond(
+                GameState.correct_answer,
+                rx.button("Siguiente Pregunta", on_click=GameState.next_round, margin_top="15px")
+            ),
             rx.button("Volver al menú", on_click=rx.redirect("/menu"), margin_top="10px"),
         )
     )
