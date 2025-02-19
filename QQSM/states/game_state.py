@@ -129,13 +129,16 @@ class GameState(rx.State):
                 topic=self.topic
             )
 
-            stats = game.public_option()  # Llama a la función de Game
+            stats = game.public_option()  # Obtiene la opinión del público
 
             if isinstance(stats, list):
-                self.public_stats = "\n".join(stats)  # Convierte la lista en texto
+                # Asegura que cada opción aparezca en una línea separada
+                self.public_stats = "\n".join(f"- {s.replace(':', ': ')}" for s in stats)
             else:
-                self.public_stats = stats  # En caso de que ya se haya usado
+                self.public_stats = stats
 
+            # Marcar que el comodín ya ha sido usado
             self.public_used = True
         else:
-            self.feedback = "❌ Ya has usado el comodín del público."    
+            self.feedback = "❌ Ya has usado el comodín del público."
+

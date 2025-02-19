@@ -17,11 +17,12 @@ def game_page():
             rx.text(GameState.question, font_size="18", color="blue", margin_top="10px"),
 
             # Botones con opciones A, B, C, D con validación
-            rx.vstack(
-                rx.button(f"A) {GameState.option_a}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_a),disabled=GameState.chosen_answer),  
-                rx.button(f"B) {GameState.option_b}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_b),disabled=GameState.chosen_answer),  
-                rx.button(f"C) {GameState.option_c}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_c),disabled=GameState.chosen_answer),  
-                rx.button(f"D) {GameState.option_d}", width="80%", on_click=lambda: GameState.validate_answer(GameState.option_d),disabled=GameState.chosen_answer),  
+            rx.grid(
+                rx.button(f"A) {GameState.option_a}", width="100%", on_click=lambda: GameState.validate_answer(GameState.option_a), disabled=GameState.chosen_answer),  
+                rx.button(f"B) {GameState.option_b}", width="100%", on_click=lambda: GameState.validate_answer(GameState.option_b), disabled=GameState.chosen_answer),  
+                rx.button(f"C) {GameState.option_c}", width="100%", on_click=lambda: GameState.validate_answer(GameState.option_c), disabled=GameState.chosen_answer),  
+                rx.button(f"D) {GameState.option_d}", width="100%", on_click=lambda: GameState.validate_answer(GameState.option_d), disabled=GameState.chosen_answer),  
+                columns="2",  # Dos columnas
                 spacing="5",
                 align_items="center",
             ),
