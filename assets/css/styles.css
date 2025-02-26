@@ -1,0 +1,115 @@
+.custom-button {
+    position: relative;
+    display: inline-block;
+    font-size: 1.2em;
+    width: 100%;
+    height: 60px;
+    padding: 10px 50px;
+    background: linear-gradient(to bottom, #1e3a8a, #0a0a1a);
+    color: #ffcc80;
+    border: 2px solid #ffffcc; /* Mantiene el borde SOLO en el cuerpo */
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+    clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0% 50%); /* Ajusta las puntas en un solo elemento */
+}
+
+/* Estado verde (éxito) */
+.custom-button.success {
+    background: linear-gradient(to bottom, #28a745, #1c7c31);
+    border-color: #c3e6cb;
+    color: #ffcc80;
+}
+
+/* Estado rojo (error) */
+.custom-button.error {
+    background: linear-gradient(to bottom, #dc3545, #a71d2a);
+    border-color: #f5c6cb;
+    color: #ffcc80;
+}
+
+.custom-button::before, 
+.custom-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background: inherit;
+}
+
+.custom-button::before {
+    left: -20px;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+.custom-button::after {
+    right: -20px;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.custom-button:hover {
+    background: linear-gradient(to bottom, #ffcc80, #ff9f43);
+    color: #1e3a8a;
+    border-color: #ffffcc;
+}
+
+.custom-button.success:hover {
+    background: linear-gradient(to bottom, #34d058, #218838);
+}
+
+.custom-button.error:hover {
+    background: linear-gradient(to bottom, #e4606d, #c82333);
+}
+
+
+.custom-title {
+    position: relative;
+    display: inline-block;
+    font-size: 1em;
+    width: 100%;
+    height: 80px;
+    padding: 10px 50px;
+    background: linear-gradient(to bottom, #1e3a8a, #0a0a1a);
+    color: #ffcc80;
+    border: 2px solid #ffffcc;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+    clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0% 50%);
+}
+
+/* Puntas laterales */
+.custom-title::before, 
+.custom-title::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background: inherit;
+}
+
+.custom-title::before {
+    left: -20px;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+.custom-title::after {
+    right: -20px;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+

@@ -20,6 +20,13 @@ class GameState(rx.State):
     chosen_answer: bool = False
     correct_answer: bool = False
 
+    # Estilos dinámicos de los botones
+    button_classes: dict[str, str] = {
+        "A": "custom-button",
+        "B": "custom-button",
+        "C": "custom-button",
+        "D": "custom-button",
+    }
 
     @rx.event
     def initialize_game(self):
@@ -31,6 +38,12 @@ class GameState(rx.State):
         self.number_question = 1
         self.difficulty = 0
         self.generate_question()
+        self.button_classes = {
+            "A": "custom-button",
+            "B": "custom-button",
+            "C": "custom-button",
+            "D": "custom-button",
+        }
         return rx.redirect("/game")
 
     @rx.event
@@ -58,34 +71,43 @@ class GameState(rx.State):
     def next_round(self):
         self.chosen_answer = False
         self.correct_answer = False
+        self.feedback = ""
+
+        # Resetear estilos de los botones
+        self.button_classes = {
+            "A": "custom-button",
+            "B": "custom-button",
+            "C": "custom-button",
+            "D": "custom-button",
+        }
+
         if self.number_question == 15:
             self.feedback = "¡Enhorabuena! ¡Has contestado correctamente a todas las preguntas!"
         else:
             self.number_question += 1
             self.generate_question()
 
-    @rx.event
-    def validate_answer(self, option: str):
-        """Valida la respuesta usando la lógica de Game."""
-        game = Game(
-            question=self.question,
-            option_a=self.option_a,
-            option_b=self.option_b,
-            option_c=self.option_c,
-            option_d=self.option_d,
-            correct=self.correct,
-            number_question=self.number_question,
-            difficulty=self.difficulty,
-            topic=self.topic
-        )
-        
-        self.chosen_answer = True
-        self.correct_answer = game.validate_question(option)
 
-        if self.correct_answer:  # Si la respuesta es correcta
+    @rx.event
+    def validate_answer(self, letter: str):
+        """Valida la respuesta y actualiza los colores de los botones."""
+        self.chosen_answer = True
+        selected_option = getattr(self, f"option_{letter.lower()}")
+
+        if selected_option == self.correct:
+            self.correct_answer = True
             self.feedback = "✅ ¡Correcto!"
+            self.button_classes[letter] = "custom-button success"
         else:
+            self.correct_answer = False
             self.feedback = "❌ ¡Incorrecto!"
+            self.button_classes[letter] = "custom-button error"
+
+        for key in ["A", "B", "C", "D"]:
+            if getattr(self, f"option_{key.lower()}") == self.correct:
+                self.button_classes[key] = "custom-button success"
+
+
     @rx.event
     def use_fifty_option(self):
         """Usa el comodín 50:50 para eliminar dos respuestas incorrectas."""

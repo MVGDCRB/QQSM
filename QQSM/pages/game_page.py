@@ -14,17 +14,25 @@ def game_page():
             rx.text(f"Tema: {GameState.topic}", font_size="20", font_weight="bold", color="purple"),
             rx.text(f"Dificultad: {GameState.difficulty}/100", font_size="18", color="gray"),
 
-            rx.text(GameState.question, font_size="18", color="blue", margin_top="10px"),
+            #rx.text(GameState.question, font_size="18", color="blue", margin_top="10px"),
+            
+            rx.text(GameState.question, class_name="custom-title"),
 
             # Botones con opciones A, B, C, D con validación
-            rx.grid(
-                rx.button(f"A) {GameState.option_a}", width="100%", on_click=lambda: GameState.validate_answer(GameState.option_a), disabled=GameState.chosen_answer),  
-                rx.button(f"B) {GameState.option_b}", width="100%", on_click=lambda: GameState.validate_answer(GameState.option_b), disabled=GameState.chosen_answer),  
-                rx.button(f"C) {GameState.option_c}", width="100%", on_click=lambda: GameState.validate_answer(GameState.option_c), disabled=GameState.chosen_answer),  
-                rx.button(f"D) {GameState.option_d}", width="100%", on_click=lambda: GameState.validate_answer(GameState.option_d), disabled=GameState.chosen_answer),  
-                columns="2",  # Dos columnas
-                spacing="5",
-                align_items="center",
+           rx.flex(
+                rx.grid(
+                    rx.button(f"A) {GameState.option_a}", width="100%", class_name=GameState.button_classes["A"], on_click=lambda: GameState.validate_answer("A"), disabled=GameState.chosen_answer),  
+                    rx.button(f"B) {GameState.option_b}", width="100%", class_name=GameState.button_classes["B"], on_click=lambda: GameState.validate_answer("B"), disabled=GameState.chosen_answer),  
+                    rx.button(f"C) {GameState.option_c}", width="100%", class_name=GameState.button_classes["C"], on_click=lambda: GameState.validate_answer("C"), disabled=GameState.chosen_answer),  
+                    rx.button(f"D) {GameState.option_d}", width="100%", class_name=GameState.button_classes["D"], on_click=lambda: GameState.validate_answer("D"), disabled=GameState.chosen_answer),  
+                    columns="2",
+                    spacing="5",
+                    align_items="center",
+                    justify_content="center",
+                    width="400px",  # Ajusta el ancho si es necesario
+                ),
+                justify="center",
+                width="100%"
             ),
 
             rx.text(GameState.feedback, font_size="20", color="red", margin_top="10px"),  # Mensaje de validación
