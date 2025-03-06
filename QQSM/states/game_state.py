@@ -16,7 +16,9 @@ class GameState(rx.State):
     feedback: str = ""
     fifty_used: bool = False
     public_used: bool = False
+    call_used: bool = False
     public_stats: str = ""
+    call_text: str = ""
     chosen_answer: bool = False
     correct_answer: bool = False
 
@@ -32,7 +34,9 @@ class GameState(rx.State):
     def initialize_game(self):
         self.fifty_used = False
         self.public_used = False
+        self.call_used = False
         self.public_stats = ""
+        self.call_text = ""
         self.chosen_answer = False
         self.correct_answer = False
         self.number_question = 1
@@ -65,6 +69,7 @@ class GameState(rx.State):
         self.difficulty = difficulty
         self.feedback = ""
         self.public_stats = ""
+        self.call_text = ""
         
 
     @rx.event
@@ -163,4 +168,26 @@ class GameState(rx.State):
             self.public_used = True
         else:
             self.feedback = "❌ Ya has usado el comodín del público."
+
+    @rx.event
+    def use_call_option(self):
+        """Usa el comodín de la llamada y muestra un texto."""
+        if not self.call_used:
+            game = Game(
+                question=self.question,
+                option_a=self.option_a,
+                option_b=self.option_b,
+                option_c=self.option_c,
+                option_d=self.option_d,
+                correct=self.correct,
+                number_question=self.number_question,
+                difficulty=self.difficulty,
+                topic=self.topic
+            )
+
+            text = game.call_option()  # Obtiene el texto de la llamada
+            self.call_text = "\n La opcion correcta es " + text[0] + ". " + text[1]
+            self.call_used = True
+        else:
+            self.feedback = "❌ Ya has usado el comodín de la llamada."
 

@@ -40,11 +40,14 @@ def game_page():
             rx.hstack(
                 rx.button("🃏 Usar 50:50", on_click=GameState.use_fifty_option, disabled=GameState.fifty_used | GameState.chosen_answer),
                 rx.button("📊 Usar Comodín del Público", on_click=GameState.use_public_option, disabled=GameState.public_used | GameState.chosen_answer),
+                rx.button("📊 Usar Comodín de la llamada", on_click=GameState.use_call_option, disabled=GameState.call_used | GameState.chosen_answer),
                 spacing="5"
             ),
 
             # Mostrar el resultado del comodín del público
             rx.cond(GameState.public_used, rx.text(GameState.public_stats, font_size="16", color="green")),
+            # Mostrar el resultado del comodin de la llamada
+            rx.cond(GameState.call_used, rx.text(GameState.call_text, font_size="16", color="orange", width="500px", text_align="center")),
 
             rx.cond(
                 GameState.correct_answer,

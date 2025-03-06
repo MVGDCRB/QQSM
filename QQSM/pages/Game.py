@@ -1,5 +1,6 @@
 import google.generativeai as gia
 import random
+import requests
 
 
 class Game:
@@ -24,6 +25,7 @@ class Game:
                        "moda", "tecnologia", "cocina", "deportes", "geografia"]
         self.fifty = 1
         self.public = 1
+        self.call = 1
 
     def generate_question(self, difficulty, topic):
         question = ("quiero que me hagas una pregunta como si fuera quien quiere ser millonario con una dificultad " +
@@ -108,3 +110,51 @@ class Game:
             return statistics
         else:
             return "No se puede usar el comodin porque ya ha sido usado"
+
+    def call_option(self):
+        if self.call > 0:
+            API_KEY = "sk-0c4a68c97ce14b288ec1a6b5b9117e21"
+            API_URL = "https://api.deepseek.com/v1/chat/completions"  # Reemplaza con la URL correcta
+            message = (
+                "Estoy jugando a quien quiere ser millonario y me preguntan" + self.question +
+                "y quiero usar el comodin de la llamada mostrandome solamente"
+                "la respuesta correcta seguido de una descripcion."
+                "Por ejemplo: Amazonas;Aunque históricamente se consideraba al Nilo como el río más largo, mediciones "
+                "más recientes y precisas han determinado que el Amazonas es el río más largo del mundo, con una "
+                "longitud aproximada de 6,992 km, superando al Nilo, que tiene alrededor de 6,650 km."
+            )
+
+            # Configura los headers con tu clave de API
+            headers = {
+                "Authorization": f"Bearer {API_KEY}",
+                "Content-Type": "application/json"
+            }
+
+            # Define el cuerpo de la solicitud
+            data = {
+                "model": "deepseek-chat",  # Reemplaza con el modelo correcto
+                "messages": [
+                    {
+                        "role": "user",  # El rol del mensaje (en este caso, el usuario)
+                        "content": message  # El contenido del mensaje
+                    }
+                ],
+                "max_tokens": 200,  # Ajusta según la longitud esperada de la respuesta
+                "temperature": 0.7  # Controla la creatividad de la respuesta
+            }
+
+            # Hacer la solicitud POST a la API
+            response = requests.post(API_URL, headers=headers, json=data)
+
+            # Verificar la respuesta
+            if response.status_code == 200:
+                # Extraer y mostrar la respuesta
+                result = response.json()
+                result = result["choices"][0]["message"]["content"]
+                result = result.replace("**", "")
+                result = result.split(";")
+                self.call -= 1
+                return result
+        else:
+            return "No se puede usar el comodin porque ya ha sido usado"
+
