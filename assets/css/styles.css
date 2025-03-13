@@ -71,8 +71,7 @@
 
 
 .custom-title {
-    position: relative;
-    display: inline-block;
+    display: flex;
     font-size: 1em;
     width: 100%;
     height: 80px;
@@ -111,5 +110,120 @@
     right: -20px;
     clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
+
+.custom-category {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px; /* Tamaño del círculo */
+    height: 100px;
+    background: linear-gradient(to bottom, #FFD700, #B8860B); /* Efecto dorado */
+    color: black;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 50%; /* Hace que sea un círculo */
+    border: 3px solid #FFFACD; /* Borde dorado claro */
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.5); /* Sombra dorada */
+    transition: all 0.3s ease-in-out;
+    padding: 5px; /* Asegura que el texto no se corte */
+    word-wrap: break-word;
+    text-align: center;
+}
+
+
+/* Efecto hover */
+.custom-category:hover {
+    background: linear-gradient(to bottom, #FFC107, #DAA520);
+    transform: scale(1.1);
+}
+
+/* Para cambiarlo fácilmente por una imagen en el futuro */
+.custom-category.image {
+    background: none;
+    background-size: cover;
+    background-position: center;
+    border: none;
+}
+
+
+.progress-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; /* Espaciado entre bolitas */
+    margin-top: 10px;
+}
+
+.progress-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: gray; /* Por defecto, gris */
+    border: 2px solid transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Colores según la dificultad */
+.progress-circle.easy {
+    background-color: green;
+}
+.progress-circle.medium {
+    background-color: yellow;
+}
+.progress-circle.hard {
+    background-color: red;
+}
+
+/* Resalta la pregunta actual */
+.progress-circle.current {
+    border: 3px solid gold;
+    box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.8);
+}
+
+.title-style {
+    font-size: 29px;
+    font-weight: bold;
+    text-align: center;
+    color: gold;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    font-family: 'Copperplate', sans-serif;
+    border: none;
+    letter-spacing: 2px;
+    transform: skew(-8deg);
+}
+
+.joker-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #FFD700; /* Dorado */
+    border: 2px solid #B8860B; /* Tono más oscuro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.joker-button:disabled {
+    background-color: gray;
+    border-color: darkgray;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.joker-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+
+
 
 
