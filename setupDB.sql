@@ -4,7 +4,8 @@ CREATE TABLE users (
     username VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     fecha_union TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    tema_stats JSONB -- JSONB para almacenar los porcentajes de aciertos por tema
+    tema_stats JSONB, -- JSONB para almacenar los porcentajes de aciertos por tema
+    maxPuntuacion INTEGER
 );
 
 -- Tabla de partidas

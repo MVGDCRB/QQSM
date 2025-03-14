@@ -1,4 +1,4 @@
-reflex==0.6.8
+reflex~=0.7.0
 
 SQLAlchemy~=2.0.37
 protobuf~=5.29.3
@@ -9,3 +9,7 @@ docutils~=0.21.2
 Jinja2~=3.1.4
 grpcio~=1.67.1
 google-generativeai~=0.8.4
+requests~=2.32.3
+openai~=1.65.3
+attrs~=25.1.0
+distro~=1.9.0

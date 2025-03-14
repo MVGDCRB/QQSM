@@ -30,7 +30,8 @@ def create_user(username: str, password: str, db: Session):
         username=username, 
         password=hashed_password, 
         fecha_union=datetime.now(),  # Fecha de unión del usuario
-        tema_stats={}  # Inicializamos las estadísticas de los temas vacías
+        tema_stats={},  # Inicializamos las estadísticas de los temas vacías
+        maxPuntuacion=0
     )
     db.add(new_user)
     db.commit()
