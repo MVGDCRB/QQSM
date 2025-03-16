@@ -223,7 +223,17 @@
     border-radius: 50%;
 }
 
+.menu-exit-button {
+    font-size: 30px; 
+    font-weight: bold;
+    color: gold; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
 
-
-
-
+.menu-exit-button:hover {
+    transform: scale(1.2) rotate(10deg); /* Efecto relajado */
+    color: #FFD700; /* Dorado más brillante */
+}

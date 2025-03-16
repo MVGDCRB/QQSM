@@ -101,11 +101,11 @@ class GameState(rx.State):
 
         if selected_option == self.correct:
             self.correct_answer = True
-            self.feedback = "✅ ¡Correcto!"
+            #self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
             self.button_classes[letter] = "custom-button success"
         else:
             self.correct_answer = False
-            self.feedback = "❌ ¡Incorrecto!"
+            #self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
             self.button_classes[letter] = "custom-button error"
 
         for key in ["A", "B", "C", "D"]:

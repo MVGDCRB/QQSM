@@ -19,6 +19,8 @@ def game_page():
                     rx.center(
                         rx.vstack(
                             rx.hstack(
+                                rx.button("✖", on_click=rx.redirect("/menu"), class_name="menu-exit-button"),
+                                rx.spacer(),
                                 *[   
                                     rx.box(
                                         rx.text(str(i + 1), font_size="14", color="gold", text_align="center"),  # Número en dorado
@@ -40,7 +42,9 @@ def game_page():
                                     )
                                     for i in range(15)
                                 ],
-                                class_name="progress-container"
+                                rx.spacer(),
+                                class_name="progress-container",
+                                width="100%",
                             ),
 
 
@@ -53,7 +57,7 @@ def game_page():
                                     text_align="center",
                                 ),
                                 rx.box(
-                                    rx.text(GameState.topic, class_name="custom-category"),  # Aquí se asegura el texto dentro del círculo
+                                    rx.text(GameState.topic, class_name="custom-category"),
                                     width="100px",
                                     height="100px",
                                     display="flex",
@@ -63,7 +67,7 @@ def game_page():
                                 spacing="5",
                                 align="center",
                                 justify="center",
-                                margin_top="5px"
+                                margin_top="0px"
                             ),
 
                             spacing="5",
@@ -75,10 +79,10 @@ def game_page():
                 rx.vstack(
                     rx.flex(
                         rx.grid(
-                            rx.button(f"A) {GameState.option_a}", width="100%", class_name="custom-button", on_click=lambda: GameState.validate_answer("A"), disabled=GameState.chosen_answer),  
-                            rx.button(f"B) {GameState.option_b}", width="100%", class_name="custom-button", on_click=lambda: GameState.validate_answer("B"), disabled=GameState.chosen_answer),  
-                            rx.button(f"C) {GameState.option_c}", width="100%", class_name="custom-button", on_click=lambda: GameState.validate_answer("C"), disabled=GameState.chosen_answer),  
-                            rx.button(f"D) {GameState.option_d}", width="100%", class_name="custom-button", on_click=lambda: GameState.validate_answer("D"), disabled=GameState.chosen_answer),  
+                            rx.button(f"A) {GameState.option_a}", width="100%", class_name=GameState.button_classes["A"], on_click=lambda: GameState.validate_answer("A"), disabled=GameState.chosen_answer),  
+                            rx.button(f"B) {GameState.option_b}", width="100%", class_name=GameState.button_classes["B"], on_click=lambda: GameState.validate_answer("B"), disabled=GameState.chosen_answer),  
+                            rx.button(f"C) {GameState.option_c}", width="100%", class_name=GameState.button_classes["C"], on_click=lambda: GameState.validate_answer("C"), disabled=GameState.chosen_answer),  
+                            rx.button(f"D) {GameState.option_d}", width="100%", class_name=GameState.button_classes["D"], on_click=lambda: GameState.validate_answer("D"), disabled=GameState.chosen_answer),  
                             columns="2",
                             spacing="5",
                             align_items="center",
@@ -98,7 +102,8 @@ def game_page():
                     rx.button("50%", class_name="joker-button", on_click=GameState.use_fifty_option, disabled=GameState.fifty_used | GameState.chosen_answer),
                     rx.button("📊", class_name="joker-button", on_click=GameState.use_public_option, disabled=GameState.public_used | GameState.chosen_answer),
                     rx.button("📞", class_name="joker-button", on_click=GameState.use_call_option, disabled=GameState.call_used | GameState.chosen_answer),
-                    spacing="7"
+                    spacing="7",
+                    margin_top="15px"
                 ),
 
                 # Mostrar el resultado del comodín del público
@@ -111,7 +116,6 @@ def game_page():
                     rx.button("Siguiente Pregunta", on_click=GameState.next_round, margin_top="15px")
                 )      
             ),
-            rx.button("Volver al menú", on_click=rx.redirect("/menu"), margin_top="10px"),
             width="100vw", height="100vh", background_color="#1E3A5F", min_height="100vh",overflow_y="auto"
         )
     )
