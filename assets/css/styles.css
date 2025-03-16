@@ -237,3 +237,34 @@
     transform: scale(1.2) rotate(10deg); /* Efecto relajado */
     color: #FFD700; /* Dorado más brillante */
 }
+
+
+.custom-input {
+    font-size: 1.2em;
+    width: 250px;
+    height: 45px;
+    padding: 10px;
+    background: linear-gradient(to bottom, #A9C6E9, #8FA8C8);
+    border: 2px solid #ffcc80;
+    border-radius: 5px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-input::placeholder {
+    color: rgb(2, 2, 63);  
+    opacity: 1; 
+    font-weight: bold;
+}
+
+.custom-input:focus {
+    border-color: #ffcc80;
+    box-shadow: 0px 0px 10px rgba(255, 204, 0, 0.5);
+}
+
+.error-message {
+    color: red;
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: 10px;
+}

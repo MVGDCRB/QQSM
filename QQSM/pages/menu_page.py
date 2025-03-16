@@ -3,13 +3,23 @@ from QQSM.states.game_state import GameState
 
 def menu_page():
     return rx.center(
-        rx.vstack(
-            rx.text("Menu", font_size="2em"),
-            rx.button("Jugar", on_click=GameState.initialize_game),
-            rx.divider(),
-            rx.button("Marcadores"),
-            rx.divider(),
-            rx.button("Perfil Usuario"),
-            rx.divider(),
+        rx.box(
+            rx.vstack(
+                rx.button("Jugar", on_click=GameState.initialize_game, class_name="custom-button", width="300px"),
+                rx.button("Marcadores", class_name="custom-button", width="300px"),
+                rx.button("Perfil Usuario", class_name="custom-button", width="300px"),
+                spacing="9",  
+                align="center",
+            ),
+            background_color="#1E3A5F", 
+            padding="50px",
+            border_radius="10px",
+            box_shadow="0px 0px 15px rgba(255, 255, 255, 0.2)",  
         ),
+        width="100vw",
+        height="100vh",
+        background_color="#1E3A5F",  
+        display="flex",
+        align_items="center",
+        justify_content="center",
     )
