@@ -238,6 +238,20 @@
     color: #FFD700; /* Dorado más brillante */
 }
 
+.next-arrow-button {
+    font-size: 50px;  /* Tamaño grande */
+    font-weight: bold;
+    color: gold; /* Color dorado */
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.next-arrow-button:hover {
+    transform: scale(1.2) translateX(5px); /* Efecto de movimiento */
+    color: #FFD700; /* Dorado más brillante */
+}
 
 .custom-input {
     font-size: 1.2em;

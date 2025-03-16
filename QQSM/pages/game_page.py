@@ -43,6 +43,14 @@ def game_page():
                                     for i in range(15)
                                 ],
                                 rx.spacer(),
+                                rx.cond(
+                                    GameState.correct_answer,
+                                    rx.button(
+                                        "➜",  # Flecha Unicode
+                                        on_click=GameState.next_round, 
+                                        class_name="next-arrow-button"
+                                    )
+                                ),    
                                 class_name="progress-container",
                                 width="100%",
                             ),
@@ -109,12 +117,7 @@ def game_page():
                 # Mostrar el resultado del comodín del público
                 rx.cond(GameState.public_used, rx.text(GameState.public_stats, font_size="16", color="green")),
                 # Mostrar el resultado del comodin de la llamada
-                rx.cond(GameState.call_used, rx.text(GameState.call_text, font_size="16", color="orange", width="500px", text_align="center")),
-
-                rx.cond(
-                    GameState.correct_answer,
-                    rx.button("Siguiente Pregunta", on_click=GameState.next_round, margin_top="15px")
-                )      
+                rx.cond(GameState.call_used, rx.text(GameState.call_text, font_size="16", color="orange", width="500px", text_align="center")),         
             ),
             width="100vw", height="100vh", background_color="#1E3A5F", min_height="100vh",overflow_y="auto"
         )
