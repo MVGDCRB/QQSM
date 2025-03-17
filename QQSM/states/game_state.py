@@ -1,5 +1,6 @@
 import reflex as rx
 from QQSM.pages.Game import Game
+import random
 
 class GameState(rx.State):
 
@@ -115,30 +116,22 @@ class GameState(rx.State):
 
     @rx.event
     def use_fifty_option(self):
-        """Usa el comodín 50:50 para eliminar dos respuestas incorrectas."""
+        """Usa el comodín 50:50 para marcar dos respuestas incorrectas como erróneas."""
         if not self.fifty_used:
-            game = Game(
-                question=self.question,
-                option_a=self.option_a,
-                option_b=self.option_b,
-                option_c=self.option_c,
-                option_d=self.option_d,
-                correct=self.correct,
-                number_question=self.number_question,
-                difficulty=self.difficulty,
-                topic=self.topic
-            )
+            opciones = ["A", "B", "C", "D"]
+            incorrectas = [op for op in opciones if getattr(self, f"option_{op.lower()}") != self.correct]
 
-            game.fifty_option()  # Llama a la función de Game
+            # Seleccionar dos opciones incorrectas al azar
+            eliminadas = random.sample(incorrectas, 2)
 
-            # Actualiza las opciones después del 50:50
-            self.option_a = game.option_a
-            self.option_b = game.option_b
-            self.option_c = game.option_c
-            self.option_d = game.option_d
+            # Marcar los botones eliminados como incorrectos en rojo
+            for op in eliminadas:
+                self.button_classes[op] = "custom-button error"
+
             self.fifty_used = True
         else:
             self.feedback = "❌ Ya has usado el comodín 50:50."
+
 
     @rx.event
     def use_public_option(self):
