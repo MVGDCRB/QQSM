@@ -28,14 +28,14 @@ class Game:
         self.call = 1
 
     def generate_question(self, difficulty, topic):
-        question = ("quiero que me hagas una pregunta como si fuera quien quiere ser millonario con una dificultad " +
+        question = ("Quiero que me hagas una pregunta como si fuera quien quiere ser millonario con una dificultad " +
                     str(difficulty) + "/100 y que el tema de la pregunta sea " + topic +
                     ". Tambien quiero que el formato este separado por punto y coma donde me muestre la pregunta las "
-                    "cuatro respuestas y la pregunta correcta.Como ejemplo ;Pregunta:;¿cual es la capital de "
+                    "cuatro respuestas y la pregunta correcta.Como ejemplo Pregunta:;¿cual es la capital de "
                     "España?;Paris;Roma;Madrid;Wansinton;Madrid; Pasame solo el mensaje sin nada extra")
         answer = self._model.generate_content(question).text
         answer = answer.split(";")
-        if answer[0] == " ":
+        if answer[0] == " " or answer[0] == "":
             del answer[0]
         del answer[0]
         if answer[-1] == "\n":
@@ -57,10 +57,11 @@ class Game:
     def generate_difficulty_normal_mode(self, number_question: int):
         return self.difficulties_NM[number_question - 1]
 
-    def generate_topic(self):
+    def generate_topic(self, topic: str):
         random_topic = random.choice(self.topics)
-        while random_topic == self.topic:
-            random_topic = random.choice(self.topics)
+        if topic != "":
+            while random_topic == topic:
+                random_topic = random.choice(self.topics)
         return random_topic
 
     def validate_question(self, option):
@@ -144,7 +145,7 @@ class Game:
             }
 
             # Hacer la solicitud POST a la API
-            response = sesion.post(API_URL, headers=headers, json=data, timeout=10)
+            response = sesion.post(API_URL, headers=headers, json=data, timeout=15)
 
             # Verificar la respuesta
             if response.status_code == 200:

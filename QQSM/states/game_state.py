@@ -55,7 +55,7 @@ class GameState(rx.State):
     def generate_question(self):
         """Genera una nueva pregunta usando Game."""
         game = Game(number_question=self.number_question)  
-        topic = game.generate_topic()
+        topic = game.generate_topic(self.topic)
         difficulty = game.generate_difficulty_normal_mode(self.number_question)
         new_question = game.generate_question(difficulty, topic)
 
