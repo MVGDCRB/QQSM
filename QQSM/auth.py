@@ -16,9 +16,11 @@ def get_top_10_users():
     try:
         # Realizar la consulta para obtener los 10 usuarios con mayor maxPuntuacion
         top_users = db.query(User.username, User.max_puntuacion).order_by(User.max_puntuacion.desc()).limit(10).all()
+        db.close()
         return top_users  # Devuelve la lista de usuarios con mayor puntuación
     except Exception as e:
         print(f"Error al obtener los usuarios: {e}")
+        db.close()
         return []
 
 def get_user_leaderboard(username: str):
@@ -26,9 +28,11 @@ def get_user_leaderboard(username: str):
     try:
         # Realizar la consulta para obtener el usuario y la puntuacion
         user = db.query(User.username, User.max_puntuacion).filter(User.username == username).all()
+        db.close()
         return user  # Devuelve la lista de usuarios con mayor puntuación
     except Exception as e:
         print(f"Error al obtener el usuario: {e}")
+        db.close()
         return []
 
 
