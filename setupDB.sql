@@ -5,7 +5,7 @@ CREATE TABLE users (
     password VARCHAR(255),
     fecha_union TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     tema_stats JSONB, -- JSONB para almacenar los porcentajes de aciertos por tema
-    maxPuntuacion INTEGER
+    max_puntuacion INTEGER
 );
 
 -- Tabla de partidas
