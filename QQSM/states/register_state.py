@@ -18,7 +18,6 @@ class RegisterState(rx.State):
             return rx.redirect("/login")  # Redirige a la página de login después de 2 segundos
 
         except Exception as e:
-            self.register_message = f"✅ Error al registrar usuario."
-            print(f"❌ Error al registrar usuario: {e}")
+            self.register_message = f"❌ El nombre de usuario ya está en uso"
         finally:
             db.close()

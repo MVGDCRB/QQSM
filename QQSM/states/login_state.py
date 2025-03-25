@@ -14,7 +14,9 @@ class LoginState(rx.State):
     @rx.event
     def clear_and_redirect(self):
         self.login_message = ""
-        return rx.redirect("/registro")
+        yield  # Esta línea es importante: fuerza una actualización del estado antes del redirect
+        return rx.redirect("/register")
+
         
     @rx.event
     def handle_login(self, form_data: dict):
