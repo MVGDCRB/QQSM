@@ -35,6 +35,15 @@
     color: #ffcc80;
 }
 
+.custom-button.disabled {
+    background: linear-gradient(to bottom, #555555, #2c2c2c);
+    border-color: #777777;
+    color: transparent; 
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .custom-button::before, 
 .custom-button::after {
     content: '';

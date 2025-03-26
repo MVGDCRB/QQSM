@@ -18,7 +18,7 @@ class GameState(rx.State):
     fifty_used: bool = False
     public_used: bool = False
     call_used: bool = False
-    public_stats: str = ""
+    public_stats: list[int] = []
     call_text: str = ""
     chosen_answer: bool = False
     correct_answer: bool = False
@@ -36,7 +36,7 @@ class GameState(rx.State):
         self.fifty_used = False
         self.public_used = False
         self.call_used = False
-        self.public_stats = ""
+        self.public_stats = []
         self.call_text = ""
         self.chosen_answer = False
         self.correct_answer = False
@@ -69,7 +69,7 @@ class GameState(rx.State):
         self.topic = topic
         self.difficulty = difficulty
         self.feedback = ""
-        self.public_stats = ""
+        self.public_stats = []
         self.call_text = ""
         
 
@@ -126,7 +126,7 @@ class GameState(rx.State):
 
             # Marcar los botones eliminados como incorrectos en rojo
             for op in eliminadas:
-                self.button_classes[op] = "custom-button error"
+                self.button_classes[op] = "custom-button disabled"
 
             self.fifty_used = True
         else:
@@ -135,7 +135,7 @@ class GameState(rx.State):
 
     @rx.event
     def use_public_option(self):
-        """Usa el comodín del público y muestra las estadísticas."""
+        """Usa el comodín del público y guarda los porcentajes como lista de tuplas."""
         if not self.public_used:
             game = Game(
                 question=self.question,
@@ -149,18 +149,24 @@ class GameState(rx.State):
                 topic=self.topic
             )
 
-            stats = game.public_option()  # Obtiene la opinión del público
+            stats = game.public_option()
 
             if isinstance(stats, list):
-                # Asegura que cada opción aparezca en una línea separada
-                self.public_stats = "\n".join(f"- {s.replace(':', ': ')}" for s in stats)
+                self.public_stats = []
+                for item in stats:
+                    try:
+                        texto, porcentaje = item.split(":", 1)
+                        porcentaje = int(porcentaje.replace("%", "").strip())
+                        self.public_stats.append({porcentaje})
+                    except Exception as e:
+                        print(f"Error al parsear resultado del público: {e}")
             else:
-                self.public_stats = stats
+                self.feedback = stats  # En caso de error, muestra el texto devuelto como feedback        
 
-            # Marcar que el comodín ya ha sido usado
             self.public_used = True
         else:
             self.feedback = "❌ Ya has usado el comodín del público."
+
 
     @rx.event
     def use_call_option(self):
