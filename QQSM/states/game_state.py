@@ -2,6 +2,7 @@ import reflex as rx
 from QQSM.pages.Game import Game
 import random
 
+
 class GameState(rx.State):
 
     # Variables del juego
@@ -22,6 +23,7 @@ class GameState(rx.State):
     call_text: str = ""
     chosen_answer: bool = False
     correct_answer: bool = False
+    mode: str = ""
 
     # Estilos dinámicos de los botones
     button_classes: dict[str, str] = {
@@ -32,7 +34,7 @@ class GameState(rx.State):
     }
 
     @rx.event
-    def initialize_game(self):
+    def initialize_game(self, ruta: str):
         self.fifty_used = False
         self.public_used = False
         self.call_used = False
@@ -49,14 +51,18 @@ class GameState(rx.State):
             "C": "custom-button",
             "D": "custom-button",
         }
-        return rx.redirect("/game")
+        self.mode = ruta
+        return rx.redirect(self.mode)
 
     @rx.event
     def generate_question(self):
         """Genera una nueva pregunta usando Game."""
         game = Game(number_question=self.number_question)  
         topic = game.generate_topic(self.topic)
-        difficulty = game.generate_difficulty_normal_mode(self.number_question)
+        if self.mode == "/game":
+            difficulty = game.generate_difficulty_normal_mode(self.number_question)
+        else:
+            difficulty = game.generate_difficulty_endless_mode(self.number_question)
         new_question = game.generate_question(difficulty, topic)
 
         # Actualiza el estado con la nueva pregunta
@@ -87,7 +93,7 @@ class GameState(rx.State):
             "D": "custom-button",
         }
 
-        if self.number_question == 15:
+        if self.number_question == 15 and self.mode == "/game":
             self.feedback = "¡Enhorabuena! ¡Has contestado correctamente a todas las preguntas!"
         else:
             self.number_question += 1
