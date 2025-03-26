@@ -5,7 +5,8 @@ def menu_page():
     return rx.center(
         rx.box(
             rx.vstack(
-                rx.button("Jugar", on_click=GameState.initialize_game, class_name="custom-button", width="300px"),
+                rx.button("Modo Normal", on_click=GameState.initialize_game("/game"), class_name="custom-button", width="300px"),
+                rx.button("Modo Infinito", on_click=GameState.initialize_game("/endless"), class_name="custom-button", width="300px"),
                 rx.button("Marcadores", on_click = rx.redirect("/leaderboard"), class_name="custom-button", width="300px"),
                 rx.button("Perfil Usuario", class_name="custom-button", width="300px"),
                 spacing="9",  

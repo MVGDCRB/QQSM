@@ -57,6 +57,12 @@ class Game:
     def generate_difficulty_normal_mode(self, number_question: int):
         return self.difficulties_NM[number_question - 1]
 
+    def generate_difficulty_endless_mode(self, number_question: int):
+        if 4 * self.number_question < 100:
+            return 4 * self.number_question
+        else:
+            return 100
+
     def generate_topic(self, topic: str):
         random_topic = random.choice(self.topics)
         if topic != "":

@@ -49,6 +49,8 @@ def create_user(username: str, password: str, db: Session):
     existing_user = db.query(User).filter(User.username == username).first()
     if existing_user:
         raise Exception("El nombre de usuario ya está en uso")
+        print("❌ Usuario registrado con éxito")
+
     
     # Crear el usuario
     hashed_password = get_password_hash(password)
@@ -59,7 +61,6 @@ def create_user(username: str, password: str, db: Session):
         tema_stats={},  # Inicializamos las estadísticas de los temas vacías
         max_puntuacion=0
     )
-    print(f"Usuario creado: {new_user.username}, Max Puntuación: {new_user.max_puntuacion}")
     db.add(new_user)
     db.commit()
     db.close()
@@ -72,10 +73,9 @@ def login_user(username: str, password: str, db: Session) -> bool:
     db.close()
 
     if user and verify_password(password, user.password):
-        print("✅ Inicio de sesión exitoso.")
         return True
-    print("❌ Usuario o contraseña incorrectos.")
-    return False
+    else:
+        return False
 
 def current_user():
     """Por ahora, simplemente devuelve un nombre de usuario estático para pruebas."""
