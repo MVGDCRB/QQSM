@@ -3,6 +3,7 @@ from QQSM.auth import login_user
 from db.database import SessionLocal
 from QQSM.states.state import State
 
+
 class LoginState(rx.State):
     # State variables
     login_message: str = ""
@@ -30,7 +31,11 @@ class LoginState(rx.State):
         db = SessionLocal()
         try:
             if login_user(username, password, db):
-                State.is_authenticated = True
+                state = State()
+                state.username = username
+                state.password = password
+                state.is_authenticated = True
+                print(state.is_authenticated, state.username, state.password)
                 self.login_message = f"✅ Usuario '{username}' autenticado correctamente."
                 return rx.redirect("/menu")
             else:
