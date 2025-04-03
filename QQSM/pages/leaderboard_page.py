@@ -1,4 +1,6 @@
 import reflex as rx
+from QQSM.states.state import State
+
 from db.database import SessionLocal
 from QQSM.auth import get_top_10_users
 from QQSM.auth import get_user_leaderboard
@@ -7,7 +9,7 @@ from QQSM.auth import get_user_leaderboard
 def leaderboard_page():
 
     top_users = get_top_10_users()
-    user = get_user_leaderboard("aaa")#Hay que pasar el usuario actual (hay que meter cookies)
+    user = get_user_leaderboard(State.username)#Hay que pasar el usuario actual (hay que meter cookies)
 
     print(top_users)
     print(user)

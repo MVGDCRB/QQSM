@@ -4,7 +4,7 @@ from requests import Session
 
 
 class Game:
-    gia.configure(api_key="AIzaSyDpS75LFcrsDFQz1UTLnX1Dfr-W9P-EgAI")  # Reemplaza con tu clave de API
+    gia.configure(api_key="AIzaSyAnGcswACvftlgtjbe8Rw747jncEtmgMo8")  # Reemplaza con tu clave de API
     _model = gia.GenerativeModel("gemini-2.0-flash")  # Especifica el modelo Gemini que quieres usar
 
     def __init__(self, question: str = "", option_a: str = "", option_b: str = "",
@@ -63,12 +63,23 @@ class Game:
         else:
             return 100
 
-    def generate_topic(self, topic: str):
+    def generate_topic_normal_mode(self, topic: str):
         random_topic = random.choice(self.topics)
         if topic != "":
             while random_topic == topic:
                 random_topic = random.choice(self.topics)
         return random_topic
+
+    def generate_topic_theme_mode(self, topic1: str, topic2: str):
+        random_topic1 = random.choice(self.topics)
+        random_topic2 = random.choice(self.topics)
+        if topic1 != "" and topic2 != "":
+            while ((random_topic1 == topic1 or random_topic2 == topic1) and
+                   (random_topic1 == topic2 or random_topic2 == topic2) or
+                   (topic1 == topic2)):
+                random_topic1 = random.choice(self.topics)
+                random_topic2 = random.choice(self.topics)
+        return random_topic1, random_topic2
 
     def validate_question(self, option):
         next_question = False

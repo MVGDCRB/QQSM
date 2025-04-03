@@ -6,7 +6,7 @@ import random
 class GameState(rx.State):
 
     # Variables del juego
-    question: str = "Presiona el botón para generar una pregunta"
+    question: str = "Presiona un tema para generar una pregunta"
     option_a: str = ""
     option_b: str = ""
     option_c: str = ""
@@ -14,6 +14,8 @@ class GameState(rx.State):
     correct: str = ""
     number_question: int = 1
     topic: str = ""
+    topic_selection1: str = ""
+    topic_selection2: str = ""
     difficulty: int = 0
     feedback: str = ""
     fifty_used: bool = False
@@ -24,6 +26,8 @@ class GameState(rx.State):
     chosen_answer: bool = False
     correct_answer: bool = False
     mode: str = ""
+    enable_topic: bool = False
+    game_class = ""
 
     # Estilos dinámicos de los botones
     button_classes: dict[str, str] = {
@@ -44,26 +48,59 @@ class GameState(rx.State):
         self.correct_answer = False
         self.number_question = 1
         self.difficulty = 0
-        self.generate_question()
         self.button_classes = {
             "A": "custom-button",
             "B": "custom-button",
             "C": "custom-button",
             "D": "custom-button",
         }
+        self.enable_topic = False
         self.mode = ruta
+        self.generate_question()
         return rx.redirect(self.mode)
+
+    @rx.event
+    def set_theme(self, topic: str):
+        self.chosen_answer = False
+        self.enable_topic = True
+        self.topic = topic
+        new_question = self.game_class.generate_question(self.difficulty, self.topic)
+        self.question = new_question[0]
+        self.option_a = new_question[1]
+        self.option_b = new_question[2]
+        self.option_c = new_question[3]
+        self.option_d = new_question[4]
+        self.correct = new_question[5]
+
+    @rx.event
+    def get_themes(self):
+        self.topic_selection1, self.topic_selection2 = self.game_class.generate_topic_theme_mode(self.topic_selection1,
+                                                                                                 self.topic_selection2)
+
+    @rx.event
+    def empty_question(self):
+        self.chosen_answer = True
+        return ["Presiona un tema para generar una pregunta","","","","",""]
 
     @rx.event
     def generate_question(self):
         """Genera una nueva pregunta usando Game."""
-        game = Game(number_question=self.number_question)  
-        topic = game.generate_topic(self.topic)
-        if self.mode == "/game":
-            difficulty = game.generate_difficulty_normal_mode(self.number_question)
+        self.game_class = Game(number_question=self.number_question)
+        topic = ""
+        if self.mode == "/theme":
+            self.get_themes()
         else:
-            difficulty = game.generate_difficulty_endless_mode(self.number_question)
-        new_question = game.generate_question(difficulty, topic)
+            topic = self.game_class.generate_topic_normal_mode(self.topic)
+
+        if self.mode == "/game":
+            difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
+            new_question = self.game_class.generate_question(difficulty, topic)
+        elif self.mode =="/endless":
+            difficulty = self.game_class.generate_difficulty_endless_mode(self.number_question)
+            new_question = self.game_class.generate_question(difficulty, topic)
+        else :
+            difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
+            new_question = self.empty_question()
 
         # Actualiza el estado con la nueva pregunta
         self.question = new_question[0]
@@ -77,7 +114,6 @@ class GameState(rx.State):
         self.feedback = ""
         self.public_stats = []
         self.call_text = ""
-        
 
     @rx.event
     def next_round(self):
@@ -93,12 +129,12 @@ class GameState(rx.State):
             "D": "custom-button",
         }
 
-        if self.number_question == 15 and self.mode == "/game":
+        if self.number_question == 15 and (self.mode == "/game" or self.mode == "/theme"):
             self.feedback = "¡Enhorabuena! ¡Has contestado correctamente a todas las preguntas!"
         else:
             self.number_question += 1
+            self.enable_topic = False
             self.generate_question()
-
 
     @rx.event
     def validate_answer(self, letter: str):
@@ -119,7 +155,6 @@ class GameState(rx.State):
             if getattr(self, f"option_{key.lower()}") == self.correct:
                 self.button_classes[key] = "custom-button success"
 
-
     @rx.event
     def use_fifty_option(self):
         """Usa el comodín 50:50 para marcar dos respuestas incorrectas como erróneas."""
@@ -137,7 +172,6 @@ class GameState(rx.State):
             self.fifty_used = True
         else:
             self.feedback = "❌ Ya has usado el comodín 50:50."
-
 
     @rx.event
     def use_public_option(self):
@@ -173,7 +207,6 @@ class GameState(rx.State):
         else:
             self.feedback = "❌ Ya has usado el comodín del público."
 
-
     @rx.event
     def use_call_option(self):
         """Usa el comodín de la llamada y muestra un texto."""
@@ -195,4 +228,3 @@ class GameState(rx.State):
             self.call_used = True
         else:
             self.feedback = "❌ Ya has usado el comodín de la llamada."
-
