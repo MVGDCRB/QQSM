@@ -6,6 +6,7 @@ from QQSM.pages.register_page import register_page
 from QQSM.pages.menu_page import menu_page 
 from QQSM.pages.game_page import game_page
 from QQSM.pages.leaderboard_page import leaderboard_page
+from QQSM.pages.user_page import user_page
 from QQSM.pages.endless_page import endless_page
 from QQSM.pages.theme_page import theme_page
 
@@ -33,6 +34,7 @@ app.add_page(login_page, route="/login")  # Ruta como string y la función como 
 app.add_page(menu_page, route="/menu")
 app.add_page(game_page, route="/game")
 app.add_page(leaderboard_page, route="/leaderboard")
+app.add_page(user_page, route="/user_page")
 app.add_page(endless_page, route="/endless")
 app.add_page(theme_page, route="/theme")
 

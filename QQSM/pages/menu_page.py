@@ -9,7 +9,7 @@ def menu_page():
                 rx.button("Modo Infinito", on_click=GameState.initialize_game("/endless"), class_name="custom-button", width="300px"),
                 rx.button("Modo Temas", on_click=GameState.initialize_game("/theme"), class_name="custom-button", width="300px"),
                 rx.button("Marcadores", on_click = rx.redirect("/leaderboard"), class_name="custom-button", width="300px"),
-                rx.button("Perfil Usuario", class_name="custom-button", width="300px"),
+                rx.button("Perfil Usuario", on_click = rx.redirect("/user_page"), class_name="custom-button", width="300px"),
                 spacing="9",  
                 align="center",
             ),
