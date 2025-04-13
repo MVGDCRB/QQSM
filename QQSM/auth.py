@@ -10,6 +10,12 @@ from datetime import datetime
 # Configuración para el hash de contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+from sqlalchemy import func
+
+def get_user_position(username: str):
+    return -1
+
+
 def get_top_10_users():
     # # Obtén los 10 usuarios con la mayor puntuación
     db: Session = SessionLocal()

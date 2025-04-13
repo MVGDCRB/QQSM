@@ -1,5 +1,6 @@
 import reflex as rx
 from QQSM.states.game_state import GameState
+from QQSM.styles.colors import Colors
 
 def menu_page():
     return rx.center(
@@ -8,20 +9,30 @@ def menu_page():
                 rx.button("Modo Normal", on_click=GameState.initialize_game("/game"), class_name="custom-button", width="300px"),
                 rx.button("Modo Infinito", on_click=GameState.initialize_game("/endless"), class_name="custom-button", width="300px"),
                 rx.button("Modo Temas", on_click=GameState.initialize_game("/theme"), class_name="custom-button", width="300px"),
-                rx.button("Marcadores", on_click = rx.redirect("/leaderboard"), class_name="custom-button", width="300px"),
-                rx.button("Perfil Usuario", on_click = rx.redirect("/user_page"), class_name="custom-button", width="300px"),
-                spacing="9",  
+                rx.button("Marcadores", on_click=rx.redirect("/leaderboard"), class_name="custom-button", width="300px"),
+                rx.button("Perfil Usuario", on_click=rx.redirect("/user_page"), class_name="custom-button", width="300px"),
+                spacing="6",  
                 align="center",
             ),
-            background_color="#1E3A5F", 
+            background_color=Colors.DARK_BLUE, 
             padding="50px",
             border_radius="10px",
-            box_shadow="0px 0px 15px rgba(255, 255, 255, 0.2)",  
+            box_shadow="0px 0px 15px rgba(255, 255, 255, 0.2)",
+            position="relative",
+            width="fit-content"
+        ),
+        rx.box(
+            rx.button("✖", on_click=rx.redirect("/login"), class_name="menu-exit-button"),
+            position="absolute",
+            top="20px",
+            left="20px"
         ),
         width="100vw",
         height="100vh",
-        background_color="#1E3A5F",  
+        background_color=Colors.DARK_BLUE,
         display="flex",
         align_items="center",
         justify_content="center",
+        position="relative",
+        overflow="hidden"
     )

@@ -22,7 +22,7 @@ def register_page():
                     spacing="5",
                     align="center",
                 ),
-                on_submit=RegisterState.handle_register,  
+                on_submit=RegisterState.handle_register, 
                 reset_on_submit=True,
             ),
             rx.text(RegisterState.register_message, class_name="error-message"),

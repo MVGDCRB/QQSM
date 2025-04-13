@@ -13,13 +13,15 @@ from QQSM.pages.theme_page import theme_page
 
 #from QQSM.pages import register_page, login_page, game_page
 from QQSM.states.state import State
+from QQSM.states.login_state import LoginState
+
 
 # Inicializa la base de datos y crea las tablas antes de ejecutar Reflex  
 init_db()
 
 
 def index() -> rx.Component:
-    return rx.cond(State.is_authenticated, menu_page(), register_page()) #si esta registrado te manda al index sino al login
+    return rx.cond(LoginState.is_authenticated, menu_page(), register_page()) #si esta registrado te manda al index sino al login
 
 
 app = rx.App(
@@ -29,7 +31,7 @@ app = rx.App(
 )
 
 app.add_page(index, route="/")
-app.add_page(register_page, route="/registro")
+app.add_page(register_page, route="/register")
 app.add_page(login_page, route="/login")  # Ruta como string y la función como segundo parámetro
 app.add_page(menu_page, route="/menu")
 app.add_page(game_page, route="/game")
