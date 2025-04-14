@@ -219,6 +219,12 @@
     transition: all 0.3s ease-in-out;
 }
 
+.joker-button:hover {
+    transform: scale(1.2);
+    background-color: #FFC107;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
 .joker-button:disabled {
     background-color: gray;
     border-color: darkgray;
