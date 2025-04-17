@@ -1,64 +1,59 @@
 import reflex as rx
-from QQSM.auth import get_top_10_users, get_user_leaderboard, get_user_position
-from QQSM.styles.colors import Colors
+from QQSM.auth import get_top_10_users           # ➊  leer directamente la BD
 from QQSM.states.login_state import LoginState
-
+from QQSM.styles.colors import Colors
 
 def leaderboard_page():
-    current_user = LoginState.username
-    top_users = get_top_10_users()
-    user_data = get_user_leaderboard(current_user)
-    current_user_score = user_data[0][1] if user_data else 0
-    position = get_user_position(current_user)
+    top_users = get_top_10_users()               # ➋  lista [(username, score)]
+
+    # fila del usuario solo si hay login
+    user_row = rx.cond(
+        LoginState.is_authenticated,
+        render_row(                             # ➌  usa los datos del login
+            "—",                                # posición desconocida
+            LoginState.username,
+            rx.cond(LoginState.is_authenticated, 0, 0),   # score real se cargará aparte
+            highlight=True,
+        ),
+        rx.fragment(),                          # ➍  nada si no hay usuario
+    )
 
     return rx.center(
-        rx.box(
-            rx.vstack(
-                rx.text("🏆 LEADERBOARD", font_size="2em", color=Colors.GOLD),
+                    rx.box(
+                        rx.vstack(
+                            rx.text("🏆 LEADERBOARD", font_size="2em", color=Colors.GOLD),
 
-                # Podium con scroll
-                rx.box(
-                    rx.vstack(
-                        *[render_row(i + 1, username, score) for i, (username, score) in enumerate(top_users)],
-                        spacing="0",
-                        align="stretch",
+                            # Top‑10 sin rx.foreach → no hay Var en la iteración
+                            rx.box(
+                                rx.vstack(
+                                    *[
+                                        render_row(i + 1, username, score)
+                                        for i, (username, score) in enumerate(top_users)
+                                    ],
+                                    spacing="0",
+                                    align="stretch",
+                                ),
+                                max_height="400px",
+                                overflow_y="auto",
+                                width="100%",
+                            ),
+
+                            # … resto de la página
+                        ),
+                        width="400px",
+                        padding="40px",
+                        background_color=Colors.DARK_BLUE,
+                        border_radius="12px",
+                        position="relative",
                     ),
-                    max_height="400px",
-                    overflow_y="auto",
-                    width="100%",
-                ),
+                    width="100vw",
+                    height="100vh",
+                    background_color=Colors.DARK_BLUE,
+                )
 
-                # Línea del usuario actual
-                rx.box(
-                    render_row(position, current_user, current_user_score, highlight=True),
-                    width="100%",
-                    margin_top="20px"
-                ),
 
-                spacing="4",
-                align="center",
-            ),
-            width="400px",
-            padding="40px",
-            background_color=Colors.DARK_BLUE,
-            border_radius="12px",
-            position="relative"
-        ),
 
-        # Botón cerrar arriba izquierda
-        rx.box(
-            rx.button("✖", on_click=rx.redirect("/menu"), class_name="menu-exit-button"),
-            position="absolute",
-            top="20px",
-            left="20px"
-        ),
 
-        width="100vw",
-        height="100vh",
-        background_color=Colors.DARK_BLUE,
-        overflow="hidden",
-        position="relative"
-    )
 
 
 def render_row(pos, username: str, score: int, highlight: bool = False):

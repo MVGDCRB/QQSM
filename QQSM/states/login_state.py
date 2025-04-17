@@ -1,15 +1,14 @@
 import reflex as rx
 from QQSM.auth import login_user
 from db.database import SessionLocal
-from QQSM.states.state import State
+
 
 class LoginState(rx.State):
-    # State variables
     login_message: str = ""
     username: str = ""
     password: str = ""
     is_authenticated: bool = False
-    
+
     @rx.event
     def clear_message(self):
         self.login_message = ""
@@ -17,31 +16,38 @@ class LoginState(rx.State):
     @rx.event
     def clear_and_redirect(self):
         self.login_message = ""
-        yield  # Esta línea es importante: fuerza una actualización del estado antes del redirect
+        yield
         return rx.redirect("/register")
 
-        
     @rx.event
     def handle_login(self, form_data: dict):
+        """Evento que procesa el formulario de inicio de sesión."""
         username = form_data["usuario"]
         password = form_data["password"]
-        
+
         if not username or not password:
             self.login_message = "❌ Por favor, complete ambos campos"
             return
-            
+
         db = SessionLocal()
         try:
             if login_user(username, password, db):
+                # datos de sesión
                 self.username = username
-                self.password = password
+                self.password = password          # guarda si de verdad lo necesitas
                 self.is_authenticated = True
-                print(self.is_authenticated, self.username, self.password)
                 self.login_message = f"✅ Usuario '{username}' autenticado correctamente."
+
+                # ① importación local para romper el ciclo
+                from QQSM.states.leaderboard_state import LeaderboardState
+
+                # ② cargar ranking y puntuación antes de ir al menú
+                yield LeaderboardState.load()
+
                 return rx.redirect("/menu")
             else:
                 self.login_message = "❌ Usuario o contraseña incorrectos."
         except Exception as e:
-            self.login_message = f"❌ Error en la autenticación: {str(e)}"
+            self.login_message = f"❌ Error en la autenticación: {e}"
         finally:
             db.close()
