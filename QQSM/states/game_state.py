@@ -31,10 +31,10 @@ class GameState(rx.State):
 
     # Estilos dinámicos de los botones
     button_classes: dict[str, str] = {
-        "A": "custom-button",
-        "B": "custom-button",
-        "C": "custom-button",
-        "D": "custom-button",
+        "A": "hex-button",
+        "B": "hex-button",
+        "C": "hex-button",
+        "D": "hex-button",
     }
 
     @rx.event
@@ -49,10 +49,10 @@ class GameState(rx.State):
         self.number_question = 1
         self.difficulty = 0
         self.button_classes = {
-            "A": "custom-button",
-            "B": "custom-button",
-            "C": "custom-button",
-            "D": "custom-button",
+            "A": "hex-button",
+            "B": "hex-button",
+            "C": "hex-button",
+            "D": "hex-button",
         }
         self.enable_topic = False
         self.mode = ruta
@@ -123,10 +123,10 @@ class GameState(rx.State):
 
         # Resetear estilos de los botones
         self.button_classes = {
-            "A": "custom-button",
-            "B": "custom-button",
-            "C": "custom-button",
-            "D": "custom-button",
+            "A": "hex-button",
+            "B": "hex-button",
+            "C": "hex-button",
+            "D": "hex-button",
         }
 
         if self.number_question == 15 and (self.mode == "/game" or self.mode == "/theme"):
@@ -145,15 +145,15 @@ class GameState(rx.State):
         if selected_option == self.correct:
             self.correct_answer = True
             #self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
-            self.button_classes[letter] = "custom-button success"
+            self.button_classes[letter] = "hex-button success"
         else:
             self.correct_answer = False
             #self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
-            self.button_classes[letter] = "custom-button error"
+            self.button_classes[letter] = "hex-button error"
 
         for key in ["A", "B", "C", "D"]:
             if getattr(self, f"option_{key.lower()}") == self.correct:
-                self.button_classes[key] = "custom-button success"
+                self.button_classes[key] = "hex-button success"
 
     @rx.event
     def use_fifty_option(self):
@@ -167,7 +167,7 @@ class GameState(rx.State):
 
             # Marcar los botones eliminados como incorrectos en rojo
             for op in eliminadas:
-                self.button_classes[op] = "custom-button disabled"
+                self.button_classes[op] = "hex-button disabled"
 
             self.fifty_used = True
         else:

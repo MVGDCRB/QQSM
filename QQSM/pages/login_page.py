@@ -17,8 +17,8 @@ def login_page():
                         name="password",
                         class_name="custom-input"
                     ),              
-                    rx.button("Iniciar Sesión", type="submit", class_name="custom-button"),
-                    rx.button("No tengo cuenta", on_click=LoginState.clear_and_redirect, class_name="custom-button"),
+                    rx.button("Iniciar Sesión", type="submit", class_name="hex-button"),
+                    rx.button("No tengo cuenta", on_click=LoginState.clear_and_redirect, class_name="hex-button"),
                     spacing="4",
                     align="center",
                 ),

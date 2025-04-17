@@ -17,8 +17,8 @@ def register_page():
                         name="password",
                         class_name="custom-input"
                     ),              
-                    rx.button("Registrar usuario", type="submit", class_name="custom-button"),
-                    rx.button("Ya tengo cuenta", on_click=rx.redirect("/login"), class_name="custom-button"),
+                    rx.button("Registrar usuario", type="submit", class_name="hex-button"),
+                    rx.button("Ya tengo cuenta", on_click=rx.redirect("/login"), class_name="hex-button"),
                     spacing="5",
                     align="center",
                 ),

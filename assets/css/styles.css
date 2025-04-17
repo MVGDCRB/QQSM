@@ -1,4 +1,4 @@
-.custom-button {
+.hex-button {
     position: relative;
     display: inline-block;
     font-size: 1.2em;
@@ -22,20 +22,20 @@
 }
 
 /* Estado verde (éxito) */
-.custom-button.success {
+.hex-button.success {
     background: linear-gradient(to bottom, #28a745, #1c7c31);
     border-color: #c3e6cb;
     color: #ffcc80;
 }
 
 /* Estado rojo (error) */
-.custom-button.error {
+.hex-button.error {
     background: linear-gradient(to bottom, #dc3545, #a71d2a);
     border-color: #f5c6cb;
     color: #ffcc80;
 }
 
-.custom-button.disabled {
+.hex-button.disabled {
     background: linear-gradient(to bottom, #555555, #2c2c2c);
     border-color: #777777;
     color: transparent; 
@@ -44,8 +44,8 @@
     pointer-events: none;
 }
 
-.custom-button::before, 
-.custom-button::after {
+.hex-button::before, 
+.hex-button::after {
     content: '';
     position: absolute;
     top: 0;
@@ -54,27 +54,27 @@
     background: inherit;
 }
 
-.custom-button::before {
+.hex-button::before {
     left: -20px;
     clip-path: polygon(100% 0, 0 50%, 100% 100%);
 }
 
-.custom-button::after {
+.hex-button::after {
     right: -20px;
     clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
-.custom-button:hover {
+.hex-button:hover {
     background: linear-gradient(to bottom, #ffcc80, #ff9f43);
     color: #1e3a8a;
     border-color: #ffffcc;
 }
 
-.custom-button.success:hover {
+.hex-button.success:hover {
     background: linear-gradient(to bottom, #34d058, #218838);
 }
 
-.custom-button.error:hover {
+.hex-button.error:hover {
     background: linear-gradient(to bottom, #e4606d, #c82333);
 }
 
@@ -298,3 +298,233 @@
     text-align: center;
     margin-top: 10px;
 }
+
+:root {
+    --triangle-width: 10px;
+    --triangle-height: 60px;
+}
+
+.hex-button {
+    position: relative;
+    width: 100%;
+    height: 60px;
+
+    background:
+    /* Triángulo superior izquierdo */
+    linear-gradient(to bottom right, #ffffcc 50%, transparent 50%) 
+        no-repeat left top / var(--triangle-width) var(--triangle-height),
+
+    /* Triángulo inferior izquierdo */
+    linear-gradient(to top right, #ffffcc 50%, transparent 50%) 
+        no-repeat left bottom / var(--triangle-width) var(--triangle-height),
+
+    /* Triángulo superior derecho */
+    linear-gradient(to top right, transparent 50%, #ffffcc 50%) 
+        no-repeat right top / var(--triangle-width) var(--triangle-height),
+
+    /* Triángulo inferior derecho */
+    linear-gradient(to bottom right, transparent 50%, #ffffcc 50%) 
+        no-repeat right bottom / var(--triangle-width) var(--triangle-height),
+
+    /* Fondo azul */
+    linear-gradient(to bottom, #1e3a8a, #0a0a1a);
+
+    background-position:
+        left top,
+        left bottom,
+        right top,
+        right bottom,
+        left center;
+
+    background-size:
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        100% 100%;
+
+
+    transition: background-position 0.4s ease-in-out;
+
+    color: #ffcc80;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+
+    outline: 2px solid #ffffcc;
+    outline-offset: -2px;
+    border-radius: 0;
+}
+
+.hex-button:hover {
+    background:
+        /* Triángulo superior izquierdo */
+        linear-gradient(to bottom right, #ffffcc 50%, transparent 50%) 
+            no-repeat 2% top / var(--triangle-width) var(--triangle-height),
+
+        /* Triángulo inferior izquierdo */
+        linear-gradient(to top right, #ffffcc 50%, transparent 50%) 
+            no-repeat 2% bottom / var(--triangle-width) var(--triangle-height),
+
+        /* Triángulo superior derecho */
+        linear-gradient(to top right, transparent 50%, #ffffcc 50%) 
+            no-repeat 98% top / var(--triangle-width) var(--triangle-height),
+
+        /* Triángulo inferior derecho */
+        linear-gradient(to bottom right, transparent 50%, #ffffcc 50%) 
+            no-repeat 98% bottom / var(--triangle-width) var(--triangle-height),
+
+        /* Fondo degradado horizontal dorado */
+        linear-gradient(to right, #ffcc80, #ff9f43);
+
+    background-position:
+        1% top,
+        1% bottom,
+        99% top,
+        99% bottom,
+        right center;
+
+    background-size:
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        100% 100%;
+
+    color: #1e3a8a;
+}
+
+
+.hex-button.success {
+    background:
+        linear-gradient(to bottom right, #c3e6cb 50%, transparent 50%) no-repeat left top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, #c3e6cb 50%, transparent 50%) no-repeat left bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, transparent 50%, #c3e6cb 50%) no-repeat right top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to bottom right, transparent 50%, #c3e6cb 50%) no-repeat right bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to bottom, #28a745, #1c7c31);
+    background-position:
+        left top,
+        left bottom,
+        right top,
+        right bottom,
+        left center;
+    background-size:
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        100% 100%;
+    color: #ffcc80;
+}
+
+
+.hex-button.success:hover {
+    background:
+        linear-gradient(to bottom right, #c3e6cb 50%, transparent 50%) 
+            no-repeat 2% top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, #c3e6cb 50%, transparent 50%) 
+            no-repeat 2% bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, transparent 50%, #c3e6cb 50%) 
+            no-repeat 98% top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to bottom right, transparent 50%, #c3e6cb 50%) 
+            no-repeat 98% bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to right, #34d058, #218838);
+    background-position:
+        1% top,
+        1% bottom,
+        99% top,
+        99% bottom,
+        right center;
+    background-size:
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        100% 100%;
+    color: #1e3a8a;
+}
+
+
+.hex-button.error {
+    background:
+        linear-gradient(to bottom right, #f5c6cb 50%, transparent 50%) no-repeat left top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, #f5c6cb 50%, transparent 50%) no-repeat left bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, transparent 50%, #f5c6cb 50%) no-repeat right top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to bottom right, transparent 50%, #f5c6cb 50%) no-repeat right bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to bottom, #dc3545, #a71d2a);
+    background-position:
+        left top,
+        left bottom,
+        right top,
+        right bottom,
+        left center;
+    background-size:
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        100% 100%;
+    color: #ffcc80;
+}
+
+
+.hex-button.error:hover {
+    background:
+        linear-gradient(to bottom right, #f5c6cb 50%, transparent 50%) 
+            no-repeat 2% top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, #f5c6cb 50%, transparent 50%) 
+            no-repeat 2% bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, transparent 50%, #f5c6cb 50%) 
+            no-repeat 98% top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to bottom right, transparent 50%, #f5c6cb 50%) 
+            no-repeat 98% bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to right, #e4606d, #c82333);
+    background-position:
+        1% top,
+        1% bottom,
+        99% top,
+        99% bottom,
+        right center;
+    background-size:
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        100% 100%;
+    color: #1e3a8a;
+}
+
+
+.hex-button.disabled {
+    background:
+        linear-gradient(to bottom right, #777777 50%, transparent 50%) no-repeat left top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, #777777 50%, transparent 50%) no-repeat left bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to top right, transparent 50%, #777777 50%) no-repeat right top / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to bottom right, transparent 50%, #777777 50%) no-repeat right bottom / var(--triangle-width) var(--triangle-height),
+        linear-gradient(to bottom, #555555, #2c2c2c);
+    background-position:
+        left top,
+        left bottom,
+        right top,
+        right bottom,
+        left center;
+    background-size:
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        var(--triangle-width) var(--triangle-height),
+        100% 100%;
+    color: transparent;
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+

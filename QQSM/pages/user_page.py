@@ -5,7 +5,7 @@ from QQSM.styles.colors import Colors
 
 @rx.page(route="/user_page")
 def user_page():
-    user_data = get_user_leaderboard(str(LoginState.username))
+    user_data = get_user_leaderboard(LoginState.username)
     username = LoginState.username
     max_score = user_data[0][1] if user_data else 0
 
@@ -17,7 +17,7 @@ def user_page():
                 rx.text(f"Nombre de usuario: {username}", font_size="1.2em", color="white"),
                 rx.text(f"Puntuación máxima: {max_score}", font_size="1.2em", color="white"),
 
-                rx.button("Volver al menú", on_click=rx.redirect("/menu"), class_name="custom-button", margin_top="30px"),
+                rx.button("Volver al menú", on_click=rx.redirect("/menu"), class_name="hex-button", margin_top="30px"),
 
                 spacing="4",
                 align="start",
