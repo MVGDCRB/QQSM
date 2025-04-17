@@ -1,19 +1,34 @@
-# Funciones de registro y autenticación
-
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
+from sqlalchemy import func
 from db.models import User
 from db.database import SessionLocal
 from datetime import datetime
 
-# Configuración para el hash de contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-from sqlalchemy import func
+def get_user_position(username: str) -> int:
+    """Devuelve la posición global del usuario. Si el usuario no existe, retorna -1."""
+    db = SessionLocal()
+    try:
+        user_score = db.query(User.max_puntuacion).filter(User.username == username).scalar()
+        if user_score is None:
+            return -1  # usuario no encontrado
 
-def get_user_position(username: str):
-    return -1
+        position = (
+            db.query(User)
+            .filter(User.max_puntuacion > user_score)
+            .order_by(User.max_puntuacion.desc())
+            .count()
+        ) + 1
+
+        return position
+    except Exception as e:
+        print(f"Error al calcular posición: {e}")
+        return -1
+    finally:
+        db.close()
+
 
 
 def get_top_10_users():
