@@ -34,16 +34,10 @@ class LoginState(rx.State):
             if login_user(username, password, db):
                 # datos de sesión
                 self.username = username
-                self.password = password          # guarda si de verdad lo necesitas
+                self.password = password
                 self.is_authenticated = True
-                self.login_message = f"✅ Usuario '{username}' autenticado correctamente."
-
-                # ① importación local para romper el ciclo
-                from QQSM.states.leaderboard_state import LeaderboardState
-
-                # ② cargar ranking y puntuación antes de ir al menú
-                yield LeaderboardState.load()
-
+                self.login_message = f"✅ Usuario '{username}' autenticado correctamente."  
+                
                 return rx.redirect("/menu")
             else:
                 self.login_message = "❌ Usuario o contraseña incorrectos."

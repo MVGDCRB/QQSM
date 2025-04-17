@@ -1,5 +1,6 @@
 import reflex as rx
 from QQSM.states.login_state import LoginState
+from QQSM.styles.colors import Colors
 
 def login_page():
     return rx.center(
@@ -26,14 +27,14 @@ def login_page():
                 reset_on_submit=True,
             ),
             rx.text(LoginState.login_message, class_name="error-message"),
-            background_color="#1E3A5F",  # Fondo azul oscuro
+            background_color=Colors.DARK_BLUE, 
             padding="40px",
             border_radius="10px",
             box_shadow="0px 0px 15px rgba(255, 255, 255, 0.2)",
         ),
         width="100vw",
         height="100vh",
-        background_color="#1E3A5F",  # Fondo azul oscuro global
+        background_color=Colors.DARK_BLUE,
         display="flex",
         align_items="center",
         justify_content="center",

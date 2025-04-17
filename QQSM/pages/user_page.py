@@ -4,33 +4,48 @@ from QQSM.states.leaderboard_state import LeaderboardState
 from QQSM.styles.colors import Colors
 
 def user_page():
-    # componente de perfil (solo se verá si hay sesión)
-    perfil = rx.center(
+    return rx.center(
         rx.box(
             rx.vstack(
                 rx.text("👤 PERFIL DE USUARIO", font_size="2em", color=Colors.GOLD),
-                rx.text(f"Nombre de usuario: {LoginState.username}",
-                        font_size="1.2em", color="white"),
-                rx.text(f"Puntuación máxima: {LeaderboardState.max_score}",
-                        font_size="1.2em", color="white"),
-                rx.button("Volver al menú",
-                          on_click=lambda: rx.redirect("/menu"),
-                          class_name="custom-button",
-                          margin_top="30px"),
-                spacing="4",
-                align="start",
+                rx.text(
+                    rx.cond(
+                        LoginState.is_authenticated,
+                        f"Nombre de usuario: {LoginState.username}",
+                        "Nombre de usuario: No registrado",
+                    ),
+                    font_size="1.2em",
+                    color="white",
+                ),
+
+                rx.text(
+                    rx.cond(
+                        LoginState.is_authenticated,
+                        f"Puntuación máxima: {LeaderboardState.max_score}",
+                        "Puntuación máxima: -1",
+                    ),
+                    font_size="1.2em",
+                    color="white",
+                ),  
             ),
             padding="40px",
             background_color=Colors.DARK_BLUE,
             border_radius="12px",
             width="400px",
+            position="relative",
         ),
+
+        rx.box(
+            rx.button("✖",
+                      on_click=rx.redirect("/menu"),
+                      class_name="menu-exit-button"),
+            position="absolute",
+            top="20px",
+            left="20px",
+        ),
+
         width="100vw",
         height="100vh",
         background_color=Colors.DARK_BLUE,
+        position="relative",
     )
-
-    # componente vacío para la rama sin sesión
-    vacio = rx.fragment()
-
-    return rx.cond(LoginState.is_authenticated, perfil, vacio)
