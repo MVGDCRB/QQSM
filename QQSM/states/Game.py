@@ -8,8 +8,7 @@ class Game:
     _model = gia.GenerativeModel("gemini-2.0-flash")  # Especifica el modelo Gemini que quieres usar
 
     def __init__(self, question: str = "", option_a: str = "", option_b: str = "",
-                 option_c: str = "", option_d: str = "", correct: str = "", number_question: int = 1,
-                 difficulty: int = 0, topic: str = ""):
+                 option_c: str = "", option_d: str = "", correct: str = "", number_question: int = 1):
         self.question = question
         self.option_a = option_a
         self.option_b = option_b
@@ -17,8 +16,6 @@ class Game:
         self.option_d = option_d
         self.correct = correct
         self.number_question = number_question
-        self.difficulty = difficulty
-        self.topic = topic
         self.difficulties_NM = [5, 12, 20, 30, 38, 45, 52, 60, 68, 75, 80, 85, 90, 95, 100]
         self.topics = ["arte", "fisica", "historia", "quimica", "musica", "matematicas",
                        "literatura", "biologia", "historia de la television", "videojuegos",
@@ -42,17 +39,6 @@ class Game:
             del answer[-1]
         answer[-1] = answer[-1].replace("\n", "")
         return answer
-
-    def set_question(self, answer, number_question: int, difficulty: int, topic: str):
-        self.question = answer[0]
-        self.option_a = answer[1]
-        self.option_b = answer[2]
-        self.option_c = answer[3]
-        self.option_d = answer[4]
-        self.correct = answer[5]
-        self.number_question = number_question
-        self.topic = topic
-        self.difficulty = difficulty
 
     def generate_difficulty_normal_mode(self, number_question: int):
         return self.difficulties_NM[number_question - 1]
@@ -87,29 +73,6 @@ class Game:
             self.number_question += 1
             next_question = True
         return next_question
-
-    def fifty_option(self):
-        if self.fifty > 0:
-            list_answer = [self.option_a, self.option_b, self.option_c, self.option_d]
-            random_question = random.choice(list_answer)
-            while random_question == self.correct:
-                random_question = random.choice(list_answer)
-
-            for answer in list_answer:
-                if answer != random_question and answer != self.correct:
-                    match answer:
-                        case self.option_a:
-                            self.option_a = ""
-                        case self.option_b:
-                            self.option_b = ""
-                        case self.option_c:
-                            self.option_c = ""
-                        case self.option_d:
-                            self.option_d = ""
-
-            self.fifty -= 1
-        else:
-            return "No se puede usar el comodin porque ya ha sido usado"
 
     def public_option(self):
         if self.public > 0:

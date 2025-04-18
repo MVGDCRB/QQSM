@@ -184,9 +184,7 @@ class GameState(rx.State):
                 option_c=self.option_c,
                 option_d=self.option_d,
                 correct=self.correct,
-                number_question=self.number_question,
-                difficulty=self.difficulty,
-                topic=self.topic
+                number_question=self.number_question
             )
 
             stats = game.public_option()
@@ -218,9 +216,7 @@ class GameState(rx.State):
                 option_c=self.option_c,
                 option_d=self.option_d,
                 correct=self.correct,
-                number_question=self.number_question,
-                difficulty=self.difficulty,
-                topic=self.topic
+                number_question=self.number_question
             )
 
             text = game.call_option()  # Obtiene el texto de la llamada
