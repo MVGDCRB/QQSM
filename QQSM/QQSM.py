@@ -7,6 +7,8 @@ from QQSM.pages.game_page import game_page
 from QQSM.pages.leaderboard_page import leaderboard_page
 from QQSM.pages.user_page import user_page
 from QQSM.pages.endless_page import endless_page
+from QQSM.pages.maquinaVS_page import maquinaVS_page
+from QQSM.pages.deepSeekIA_page import deepSeekIA_page
 from QQSM.pages.theme_page import theme_page
 from QQSM.pages.wellcome_page import wellcome_page
 
@@ -35,6 +37,8 @@ app.add_page(leaderboard_page, route="/leaderboard")
 app.add_page(user_page, route="/user_page")
 app.add_page(endless_page, route="/endless")
 app.add_page(theme_page, route="/theme")
+app.add_page(maquinaVS_page, route="/maquinaVS")
+app.add_page(deepSeekIA_page, route="/deepSeekIA")
 
 
 if __name__ == "__main__":

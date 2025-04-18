@@ -29,7 +29,7 @@ class GameState(rx.State):
     enable_topic: bool = False
     game_class = ""
 
-    # Estilos dinámicos de los botones
+    #Estilos dinámicos de los botones
     button_classes: dict[str, str] = {
         "A": "hex-button",
         "B": "hex-button",
@@ -87,12 +87,14 @@ class GameState(rx.State):
         """Genera una nueva pregunta usando Game."""
         self.game_class = Game(number_question=self.number_question)
         topic = ""
+
+        #Primero se generan los temas en funcion de si hacen falta 1 o 2
         if self.mode == "/theme":
             self.get_themes()
         else:
             topic = self.game_class.generate_topic_normal_mode(self.topic)
 
-        if self.mode == "/game":
+        if (self.mode == "/game" or self.mode == "/deepSeekIA"):
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.game_class.generate_question(difficulty, topic)
         elif self.mode == "/endless":
@@ -101,6 +103,7 @@ class GameState(rx.State):
         else:
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.empty_question()
+
 
         # Actualiza el estado con la nueva pregunta
         self.question = new_question[0]

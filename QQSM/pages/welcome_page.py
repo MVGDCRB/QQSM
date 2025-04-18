@@ -4,8 +4,8 @@ from QQSM.states.register_state import RegisterState
 from QQSM.states.login_state import LoginState
 
 
-@rx.page("/wellcome")
-def wellcome_page():
+@rx.page("/welcome")
+def welcome_page():
     return rx.center(
         rx.box(
             rx.form(

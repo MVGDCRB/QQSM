@@ -21,7 +21,7 @@ def login_page():
                         class_name="custom-input"
                     ),              
                     rx.button("Iniciar Sesión", type="submit", class_name="hex-button"),
-                    rx.button("Volver", on_click=rx.redirect("/wellcome"), class_name="hex-button"),
+                    rx.button("Volver", on_click=rx.redirect("/welcome"), class_name="hex-button"),
                     spacing="4",
                     align="center",
                 ),

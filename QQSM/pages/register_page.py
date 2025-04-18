@@ -1,7 +1,6 @@
 import reflex as rx
 from QQSM.states.register_state import RegisterState
 
-
 @rx.page("/register")
 def register_page():
     return rx.center(
@@ -20,7 +19,7 @@ def register_page():
                         class_name="custom-input"
                     ),              
                     rx.button("Registrar usuario", type="submit", class_name="hex-button"),
-                    rx.button("Volver", on_click=rx.redirect("/wellcome"), class_name="hex-button"),
+                    rx.button("Volver", on_click=rx.redirect("/welcome"), class_name="hex-button"),
                     spacing="5",
                     align="center",
                 ),

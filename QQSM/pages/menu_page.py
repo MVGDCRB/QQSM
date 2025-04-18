@@ -14,7 +14,9 @@ def menu_page():
                           class_name="hex-button", width="300px"),
                 rx.button("Modo Temas", on_click=GameState.initialize_game("/theme"),
                           class_name="hex-button", width="300px"),
-                rx.button("Marcadores", on_click=rx.redirect("/leaderboard"),
+                rx.button("IA vs IA", on_click=rx.redirect("/maquinaVS_page"),
+                          class_name="hex-button", width="300px"),          
+                rx.button("Marcadores", on_click=rx.redirect("/leaderboard_page"),
                           class_name="hex-button", width="300px"),
                 rx.button("Perfil Usuario", on_click=rx.redirect("/user_page"),
                           class_name="hex-button", width="300px"),
@@ -29,7 +31,7 @@ def menu_page():
             width="fit-content"
         ),
         rx.box(
-            rx.button("✖", on_click=rx.redirect("/wellcome"), class_name="menu-exit-button"),
+            rx.button("✖", on_click=rx.redirect("/welcome"), class_name="menu-exit-button"),
             position="absolute",
             top="20px",
             left="20px"
