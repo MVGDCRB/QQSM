@@ -10,7 +10,7 @@ from QQSM.pages.endless_page import endless_page
 from QQSM.pages.maquinaVS_page import maquinaVS_page
 from QQSM.pages.deepSeekIA_page import deepSeekIA_page
 from QQSM.pages.theme_page import theme_page
-from QQSM.pages.wellcome_page import wellcome_page
+from QQSM.pages.welcome_page import welcome_page
 
 
 # Inicializa la base de datos y crea las tablas antes de ejecutar Reflex  
@@ -18,7 +18,7 @@ init_db()
 
 
 def index() -> rx.Component:
-    return rx.cond(True, wellcome_page(), wellcome_page())
+    return rx.cond(True, welcome_page(), welcome_page())
 
 
 app = rx.App(
@@ -28,7 +28,7 @@ app = rx.App(
 )
 
 app.add_page(index, route="/")
-app.add_page(wellcome_page, route="/wellcome")
+app.add_page(wellcome_page, route="/welcome")
 app.add_page(register_page, route="/register")
 app.add_page(login_page, route="/login")  # Ruta como string y la función como segundo parámetro
 app.add_page(menu_page, route="/menu")
