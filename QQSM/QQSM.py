@@ -28,7 +28,7 @@ app = rx.App(
 )
 
 app.add_page(index, route="/")
-app.add_page(wellcome_page, route="/welcome")
+app.add_page(welcome_page, route="/welcome")
 app.add_page(register_page, route="/register")
 app.add_page(login_page, route="/login")  # Ruta como string y la función como segundo parámetro
 app.add_page(menu_page, route="/menu")
