@@ -1,5 +1,5 @@
 import reflex as rx
-from QQSM.pages.Game import Game
+from QQSM.states.Game import Game
 import random
 
 
