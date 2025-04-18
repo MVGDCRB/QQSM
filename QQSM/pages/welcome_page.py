@@ -27,7 +27,7 @@ def welcome_page():
         width="100vw",
         height="100vh",
         background_color=Colors.DARK_BLUE,
-        background_image="url('/wellcome_fondo.jpg')",  # Ruta relativa a assets/
+        background_image="url('/welcome_fondo.jpg')",  # Ruta relativa a assets/
         background_size="cover",
         background_position="center",
         background_repeat="no-repeat",
