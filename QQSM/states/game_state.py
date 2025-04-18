@@ -23,6 +23,7 @@ class GameState(rx.State):
     call_used: bool = False
     public_stats: list[int] = []
     call_text: str = ""
+    text_answer: str = ""
     chosen_answer: bool = False
     correct_answer: bool = False
     mode: str = ""
@@ -94,11 +95,14 @@ class GameState(rx.State):
         else:
             topic = self.game_class.generate_topic_normal_mode(self.topic)
 
-        if (self.mode == "/game" or self.mode == "/deepSeekIA"):
+        if self.mode == "/game":
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.game_class.generate_question(difficulty, topic)
         elif self.mode == "/endless":
             difficulty = self.game_class.generate_difficulty_endless_mode()
+            new_question = self.game_class.generate_question(difficulty, topic)
+        elif self.mode == "/deepSeekIA":
+            difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.game_class.generate_question(difficulty, topic)
         else:
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
@@ -117,6 +121,11 @@ class GameState(rx.State):
         self.feedback = ""
         self.public_stats = []
         self.call_text = ""
+
+        if self.mode == "/deepSeekIA":
+            answer = self.deepSeekAnswer()
+            self.validate_answer(answer)
+
 
     @rx.event
     def next_round(self):
@@ -227,3 +236,21 @@ class GameState(rx.State):
             self.call_used = True
         else:
             self.feedback = "❌ Ya has usado el comodín de la llamada."
+
+
+    @rx.event
+    def deepSeekAnswer(self):
+        print("DeepSeek Answer (game_state.py)")
+        """Mostrar la respuesta de DeepSeek."""
+        game = Game(
+                question=self.question,
+                option_a=self.option_a,
+                option_b=self.option_b,
+                option_c=self.option_c,
+                option_d=self.option_d,
+                correct=self.correct,
+                number_question=self.number_question
+            )
+        answer = game.deepSeekAnswer()  # Obtiene la respuesta de DeepSeek
+        print(answer)
+        return answer  # Devuelve la respuesta para su uso posterior        

@@ -138,3 +138,51 @@ class Game:
                 return result
         else:
             return "No se puede usar el comodin porque ya ha sido usado"
+
+
+    def deepSeekAnswer(self):
+        api_key = "sk-0c4a68c97ce14b288ec1a6b5b9117e21"
+        api_url = "https://api.deepseek.com/v1/chat/completions"  # Reemplaza con la URL correcta
+        message = (
+            "En '¿Quién quiere ser millonario?', la pregunta es: " + self.question +
+            "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
+            + "Usando el comodín de la llamada, muestra solo con el siguiente formato(SOLO LA LETRA DE LA RESPUESTA): "
+            "respuesta correcta"
+        )
+
+        sesion = Session()
+
+        # Configura los headers con tu clave de API
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+
+        # Define el cuerpo de la solicitud
+        data = {
+            "model": "deepseek-chat",  # Reemplaza con el modelo correcto
+            "messages": [
+                {
+                    "role": "user",  # El rol del mensaje (en este caso, el usuario)
+                    "content": message  # El contenido del mensaje
+                }
+            ],
+            "max_tokens": 70,  # Ajusta según la longitud esperada de la respuesta, influye en el tiempo
+            "temperature": 1,  # Controla la creatividad de la respuesta
+            "stream": False
+        }
+
+        # Hacer la solicitud POST a la API
+        response = sesion.post(api_url, headers=headers, json=data, timeout=15)
+
+        # Verificar la respuesta
+        if response.status_code == 200:
+            # Extraer y mostrar la respuesta
+            result = response.json()
+            result = result["choices"][0]["message"]["content"]
+            print(result)
+
+            sesion.close()
+            return result
+        else:
+            return "Error en la solicitud a la API."
