@@ -67,6 +67,7 @@ def leaderboard_page():
         position="relative",
     )
 
+
 def render_row(pos, username, score, highlight=False):
     """Renderiza una fila del ranking."""
     return rx.hstack(

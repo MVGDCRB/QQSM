@@ -3,6 +3,8 @@ from QQSM.states.login_state import LoginState
 from QQSM.states.leaderboard_state import LeaderboardState
 from QQSM.styles.colors import Colors
 
+
+@rx.page("/user_page")
 def user_page():
     return rx.center(
         rx.box(

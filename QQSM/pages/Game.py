@@ -57,7 +57,7 @@ class Game:
     def generate_difficulty_normal_mode(self, number_question: int):
         return self.difficulties_NM[number_question - 1]
 
-    def generate_difficulty_endless_mode(self, number_question: int):
+    def generate_difficulty_endless_mode(self):
         if 4 * self.number_question < 100:
             return 4 * self.number_question
         else:
@@ -113,12 +113,11 @@ class Game:
 
     def public_option(self):
         if self.public > 0:
-            public = ("Estoy jugando a quien quiere ser millonario y me preguntan" + self.question + "con estas posibles "
-                                                                                                     "respuestas"
-                      + self.option_a + self.option_b + self.option_c + self.option_d +
-                      "y quiero usar el comodin del publico. Quero que solo me muestres el texto del comodin del publico "
-                      "de la siguiente forma como en el ejemplo : Courrèges:15%;Miyake:60%;Ungaro:5%Cardin:20% .Pasame "
-                      "solo el mensaje sin nada extra ")
+            public = ("Estoy jugando a quien quiere ser millonario y me preguntan" + self.question +
+                      "con estas posibles respuestas" + self.option_a + self.option_b + self.option_c + self.option_d +
+                      "y quiero usar el comodin del publico. Quero que solo me muestres el texto del comodin del "
+                      "publico de la siguiente forma como en el ejemplo : "
+                      "Courrèges:15%;Miyake:60%;Ungaro:5%Cardin:20% .Pasame solo el mensaje sin nada extra ")
             statistics = self._model.generate_content(public).text
             statistics = statistics.split(";")
             if statistics[-1] == "\n":
@@ -131,19 +130,20 @@ class Game:
 
     def call_option(self):
         if self.call > 0:
-            API_KEY = "sk-0c4a68c97ce14b288ec1a6b5b9117e21"
-            API_URL = "https://api.deepseek.com/v1/chat/completions"  # Reemplaza con la URL correcta
+            api_key = "sk-0c4a68c97ce14b288ec1a6b5b9117e21"
+            api_url = "https://api.deepseek.com/v1/chat/completions"  # Reemplaza con la URL correcta
             message = (
                 "En '¿Quién quiere ser millonario?', la pregunta es: " + self.question +
-                "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "." +
-                "Usando el comodín de la llamada, muestra solo con el siguiente formato: respuesta correcta;descripcion breve."
+                "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
+                + "Usando el comodín de la llamada, muestra solo con el siguiente formato: "
+                  "respuesta correcta;descripcion breve."
             )
 
             sesion = Session()
 
             # Configura los headers con tu clave de API
             headers = {
-                "Authorization": f"Bearer {API_KEY}",
+                "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
             }
 
@@ -162,7 +162,7 @@ class Game:
             }
 
             # Hacer la solicitud POST a la API
-            response = sesion.post(API_URL, headers=headers, json=data, timeout=15)
+            response = sesion.post(api_url, headers=headers, json=data, timeout=15)
 
             # Verificar la respuesta
             if response.status_code == 200:
@@ -175,5 +175,3 @@ class Game:
                 return result
         else:
             return "No se puede usar el comodin porque ya ha sido usado"
-
-

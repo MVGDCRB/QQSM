@@ -2,6 +2,8 @@ import reflex as rx
 from QQSM.states.login_state import LoginState
 from QQSM.styles.colors import Colors
 
+
+@rx.page("/login")
 def login_page():
     return rx.center(
         rx.box(
@@ -19,7 +21,7 @@ def login_page():
                         class_name="custom-input"
                     ),              
                     rx.button("Iniciar Sesión", type="submit", class_name="hex-button"),
-                    rx.button("No tengo cuenta", on_click=LoginState.clear_and_redirect, class_name="hex-button"),
+                    rx.button("Volver", on_click=rx.redirect("/wellcome"), class_name="hex-button"),
                     spacing="4",
                     align="center",
                 ),

@@ -1,8 +1,8 @@
 import reflex as rx
 from attr.validators import disabled
 from keyring.core import disable
-
 from QQSM.states.game_state import GameState
+
 
 def get_gradient_color(index):
     """
@@ -14,8 +14,9 @@ def get_gradient_color(index):
     b = 0
     return f"rgb({r},{g},{b})"
 
+
 def render_public_chart():
-    letras = ["A", "B", "C", "D"]
+    # letras = ["A", "B", "C", "D"]
     return rx.hstack(
         rx.foreach(
             GameState.public_stats,
@@ -34,8 +35,9 @@ def render_public_chart():
         justify="start",
         margin_top="5",
         margin_left="0px",
-        padding= "0"
+        padding="0"
     )
+
 
 def render_call_box():
     return rx.box(
@@ -55,7 +57,7 @@ def render_call_box():
 def theme_page():
     return rx.center(
         rx.box(
-            rx.text("¿QUIÉN QUIERE SER MILLONARIO?",class_name="title-style"),
+            rx.text("¿QUIÉN QUIERE SER MILLONARIO?", class_name="title-style"),
             rx.center(
                 rx.vstack(
                     rx.hstack(
@@ -63,7 +65,8 @@ def theme_page():
                         rx.spacer(),
                         *[
                             rx.box(
-                                rx.text(str(i + 1), font_size="14", color="gold", text_align="center"),  # Número en dorado
+                                # Número en dorado
+                                rx.text(str(i + 1), font_size="14", color="gold", text_align="center"),
                                 rx.box(
                                     class_name=rx.cond(
                                         i == GameState.number_question - 1,  # Ajustado a 1-based index
@@ -98,7 +101,8 @@ def theme_page():
 
                     rx.hstack(
                         rx.box(
-                            rx.text(GameState.question, font_size="24", font_weight="bold", color="white", text_align="center", class_name="custom-title"),
+                            rx.text(GameState.question, font_size="24", font_weight="bold", color="white",
+                                    text_align="center", class_name="custom-title"),
                             padding="5",
                             border_radius="5",
                             width="80%",
@@ -142,10 +146,22 @@ def theme_page():
                     rx.hstack(
                         rx.cond(GameState.public_used, render_public_chart()),
                         rx.grid(
-                            rx.button(f"A) {GameState.option_a}", width="100%", class_name=GameState.button_classes["A"], on_click=lambda: GameState.validate_answer("A"), disabled=GameState.chosen_answer),
-                            rx.button(f"B) {GameState.option_b}", width="100%", class_name=GameState.button_classes["B"], on_click=lambda: GameState.validate_answer("B"), disabled=GameState.chosen_answer),
-                            rx.button(f"C) {GameState.option_c}", width="100%", class_name=GameState.button_classes["C"], on_click=lambda: GameState.validate_answer("C"), disabled=GameState.chosen_answer),
-                            rx.button(f"D) {GameState.option_d}", width="100%", class_name=GameState.button_classes["D"], on_click=lambda: GameState.validate_answer("D"), disabled=GameState.chosen_answer),
+                            rx.button(f"A) {GameState.option_a}", width="100%",
+                                      class_name=GameState.button_classes["A"],
+                                      on_click=lambda: GameState.validate_answer("A"),
+                                      disabled=GameState.chosen_answer),
+                            rx.button(f"B) {GameState.option_b}", width="100%",
+                                      class_name=GameState.button_classes["B"],
+                                      on_click=lambda: GameState.validate_answer("B"),
+                                      disabled=GameState.chosen_answer),
+                            rx.button(f"C) {GameState.option_c}", width="100%",
+                                      class_name=GameState.button_classes["C"],
+                                      on_click=lambda: GameState.validate_answer("C"),
+                                      disabled=GameState.chosen_answer),
+                            rx.button(f"D) {GameState.option_d}", width="100%",
+                                      class_name=GameState.button_classes["D"],
+                                      on_click=lambda: GameState.validate_answer("D"),
+                                      disabled=GameState.chosen_answer),
                             columns="2",
                             spacing="5",
                             align_items="center",
@@ -161,16 +177,20 @@ def theme_page():
             ),
 
             rx.center(
-                rx.text(GameState.feedback, font_size="20", color="red", margin_top="10px",text_align="center"),  # Mensaje de validación
+                rx.text(GameState.feedback, font_size="20", color="red", margin_top="10px",
+                        text_align="center"),  # Mensaje de validación
 
                 rx.hstack(
-                    rx.button("📊", class_name="joker-button", on_click=GameState.use_public_option, disabled=GameState.public_used | GameState.chosen_answer),
-                    rx.button("50%", class_name="joker-button", on_click=GameState.use_fifty_option, disabled=GameState.fifty_used | GameState.chosen_answer),
-                    rx.button("📞", class_name="joker-button", on_click=GameState.use_call_option, disabled=GameState.call_used | GameState.chosen_answer),
+                    rx.button("📊", class_name="joker-button", on_click=GameState.use_public_option,
+                              disabled=GameState.public_used | GameState.chosen_answer),
+                    rx.button("50%", class_name="joker-button", on_click=GameState.use_fifty_option,
+                              disabled=GameState.fifty_used | GameState.chosen_answer),
+                    rx.button("📞", class_name="joker-button", on_click=GameState.use_call_option,
+                              disabled=GameState.call_used | GameState.chosen_answer),
                     spacing="7",
                     margin_top="15px"
                 )
             ),
-            width="100vw", height="100vh", background_color="#1E3A5F", min_height="100vh",overflow_y="auto"
+            width="100vw", height="100vh", background_color="#1E3A5F", min_height="100vh", overflow_y="auto"
         )
     )

@@ -12,6 +12,7 @@ class LoginState(rx.State):
     @rx.event
     def clear_message(self):
         self.login_message = ""
+        return rx.redirect("/login")
 
     @rx.event
     def clear_and_redirect(self):
@@ -25,23 +26,23 @@ class LoginState(rx.State):
         username = form_data["usuario"]
         password = form_data["password"]
 
-        if not username or not password:
+        if (not username and password) or (not password and username) or username == "" and password == "":
             self.login_message = "❌ Por favor, complete ambos campos"
             return
+        else:
+            db = SessionLocal()
+            try:
+                if login_user(username, password):
+                    # datos de sesión
+                    self.username = username
+                    self.password = password
+                    self.is_authenticated = True
+                    self.login_message = f"✅ Usuario '{username}' autenticado correctamente."
 
-        db = SessionLocal()
-        try:
-            if login_user(username, password, db):
-                # datos de sesión
-                self.username = username
-                self.password = password
-                self.is_authenticated = True
-                self.login_message = f"✅ Usuario '{username}' autenticado correctamente."  
-                
-                return rx.redirect("/menu")
-            else:
-                self.login_message = "❌ Usuario o contraseña incorrectos."
-        except Exception as e:
-            self.login_message = f"❌ Error en la autenticación: {e}"
-        finally:
-            db.close()
+                    return rx.redirect("/menu")
+                else:
+                    self.login_message = "❌ Usuario o contraseña incorrectos."
+            except Exception as e:
+                self.login_message = f"❌ Error en la autenticación: {e}"
+            finally:
+                db.close()

@@ -1,6 +1,8 @@
 import reflex as rx
+from reflex import Style
 from QQSM.states.game_state import GameState
 from QQSM.styles.colors import Colors
+
 
 def get_gradient_color(index):
     """
@@ -43,6 +45,7 @@ def endless_page():
         overflow="hidden",
     )
 
+
 def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
@@ -53,6 +56,7 @@ def render_upper_panel():
         align="center",
         justify="between",
     )
+
 
 def render_game_header():
     return rx.box(
@@ -74,6 +78,7 @@ def render_exit_button():
         class_name="menu-exit-button"
     )
 
+
 def render_next_button():
     return rx.cond(
         GameState.correct_answer,
@@ -83,6 +88,7 @@ def render_next_button():
             class_name="next-arrow-button"
         )
     )
+
 
 def render_progress_indicator():
     return rx.hstack(
@@ -173,7 +179,7 @@ def render_answer_options():
                 height="auto",
                 min_height="50px",
                 class_name=GameState.button_classes[letter],
-                on_click=lambda l=letter: GameState.validate_answer(l),
+                on_click=lambda le=letter: GameState.validate_answer(le),
                 disabled=GameState.chosen_answer
             )
             for letter in ["A", "B", "C", "D"]
@@ -186,11 +192,13 @@ def render_answer_options():
         margin_top="10px",
     )
 
+
 def render_right_panel():
     return rx.cond(
         GameState.public_used,
         render_public_chart()
     )
+
 
 def render_public_chart():
     return rx.hstack(
@@ -220,6 +228,7 @@ def render_left_panel():
         render_call_box()
     )
 
+
 def render_call_box():
     return rx.box(
         rx.text(
@@ -237,17 +246,19 @@ def render_call_box():
         border_radius="10px",
         border="2px solid #FFD700",
         box_shadow="0px 0px 10px rgba(255, 215, 0, 0.5)",
-        style={"direction": "rtl"}
+        style=Style({"direction": "rtl"})
     )
-
 
 
 def render_lower_panel():
     return rx.center(
         rx.hstack(
-            rx.button("📞", class_name="joker-button", on_click=GameState.use_call_option, disabled=GameState.call_used | GameState.chosen_answer),
-            rx.button("50%", class_name="joker-button", on_click=GameState.use_fifty_option, disabled=GameState.fifty_used | GameState.chosen_answer),
-            rx.button("📊", class_name="joker-button", on_click=GameState.use_public_option, disabled=GameState.public_used | GameState.chosen_answer),
+            rx.button("📞", class_name="joker-button", on_click=GameState.use_call_option,
+                      disabled=GameState.call_used | GameState.chosen_answer),
+            rx.button("50%", class_name="joker-button", on_click=GameState.use_fifty_option,
+                      disabled=GameState.fifty_used | GameState.chosen_answer),
+            rx.button("📊", class_name="joker-button", on_click=GameState.use_public_option,
+                      disabled=GameState.public_used | GameState.chosen_answer),
             spacing="6",
             margin_top="30px"
         ),

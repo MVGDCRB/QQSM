@@ -5,6 +5,7 @@ from datetime import datetime
 # Configuración de la base de datos SQLAlchemy
 Base = declarative_base()
 
+
 class User(Base):
     """Modelo de tabla de usuarios."""
     __tablename__ = "users"

@@ -80,7 +80,7 @@ class GameState(rx.State):
     @rx.event
     def empty_question(self):
         self.chosen_answer = True
-        return ["Presiona un tema para generar una pregunta","","","","",""]
+        return ["Presiona un tema para generar una pregunta", "", "", "", "", ""]
 
     @rx.event
     def generate_question(self):
@@ -95,10 +95,10 @@ class GameState(rx.State):
         if self.mode == "/game":
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.game_class.generate_question(difficulty, topic)
-        elif self.mode =="/endless":
-            difficulty = self.game_class.generate_difficulty_endless_mode(self.number_question)
+        elif self.mode == "/endless":
+            difficulty = self.game_class.generate_difficulty_endless_mode()
             new_question = self.game_class.generate_question(difficulty, topic)
-        else :
+        else:
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.empty_question()
 
@@ -144,11 +144,11 @@ class GameState(rx.State):
 
         if selected_option == self.correct:
             self.correct_answer = True
-            #self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
+            # self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button success"
         else:
             self.correct_answer = False
-            #self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
+            # self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button error"
 
         for key in ["A", "B", "C", "D"]:
@@ -197,7 +197,7 @@ class GameState(rx.State):
                     try:
                         texto, porcentaje = item.split(":", 1)
                         porcentaje = int(porcentaje.replace("%", "").strip())
-                        self.public_stats.append({porcentaje})
+                        self.public_stats.append(porcentaje)
                     except Exception as e:
                         print(f"Error al parsear resultado del público: {e}")
             else:
