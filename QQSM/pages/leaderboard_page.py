@@ -5,7 +5,7 @@ from QQSM.states.leaderboard_state import LeaderboardState
 from QQSM.styles.colors import Colors
 
 
-@rx.page(route="/leaderboard")
+@rx.page(route="/leaderboard",on_load=LeaderboardState.load())
 def leaderboard_page():
     # Top‑10 general
     top_users = get_top_10_users()

@@ -8,21 +8,18 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def get_user_position(username: str) -> int:
-    """Devuelve la posición global del usuario. Si el usuario no existe, retorna -1."""
+    """Devuelve la posición global del usuario según: puntuación DESC, orden de inserción."""
     db = SessionLocal()
     try:
-        user_score = db.query(User.max_puntuacion).filter(User.username == username).scalar()
-        if user_score is None:
-            return -1  # usuario no encontrado
-
-        position = (
-            db.query(User)
-            .filter(User.max_puntuacion > user_score)
-            .order_by(User.max_puntuacion.desc())
-            .count()
-        ) + 1
-
-        return position
+        ordered_users = (
+            db.query(User.username, User.max_puntuacion)
+            .order_by(User.max_puntuacion.desc(), User.id.asc())# desempate por orden de inserción
+            .all()
+        )
+        for idx, (uname, _) in enumerate(ordered_users, start=1):
+            if uname == username:
+                return idx
+        return -1
     except Exception as e:
         print(f"Error al calcular posición: {e}")
         return -1
@@ -30,18 +27,23 @@ def get_user_position(username: str) -> int:
         db.close()
 
 
+
 def get_top_10_users():
-    # # Obtén los 10 usuarios con la mayor puntuación
     db: Session = SessionLocal()
     try:
-        # Realizar la consulta para obtener los 10 usuarios con mayor maxPuntuacion
-        top_users = db.query(User.username, User.max_puntuacion).order_by(User.max_puntuacion.desc()).limit(10).all()
-        db.close()
-        return top_users  # Devuelve la lista de usuarios con mayor puntuación
+        top_users = (
+            db.query(User.username, User.max_puntuacion)
+            .order_by(User.max_puntuacion.desc(), User.id.asc())  # desempate por orden de inserción
+            .limit(10)
+            .all()
+        )
+        return top_users
     except Exception as e:
         print(f"Error al obtener los usuarios: {e}")
-        db.close()
         return []
+    finally:
+        db.close()
+
 
 
 def get_user_leaderboard(username: str):
