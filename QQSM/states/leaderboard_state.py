@@ -16,5 +16,3 @@ class LeaderboardState(LoginState):
         row = get_user_leaderboard(self.username)
         self.max_score = row[0][1] if row else -1
         self.position = get_user_position(self.username)
-        print(self.username)
-        print(self.position)

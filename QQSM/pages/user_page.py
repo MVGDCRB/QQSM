@@ -15,14 +15,14 @@ def user_page():
                     rx.text("Estadísticas por tema", font_size="1.2em", color=Colors.GOLD),
                     rx.grid(
                         rx.foreach(
-                            UserState.tema_stats,
-                            lambda s: rx.box(
-                                rx.text(s.split(";")[0], font_weight="bold", color=Colors.GOLD, text_transform="capitalize"),
-                                rx.text("Aciertos: " + s.split(";")[1]),
-                                rx.text("Fallos: " + s.split(";")[2]),
-                                padding="10px",
-                                background_color="#2B3D5F",
-                                border_radius="8px"
+                        UserState.tema_stats,
+                        lambda s: rx.box(
+                            rx.text(s.split(";")[0], font_weight="bold", color=Colors.GOLD, text_transform="capitalize"),
+                            rx.text(f"Aciertos: {s.split(';')[1]} ({s.split(';')[3]}%)"),
+                            rx.text(f"Fallos: {s.split(';')[2]} ({s.split(';')[4]}%)"),
+                            padding="10px",
+                            background_color="#2B3D5F",
+                            border_radius="8px"
                             )
                         ),
                         columns="3",

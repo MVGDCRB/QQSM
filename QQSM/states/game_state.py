@@ -1,6 +1,9 @@
 import reflex as rx
 from QQSM.states.Game import Game
 from QQSM.states.login_state import LoginState
+from QQSM.auth import update_user_stats
+
+
 import random
 
 
@@ -163,6 +166,8 @@ class GameState(LoginState):
             self.correct_answer = False
             # self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button error"
+
+        update_user_stats(self.username, self.topic, self.correct_answer)# Se actualizan las stats de usuario
 
         for key in ["A", "B", "C", "D"]:
             if getattr(self, f"option_{key.lower()}") == self.correct:

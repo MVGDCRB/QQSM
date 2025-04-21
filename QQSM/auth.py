@@ -3,15 +3,38 @@ from sqlalchemy.orm import Session
 from db.models import User
 from db.database import SessionLocal
 from datetime import datetime
+from sqlalchemy.orm.attributes import flag_modified
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def update_user_stats(username: str, tema: str, acierto: bool):
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.username == username).first()
+        if not user:
+            return
+
+        if tema not in user.tema_stats:
+            user.tema_stats[tema] = {"correctas": 0, "falladas": 0}
+
+        if acierto:
+            user.tema_stats[tema]["correctas"] += 1
+        else:
+            user.tema_stats[tema]["falladas"] += 1
+
+        flag_modified(user, "tema_stats")#Si no no se acualiza la base de datos
+        db.commit()
+    finally:
+        db.close()
+
 
 def get_user_full_stats(username: str):
     db = SessionLocal()
     try:
         user = db.query(User).filter(User.username == username).first()
         if user:
-            # Asegurarse de que tema_stats esté inicializado
+            # Se inicializa si no existía porque el user es viejo
             if not user.tema_stats or not isinstance(user.tema_stats, dict) or len(user.tema_stats) < 15:
                 default_stats = {
                     tema: {"correctas": 0, "falladas": 0}
@@ -22,12 +45,17 @@ def get_user_full_stats(username: str):
                     ]
                 }
                 user.tema_stats = default_stats
-                db.commit()  # importante: guarda la corrección en BD
+                db.commit() 
 
-            lista_stats = [
-                f"{tema};{stats['correctas']};{stats['falladas']}"
-                for tema, stats in user.tema_stats.items()
-            ]
+            lista_stats = []
+            for tema, stats in user.tema_stats.items():
+                c = stats["correctas"]
+                f = stats["falladas"]
+                total = c + f if c + f > 0 else 1  # evita división entre 0
+                acierto_pct = round(c / total * 100)
+                fallo_pct = round(f / total * 100)
+                lista_stats.append(f"{tema};{c};{f};{acierto_pct};{fallo_pct}")
+
             return {
                 "max_score": user.max_puntuacion,
                 "position": get_user_position(username),
