@@ -1,9 +1,10 @@
 import reflex as rx
 from QQSM.states.Game import Game
+from QQSM.states.login_state import LoginState
 import random
 
 
-class GameState(rx.State):
+class GameState(LoginState):
 
     # Variables del juego
     question: str = "Presiona un tema para generar una pregunta"

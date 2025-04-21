@@ -16,6 +16,7 @@ class User(Base):
     fecha_union = Column(DateTime, default=datetime.now)  # Nuevo campo para la fecha de unión
     tema_stats = Column(JSON, default={})  # Nuevo campo para las estadísticas de los temas
     max_puntuacion = Column(Integer, default=0, nullable=False)
+    
 
     def __repr__(self):
         return f"<User(username={self.username})>"
