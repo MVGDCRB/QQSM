@@ -1,15 +1,11 @@
 import reflex as rx
-from QQSM.auth import get_top_10_users
 from QQSM.states.login_state import LoginState
 from QQSM.states.leaderboard_state import LeaderboardState
 from QQSM.styles.colors import Colors
 
 
-@rx.page(route="/leaderboard",on_load=LeaderboardState.load())
+@rx.page(route="/leaderboard", on_load=LeaderboardState.load())
 def leaderboard_page():
-    # Top‑10 general
-    top_users = get_top_10_users()
-
     # Fila permanente del visitante / usuario
     user_row = render_row(
         rx.cond(LoginState.is_authenticated, LeaderboardState.position, -1),
@@ -18,19 +14,18 @@ def leaderboard_page():
         highlight=True,
     )
 
-    # Fila resaltada dentro del Top‑10 si coincide con el usuario logueado
-    top_rows = [
-        render_row(
-            i + 1,
-            username,
-            score,
+    # Top‑10 dinámico con posición incluida
+    top_rows = rx.foreach(
+        LeaderboardState.top_users,
+        lambda t: render_row(
+            t[0],          # posición
+            t[1],          # username
+            t[2],          # score
             highlight=(
-                LoginState.is_authenticated
-                & (LoginState.username == username)
-            ),
+                LoginState.is_authenticated & (LoginState.username == t[1])
+            )
         )
-        for i, (username, score) in enumerate(top_users)
-    ]
+    )
 
     return rx.center(
         rx.box(
@@ -38,7 +33,7 @@ def leaderboard_page():
                 rx.text("🏆 LEADERBOARD", font_size="2em", color=Colors.GOLD),
 
                 rx.box(
-                    rx.vstack(*top_rows, spacing="0", align="stretch"),
+                    rx.vstack(top_rows, spacing="0", align="stretch"),
                     max_height="400px",
                     overflow_y="auto",
                     width="100%",
@@ -69,14 +64,11 @@ def leaderboard_page():
 
 
 def render_row(pos, username, score, highlight=False):
-    """Renderiza una fila del ranking."""
     return rx.hstack(
         rx.text(f"{pos}.", width="25px", font_size="0.85em", color=Colors.GOLD),
-        rx.text(username, font_size="0.85em", color="white",
-                flex="1", text_align="left"),
+        rx.text(username, font_size="0.85em", color="white", flex="1", text_align="left"),
         rx.box(
-            rx.text(f"{score}", font_weight="bold",
-                    color=Colors.GOLD, font_size="0.85em"),
+            rx.text(f"{score}", font_weight="bold", color=Colors.GOLD, font_size="0.85em"),
             padding="1px 8px",
             background_color="#2D3748",
             border_radius="6px",

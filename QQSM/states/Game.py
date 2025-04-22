@@ -57,15 +57,14 @@ class Game:
         return random_topic
 
     def generate_topic_theme_mode(self, topic1: str, topic2: str):
-        random_topic1 = random.choice(self.topics)
-        random_topic2 = random.choice(self.topics)
-        if topic1 != "" and topic2 != "":
-            while ((random_topic1 == topic1 or random_topic2 == topic1) and
-                   (random_topic1 == topic2 or random_topic2 == topic2) or
-                   (topic1 == topic2)):
-                random_topic1 = random.choice(self.topics)
-                random_topic2 = random.choice(self.topics)
-        return random_topic1, random_topic2
+        # Si los anteriores eran válidos, no repetirlos
+        prev_topics = {topic1, topic2} if topic1 != "" and topic2 != "" and topic1 != topic2 else set()
+
+        # Elegir dos nuevos temas diferentes entre sí y diferentes de los anteriores
+        topics_left = [t for t in self.topics if t not in prev_topics]
+
+        return random.sample(topics_left, 2)
+
 
     def validate_question(self, option):
         next_question = False

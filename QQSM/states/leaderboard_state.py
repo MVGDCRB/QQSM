@@ -12,7 +12,18 @@ class LeaderboardState(LoginState):
 
     @rx.event
     def load(self):
-        self.top_users = get_top_10_users()
+        users = get_top_10_users() or []
+
+        # Filtramos posibles filas malformadas
+        self.top_users = [
+            (i + 1, username, score)
+            for i, (username, score) in enumerate(users)
+            if username is not None and score is not None
+        ]
+
         row = get_user_leaderboard(self.username)
         self.max_score = row[0][1] if row else -1
         self.position = get_user_position(self.username)
+
+
+
