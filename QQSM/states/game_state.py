@@ -1,7 +1,7 @@
 import reflex as rx
 from QQSM.states.Game import Game
 from QQSM.states.login_state import LoginState
-from QQSM.auth import update_user_stats
+from QQSM.auth import update_user_stats, update_max_score
 
 
 import random
@@ -79,8 +79,7 @@ class GameState(LoginState):
 
     @rx.event
     def get_themes(self):
-        self.topic_selection1, self.topic_selection2 = self.game_class.generate_topic_theme_mode(self.topic_selection1,
-                                                                                                 self.topic_selection2)
+        self.topic_selection1, self.topic_selection2 = self.game_class.generate_topic_theme_mode(self.topic_selection1,self.topic_selection2)
 
     @rx.event
     def empty_question(self):
@@ -162,6 +161,7 @@ class GameState(LoginState):
             self.correct_answer = True
             # self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button success"
+            update_max_score(self.username, self.number_question)
         else:
             self.correct_answer = False
             # self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
@@ -183,7 +183,7 @@ class GameState(LoginState):
             # Seleccionar dos opciones incorrectas al azar
             eliminadas = random.sample(incorrectas, 2)
 
-            # Marcar los botones eliminados como incorrectos en rojo
+            # Marcar los botones eliminados como incorrectos en gris
             for op in eliminadas:
                 self.button_classes[op] = "hex-button disabled"
 

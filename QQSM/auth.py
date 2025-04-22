@@ -8,6 +8,17 @@ from sqlalchemy.orm.attributes import flag_modified
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+def update_max_score(username: str, score: int):
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.username == username).first()
+        if user and score > user.max_puntuacion:
+            user.max_puntuacion = score
+            db.commit()
+    finally:
+        db.close()
+
+
 def update_user_stats(username: str, tema: str, acierto: bool):
     db = SessionLocal()
     try:
