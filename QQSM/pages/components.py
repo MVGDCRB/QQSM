@@ -166,18 +166,18 @@ def render_public_chart():
     return rx.hstack(
         rx.foreach(
             GameState.public_items,
-            lambda item: rx.vstack(
-                # letra de la opción
-                rx.text(item[0], font_size="14px", color="white"),
-                # porcentaje del público
+            lambda item, idx: rx.vstack(
+                # Mostrar porcentaje encima
                 rx.text(f"{item[1]}%", font_size="14px", color="white"),
-                # barra de audiencia
+                # Barra de audiencia
                 rx.box(
                     width="30px",
                     height=f"{item[1] * 2}px",
                     background_color=Colors.GOLD,
                     border_radius="5px",
                 ),
+                # Letra de la opción debajo de la barra
+                rx.text(item[0], font_size="14px", color="white"),
                 align="center",
                 spacing="2",
             )

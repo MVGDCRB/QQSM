@@ -162,13 +162,16 @@ class GameState(LoginState):
             self.correct_answer = True
             # self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button success"
-            update_max_score(self.username, self.number_question)
+            if self.mode != "/deepSeekIA":
+                update_max_score(self.username, self.number_question)
         else:
             self.correct_answer = False
             # self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button error"
-
-        update_user_stats(self.username, self.topic, self.correct_answer)# Se actualizan las stats de usuario
+        
+        
+        if self.mode != "/deepSeekIA":
+            update_user_stats(self.username, self.topic, self.correct_answer)# Se actualizan las stats de usuario
 
         for key in ["A", "B", "C", "D"]:
             if getattr(self, f"option_{key.lower()}") == self.correct:
