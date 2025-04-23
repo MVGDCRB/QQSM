@@ -169,15 +169,14 @@ class GameState(LoginState):
             self.correct_answer = True
             # self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button success"
-            if self.mode == "/endless":
-                update_max_score(self.username, self.number_question*10)
+
         else:
             self.correct_answer = False
             # self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button error"
         
-        
         if self.mode == "/endless":
+            update_max_score(self.username, self.number_question*10)
             update_user_stats(self.username, self.topic, self.correct_answer)# Se actualizan las stats de usuario
 
         for key in ["A", "B", "C", "D"]:
