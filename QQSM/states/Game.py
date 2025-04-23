@@ -145,8 +145,7 @@ class Game:
         message = (
             "En '¿Quién quiere ser millonario?', la pregunta es: " + self.question +
             "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
-            + "Usando el comodín de la llamada, muestra solo con el siguiente formato(SOLO LA LETRA DE LA RESPUESTA): "
-            "respuesta correcta"
+            + "Muestrame solo la letra directamente (SOLO LA LETRA NADA MAS): "
         )
 
         sesion = Session()
