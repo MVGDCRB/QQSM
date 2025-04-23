@@ -27,7 +27,6 @@ def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
         render_game_header(),
-        render_next_button(),
         width="100%",
         padding="0px 20px",
         align="center",
@@ -54,15 +53,6 @@ def render_exit_button():
         class_name="menu-exit-button"
     )
 
-def render_next_button():
-    return rx.cond(
-        GameState.correct_answer,
-        rx.button(
-            "➜",
-            on_click=GameState.next_round,
-            class_name="next-arrow-button"
-        )
-    )
 
 def get_gradient_color(index):
     factor = index / 14
@@ -128,7 +118,7 @@ def render_IA1():
 
 def render_IA2():
     return rx.box(
-        rx.text("OpenAI", class_name="custom-category", on_click=GameState.initialize_game("/OpenAIIA")),
+        rx.text("OpenAI", class_name="custom-category", on_click=GameState.initialize_game("/openAI")),
     )
 
 def render_IA3():

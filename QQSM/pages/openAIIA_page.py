@@ -2,7 +2,7 @@ import reflex as rx
 from QQSM.styles.colors import Colors
 from QQSM.states.game_state import GameState
 
-@rx.page(route="/openAIIA_page")
+@rx.page(route="/openAI")
 def openAIIA_page():
     return rx.box(
         render_upper_panel(),

@@ -99,6 +99,7 @@ class GameState(LoginState):
         else:
             topic = self.game_class.generate_topic_normal_mode(self.topic)
 
+        #Despues se genera la dificultad y la pregunta en funcion del modo de juego
         if self.mode == "/game":
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.game_class.generate_question(difficulty, topic)
@@ -108,6 +109,9 @@ class GameState(LoginState):
         elif self.mode == "/deepSeekIA":
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.game_class.generate_question(difficulty, topic)
+        elif self.mode == "/openAI":
+            difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
+            new_question = self.game_class.generate_question(difficulty, topic)     
         else:
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.empty_question()
@@ -128,6 +132,9 @@ class GameState(LoginState):
 
         if self.mode == "/deepSeekIA":
             answer = self.deepSeekAnswer()
+            self.validate_answer(answer)
+        elif self.mode == "/openAI":
+            answer = self.openAIAnswer()
             self.validate_answer(answer)
 
 
@@ -225,7 +232,6 @@ class GameState(LoginState):
             # Extraer todos los números antes de '%'
             nums = re.findall(r"(\d+)%", full_text)
 
-            #print(full_text, nums)
 
             percentages = [int(n) for n in nums]
 
@@ -266,8 +272,8 @@ class GameState(LoginState):
 
     @rx.event
     def deepSeekAnswer(self):
-        print("DeepSeek Answer (game_state.py)")
         """Mostrar la respuesta de DeepSeek."""
+        print("DeepSeek Answer (game_state.py)")
         game = Game(
                 question=self.question,
                 option_a=self.option_a,
@@ -278,5 +284,22 @@ class GameState(LoginState):
                 number_question=self.number_question
             )
         answer = game.deepSeekAnswer()  # Obtiene la respuesta de DeepSeek
+        print(answer)
+        return answer  # Devuelve la respuesta para su uso posterior        
+    
+    @rx.event
+    def openAIAnswer(self):
+        """Mostrar la respuesta de DeepSeek."""
+        print("OpenAI Answer (game_state.py)")
+        game = Game(
+                question=self.question,
+                option_a=self.option_a,
+                option_b=self.option_b,
+                option_c=self.option_c,
+                option_d=self.option_d,
+                correct=self.correct,
+                number_question=self.number_question
+            )
+        answer = game.openAIAnswer()  # Obtiene la respuesta de DeepSeek
         print(answer)
         return answer  # Devuelve la respuesta para su uso posterior        
