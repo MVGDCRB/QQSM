@@ -165,15 +165,21 @@ def render_answer_options():
 def render_public_chart():
     return rx.hstack(
         rx.foreach(
-            GameState.public_stats,
-            lambda porcentaje: rx.vstack(
-                rx.text(f"{porcentaje}%", font_size="14px", color="white"),
+            GameState.public_items,
+            lambda item, idx: rx.vstack(
+                # Mostrar porcentaje encima
+                rx.text(f"{item[1]}%", font_size="14px", color="white"),
+                # Barra de audiencia
                 rx.box(
                     width="30px",
-                    height=f"{porcentaje * 2}px",
+                    height=f"{item[1] * 2}px",
                     background_color=Colors.GOLD,
-                    border_radius="5px"
-                )
+                    border_radius="5px",
+                ),
+                # Letra de la opción debajo de la barra
+                rx.text(item[0], font_size="14px", color="white"),
+                align="center",
+                spacing="2",
             )
         ),
         width="25vw",
@@ -182,6 +188,7 @@ def render_public_chart():
         align="end",
         justify="end",
     )
+
 
 
 def render_call_box():

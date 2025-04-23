@@ -4,7 +4,7 @@ from QQSM.states.login_state import LoginState
 from QQSM.auth import update_user_stats, update_max_score
 
 
-import random
+import random, re
 
 
 class GameState(LoginState):
@@ -26,6 +26,7 @@ class GameState(LoginState):
     public_used: bool = False
     call_used: bool = False
     public_stats: list[int] = []
+    public_items: list[tuple[str,int]] =[]
     call_text: str = ""
     text_answer: str = ""
     chosen_answer: bool = False
@@ -161,13 +162,16 @@ class GameState(LoginState):
             self.correct_answer = True
             # self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button success"
-            update_max_score(self.username, self.number_question)
+            if self.mode != "/deepSeekIA":
+                update_max_score(self.username, self.number_question)
         else:
             self.correct_answer = False
             # self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button error"
-
-        update_user_stats(self.username, self.topic, self.correct_answer)# Se actualizan las stats de usuario
+        
+        
+        if self.mode != "/deepSeekIA":
+            update_user_stats(self.username, self.topic, self.correct_answer)# Se actualizan las stats de usuario
 
         for key in ["A", "B", "C", "D"]:
             if getattr(self, f"option_{key.lower()}") == self.correct:
@@ -191,37 +195,53 @@ class GameState(LoginState):
         else:
             self.feedback = "❌ Ya has usado el comodín 50:50."
 
+
+
     @rx.event
     def use_public_option(self):
         """Usa el comodín del público y guarda los porcentajes como lista de tuplas."""
-        if not self.public_used:
-            game = Game(
-                question=self.question,
-                option_a=self.option_a,
-                option_b=self.option_b,
-                option_c=self.option_c,
-                option_d=self.option_d,
-                correct=self.correct,
-                number_question=self.number_question
-            )
-
-            stats = game.public_option()
-
-            if isinstance(stats, list):
-                self.public_stats = []
-                for item in stats:
-                    try:
-                        texto, porcentaje = item.split(":", 1)
-                        porcentaje = int(porcentaje.replace("%", "").strip())
-                        self.public_stats.append(porcentaje)
-                    except Exception as e:
-                        print(f"Error al parsear resultado del público: {e}")
-            else:
-                self.feedback = stats  # En caso de error, muestra el texto devuelto como feedback        
-
-            self.public_used = True
-        else:
+        if self.public_used:
             self.feedback = "❌ Ya has usado el comodín del público."
+            return
+
+        # Generar la estadística completa
+        game = Game(
+            question=self.question,
+            option_a=self.option_a,
+            option_b=self.option_b,
+            option_c=self.option_c,
+            option_d=self.option_d,
+            correct=self.correct,
+            number_question=self.number_question,
+        )
+        stats = game.public_option()
+
+        if isinstance(stats, str):
+            # Mensaje de error
+            self.feedback = stats
+        else:
+            # Unir trozos para obtener el texto íntegro
+            full_text = ";".join(stats)
+            # Extraer todos los números antes de '%'
+            nums = re.findall(r"(\d+)%", full_text)
+
+            #print(full_text, nums)
+
+            percentages = [int(n) for n in nums]
+
+            # Guardar en public_stats
+            self.public_stats = percentages
+
+            # Mapear letras A–D a cada porcentaje
+            letters = ["A", "B", "C", "D"]
+            self.public_items = [
+                (letters[i], percentages[i])
+                for i in range(min(len(letters), len(percentages)))
+            ]
+
+        self.public_used = True
+
+
 
     @rx.event
     def use_call_option(self):
