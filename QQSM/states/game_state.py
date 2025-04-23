@@ -106,12 +106,9 @@ class GameState(LoginState):
         elif self.mode == "/endless":
             difficulty = self.game_class.generate_difficulty_endless_mode()
             new_question = self.game_class.generate_question(difficulty, topic)
-        elif self.mode == "/deepSeekIA":
+        elif self.mode in ["/deepSeekIA", "/openAI", "/llamaIA"]:
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.game_class.generate_question(difficulty, topic)
-        elif self.mode == "/openAI":
-            difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
-            new_question = self.game_class.generate_question(difficulty, topic)     
         else:
             difficulty = self.game_class.generate_difficulty_normal_mode(self.number_question)
             new_question = self.empty_question()
@@ -135,6 +132,9 @@ class GameState(LoginState):
             self.validate_answer(answer)
         elif self.mode == "/openAI":
             answer = self.openAIAnswer()
+            self.validate_answer(answer)
+        elif self.mode == "/llamaIA":
+            answer = self.llamaAnswer()
             self.validate_answer(answer)
 
 
@@ -301,5 +301,22 @@ class GameState(LoginState):
                 number_question=self.number_question
             )
         answer = game.openAIAnswer()  # Obtiene la respuesta de DeepSeek
+        print(answer)
+        return answer  # Devuelve la respuesta para su uso posterior        
+    
+    @rx.event
+    def llamaAnswer(self):
+        """Mostrar la respuesta de LlamaIA."""
+        print("LlamaIA Answer (game_state.py)")
+        game = Game(
+                question=self.question,
+                option_a=self.option_a,
+                option_b=self.option_b,
+                option_c=self.option_c,
+                option_d=self.option_d,
+                correct=self.correct,
+                number_question=self.number_question
+            )
+        answer = game.llamaAnswer()  # Obtiene la respuesta de DeepSeek
         print(answer)
         return answer  # Devuelve la respuesta para su uso posterior        

@@ -123,7 +123,7 @@ def render_IA2():
 
 def render_IA3():
     return rx.box(
-        rx.text("-", class_name="custom-category"),
+        rx.text("LlamaIA", class_name="custom-category", on_click=GameState.initialize_game("/llamaIA")),
     )
 
 
