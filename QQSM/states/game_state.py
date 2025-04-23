@@ -170,7 +170,7 @@ class GameState(LoginState):
             # self.feedback = "✅ ¡Correcto!" Los botones suplen este feedback
             self.button_classes[letter] = "hex-button success"
             if self.mode == "/endless":
-                update_max_score(self.username, self.number_question)
+                update_max_score(self.username, self.number_question*10)
         else:
             self.correct_answer = False
             # self.feedback = "❌ ¡Incorrecto!" Los botones suplen este feedback
