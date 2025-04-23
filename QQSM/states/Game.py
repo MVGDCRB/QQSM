@@ -1,7 +1,7 @@
 import google.generativeai as gia
 import random
 from requests import Session
-
+import openai
 
 class Game:
     gia.configure(api_key="AIzaSyAnGcswACvftlgtjbe8Rw747jncEtmgMo8")  # Reemplaza con tu clave de API
@@ -143,9 +143,9 @@ class Game:
         api_key = "sk-0c4a68c97ce14b288ec1a6b5b9117e21"
         api_url = "https://api.deepseek.com/v1/chat/completions"  # Reemplaza con la URL correcta
         message = (
-            "En '¿Quién quiere ser millonario?', la pregunta es: " + self.question +
+            "Responde a la pregunta: " + self.question +
             "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
-            + "Muestrame solo la letra directamente (SOLO LA LETRA NADA MAS): "
+            + "Muestrame SOLO LA LETRA de la solucion, sin negrita ni ningun efecto, solo la letra. Opciones: A, B, C, D."
         )
 
         sesion = Session()
@@ -184,3 +184,25 @@ class Game:
             return result
         else:
             return "Error en la solicitud a la API."
+        
+    def openAIAnswer(self):
+
+        """client = openai()
+
+        message = (
+            "Responde a la pregunta: " + self.question +
+            "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
+            + "Muestrame SOLO LA LETRA de la solucion, sin negrita ni ningun efecto, solo la letra. Opciones: A, B, C, D."
+        )
+
+        response = openai.Completion.create(
+        engine="gpt-3.5-turbo",  # Use the desired GPT model
+        prompt=message,
+        max_tokens=150,
+        n=1,
+        stop=None,
+        temperature=0.7,
+        )
+        return response.choices[0].text.strip()"""
+        return "A"
+
