@@ -23,12 +23,12 @@ def menu_page():
                 spacing="6",  
                 align="center",
             ),
-            background_color=Colors.DARK_BLUE, 
-            padding="50px",
-            border_radius="10px",
-            box_shadow="0px 0px 15px rgba(255, 255, 255, 0.2)",
-            position="relative",
-            width="fit-content"
+            # background_color=Colors.DARK_BLUE,
+            # padding="50px",
+            # border_radius="10px",
+            # box_shadow="0px 0px 15px rgba(255, 255, 255, 0.2)",
+            # position="relative",
+            # width="fit-content"
         ),
         rx.box(
             rx.button("✖", on_click=rx.redirect("/welcome"), class_name="menu-exit-button"),
@@ -38,7 +38,10 @@ def menu_page():
         ),
         width="100vw",
         height="100vh",
-        background_color=Colors.DARK_BLUE,
+        background_image="url('/welcome_fondo.jpg')",  # Ruta relativa a assets/
+        background_size="cover",
+        background_position="center",
+        background_repeat="no-repeat",
         display="flex",
         align_items="center",
         justify_content="center",
