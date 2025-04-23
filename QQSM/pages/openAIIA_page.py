@@ -2,10 +2,11 @@ import reflex as rx
 from QQSM.styles.colors import Colors
 from QQSM.states.game_state import GameState
 
-@rx.page(route="/maquinaVS_page")
-def maquinaVS_page():
+@rx.page(route="/openAIIA_page")
+def openAIIA_page():
     return rx.box(
         render_upper_panel(),
+        render_progress_indicator(),
 
         rx.hstack(
             render_question_section(),
@@ -37,7 +38,7 @@ def render_upper_panel():
 def render_game_header():
     return rx.box(
         rx.text(
-            "¿QUIÉN QUIERE SER MILLONARIO? IA vs IA",
+            "¿QUIÉN QUIERE SER MILLONARIO? OpenAI vs Gemini",
             class_name="title-style",
             margin="0px"
         ),
@@ -71,17 +72,49 @@ def get_gradient_color(index):
     b = 0
     return f"rgb({r},{g},{b})"
 
+def render_progress_indicator():
+    return rx.hstack(
+        *[
+            rx.box(
+                rx.text(str(i + 1), font_size="14px", color="gold", text_align="center"),
+                rx.box(
+                    class_name=rx.cond(
+                        i == GameState.number_question - 1,
+                        "progress-circle current",
+                        "progress-circle"
+                    ),
+                    background_color=rx.cond(
+                        i < GameState.number_question,
+                        get_gradient_color(i),
+                        "gray"
+                    )
+                ),
+                display="flex",
+                flex_direction="column",
+                align_items="center",
+            )
+            for i in range(15)
+        ],
+        spacing="6",
+        align="center",
+        justify="center",
+        class_name="progress-container",
+        width="100%",
+        margin_bottom="5px"
+    )
+
 
 def render_question_section():
     return rx.vstack(
         rx.hstack(
-            render_text(),
+            render_question_title(),
+            render_question_topic(),
             spacing="5",
             align="center",
             justify="center",
             width="100%"
         ),
-        render_IAs(),
+        render_answer_options(),
         spacing="4",
         align="center",
         justify="center",
@@ -90,10 +123,10 @@ def render_question_section():
     )
 
 
-def render_text():
+def render_question_title():
     return rx.box(
         rx.text(
-            "Elige la IA que vaya a responder la pregunta",
+            GameState.question,
             white_space="normal",
             word_break="break-word",
             color="white",
@@ -106,12 +139,10 @@ def render_text():
     )
 
 
-def render_IAs():
-    return rx.hstack(
-        render_IA1(),
-        render_IA2(),
-        render_IA3(),
-         width="100px",
+def render_question_topic():
+    return rx.box(
+        rx.text(GameState.topic, class_name="custom-category"),
+        width="100px",
         height="100px",
         display="flex",
         align_items="center",
@@ -121,19 +152,28 @@ def render_IAs():
         flex_shrink="0"
     )
 
-def render_IA1():
-    return rx.box(
-        rx.text("DeepSeek", class_name="custom-category", on_click=GameState.initialize_game("/deepSeekIA")),
+
+def render_answer_options():
+    return rx.grid(
+        *[
+            rx.button(
+                f"{letter}) {getattr(GameState, f'option_{letter.lower()}')}",
+                width="100%",
+                font_size="14px",
+                white_space="normal",
+                word_break="break-word",
+                height="auto",
+                min_height="50px",
+                class_name=GameState.button_classes[letter],
+                on_click=lambda l=letter: GameState.validate_answer(l),
+                disabled=GameState.chosen_answer
+            )
+            for letter in ["A", "B", "C", "D"]
+        ],
+        columns="2",
+        spacing="4",
+        width="70%",  
+        align_items="center",
+        justify_content="center",
+        margin_top="10px",
     )
-
-def render_IA2():
-    return rx.box(
-        rx.text("OpenAI", class_name="custom-category", on_click=GameState.initialize_game("/OpenAIIA")),
-    )
-
-def render_IA3():
-    return rx.box(
-        rx.text("-", class_name="custom-category"),
-    )
-
-
