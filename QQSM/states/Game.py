@@ -2,9 +2,10 @@ import google.generativeai as gia
 import random
 from requests import Session
 import openai
+from QQSM.secrets.py import Secrets
 
 class Game:
-    gia.configure(api_key="AIzaSyAnGcswACvftlgtjbe8Rw747jncEtmgMo8")  # Reemplaza con tu clave de API
+    gia.configure(api_key=Secrets.SECRET_API_KEY)  # Reemplaza con tu clave de API
     _model = gia.GenerativeModel("gemini-2.0-flash")  # Especifica el modelo Gemini que quieres usar
 
     def __init__(self, question: str = "", option_a: str = "", option_b: str = "",
