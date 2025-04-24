@@ -2,7 +2,7 @@ import google.generativeai as gia
 import random
 from requests import Session
 import openai
-from QQSM.secrets.py import Secrets
+from QQSM.secrets import Secrets
 
 class Game:
     gia.configure(api_key=Secrets.SECRET_API_KEY)  # Reemplaza con tu clave de API
