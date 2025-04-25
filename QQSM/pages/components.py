@@ -29,7 +29,7 @@ def render_next_button():
         GameState.correct_answer,
         rx.button(
             "➜",
-            on_click=GameState.next_round,
+            on_click=GameState.next_round.debounce(1000),
             class_name="next-arrow-button"
         )
     )
