@@ -1,6 +1,5 @@
 import reflex as rx
 from QQSM.states.login_state import LoginState
-from QQSM.styles.colors import Colors
 
 
 @rx.page("/login")

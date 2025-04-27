@@ -2,8 +2,9 @@ import reflex as rx
 from QQSM.styles.colors import Colors
 from QQSM.states.game_state import GameState
 
+
 @rx.page(route="/maquinaVS_page")
-def maquinaVS_page():
+def maquina_vs_page():
     return rx.box(
         render_upper_panel(),
 
@@ -23,6 +24,7 @@ def maquinaVS_page():
         overflow="hidden",
     )
 
+
 def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
@@ -32,6 +34,7 @@ def render_upper_panel():
         align="center",
         justify="between",
     )
+
 
 def render_game_header():
     return rx.box(
@@ -71,7 +74,7 @@ def render_question_section():
             justify="center",
             width="100%"
         ),
-        render_IAs(),
+        render_ias(),
         spacing="4",
         align="center",
         justify="center",
@@ -96,12 +99,12 @@ def render_text():
     )
 
 
-def render_IAs():
+def render_ias():
     return rx.hstack(
-        render_IA1(),
-        render_IA2(),
-        render_IA3(),
-         width="100px",
+        render_ia1(),
+        render_ia2(),
+        render_ia3(),
+        width="100px",
         height="100px",
         display="flex",
         align_items="center",
@@ -111,19 +114,20 @@ def render_IAs():
         flex_shrink="0"
     )
 
-def render_IA1():
+
+def render_ia1():
     return rx.box(
         rx.text("DeepSeek", class_name="custom-category", on_click=GameState.initialize_game("/deepSeekIA")),
     )
 
-def render_IA2():
+
+def render_ia2():
     return rx.box(
         rx.text("OpenAI", class_name="custom-category", on_click=GameState.initialize_game("/openAI")),
     )
 
-def render_IA3():
+
+def render_ia3():
     return rx.box(
         rx.text("LlamaIA", class_name="custom-category", on_click=GameState.initialize_game("/llamaIA")),
     )
-
-

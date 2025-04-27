@@ -1,6 +1,5 @@
 import reflex as rx
 from QQSM.states.game_state import GameState
-from QQSM.styles.colors import Colors
 
 
 @rx.page("/menu")

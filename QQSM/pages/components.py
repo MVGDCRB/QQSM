@@ -3,6 +3,7 @@ from QQSM.states.game_state import GameState
 from QQSM.styles.colors import Colors
 from reflex import Style
 
+
 def render_exit_button():
     return rx.button(
         "✖",
@@ -33,6 +34,7 @@ def render_next_button():
             class_name="next-arrow-button"
         )
     )
+
 
 def get_gradient_color(index: int, steps: int) -> str:
     factor = index / (steps - 1) if steps > 1 else 0
@@ -74,10 +76,6 @@ def render_progress_indicator(steps: int):
     )
 
 
-
-
-
-
 def render_question_title():
     return rx.box(
         rx.text(
@@ -106,6 +104,7 @@ def render_question_topic():
         background_color=Colors.GOLD,
         flex_shrink="0"
     )
+
 
 def render_topic_chooser():
     return rx.hstack(
@@ -162,6 +161,7 @@ def render_answer_options():
         margin_top="10px",
     )
 
+
 def render_public_chart():
     return rx.hstack(
         rx.foreach(
@@ -188,7 +188,6 @@ def render_public_chart():
         align="end",
         justify="end",
     )
-
 
 
 def render_call_box():
@@ -220,6 +219,7 @@ def render_joker_call():
         disabled=GameState.call_used | GameState.chosen_answer
     )
 
+
 def render_joker_fifty():
     return rx.button(
         "50%",
@@ -227,6 +227,7 @@ def render_joker_fifty():
         on_click=GameState.use_fifty_option,
         disabled=GameState.fifty_used | GameState.chosen_answer
     )
+
 
 def render_joker_public():
     return rx.button(

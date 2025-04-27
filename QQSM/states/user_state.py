@@ -2,6 +2,7 @@ import reflex as rx
 from QQSM.auth import get_user_full_stats
 from QQSM.states.leaderboard_state import LeaderboardState
 
+
 class UserState(LeaderboardState):
     tema_stats: list[str] = []
 
@@ -12,4 +13,3 @@ class UserState(LeaderboardState):
             self.max_score = data["max_score"]
             self.position = data["position"]
             self.tema_stats = data["tema_stats"]
-

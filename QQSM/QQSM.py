@@ -7,10 +7,10 @@ from QQSM.pages.game_page import game_page
 from QQSM.pages.leaderboard_page import leaderboard_page
 from QQSM.pages.user_page import user_page
 from QQSM.pages.endless_page import endless_page
-from QQSM.pages.maquinaVS_page import maquinaVS_page
-from QQSM.pages.deepSeekIA_page import deepSeekIA_page
-from QQSM.pages.openAIIA_page import openAIIA_page
-from QQSM.pages.llamaIA_page import llamaIA_page
+from QQSM.pages.maquinaVS_page import maquina_vs_page
+from QQSM.pages.deepSeekIA_page import deep_seekia_page
+from QQSM.pages.openAIIA_page import openaiia_page
+from QQSM.pages.llamaIA_page import llamaia_page
 from QQSM.pages.theme_page import theme_page
 from QQSM.pages.welcome_page import welcome_page
 
@@ -39,11 +39,11 @@ app.add_page(game_page, route="/game")
 app.add_page(leaderboard_page, route="/leaderboard")
 app.add_page(user_page, route="/user")
 app.add_page(endless_page, route="/endless")
-app.add_page(openAIIA_page, route="/openAI")
+app.add_page(openaiia_page, route="/openAI")
 app.add_page(theme_page, route="/theme")
-app.add_page(maquinaVS_page, route="/maquinaVS")
-app.add_page(deepSeekIA_page, route="/deepSeekIA")
-app.add_page(llamaIA_page, route="/llamaIA")
+app.add_page(maquina_vs_page, route="/maquinaVS")
+app.add_page(deep_seekia_page, route="/deepSeekIA")
+app.add_page(llamaia_page, route="/llamaIA")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 import reflex as rx
 from QQSM.states.register_state import RegisterState
 
+
 @rx.page("/register")
 def register_page():
     return rx.center(
