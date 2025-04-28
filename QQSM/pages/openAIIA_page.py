@@ -2,8 +2,9 @@ import reflex as rx
 from QQSM.styles.colors import Colors
 from QQSM.states.game_state import GameState
 
+
 @rx.page(route="/openAI")
-def openAIIA_page():
+def openaiia_page():
     return rx.box(
         render_upper_panel(),
         render_progress_indicator(),
@@ -24,6 +25,7 @@ def openAIIA_page():
         overflow="hidden",
     )
 
+
 def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
@@ -34,6 +36,7 @@ def render_upper_panel():
         align="center",
         justify="between",
     )
+
 
 def render_game_header():
     return rx.box(
@@ -55,6 +58,7 @@ def render_exit_button():
         class_name="menu-exit-button"
     )
 
+
 def render_next_button():
     return rx.cond(
         GameState.correct_answer,
@@ -65,12 +69,14 @@ def render_next_button():
         )
     )
 
+
 def get_gradient_color(index):
     factor = index / 14
     r = int(0 + factor * 255)
     g = int(255 - factor * 255)
     b = 0
     return f"rgb({r},{g},{b})"
+
 
 def render_progress_indicator():
     return rx.hstack(
@@ -165,7 +171,7 @@ def render_answer_options():
                 height="auto",
                 min_height="50px",
                 class_name=GameState.button_classes[letter],
-                on_click=lambda l=letter: GameState.validate_answer(l),
+                on_click=lambda le=letter: GameState.validate_answer(le),
                 disabled=GameState.chosen_answer
             )
             for letter in ["A", "B", "C", "D"]

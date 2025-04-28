@@ -1,11 +1,12 @@
 import google.generativeai as gia
 import random
 from requests import Session
-import openai
+from openai import OpenAI
 from QQSM.secrets import Secrets
 
+
 class Game:
-    gia.configure(api_key=Secrets.SECRET_API_KEY)  # Reemplaza con tu clave de API
+    gia.configure(api_key=Secrets.GIA_API_KEY)  # Reemplaza con tu clave de API
     _model = gia.GenerativeModel("gemini-2.0-flash")  # Especifica el modelo Gemini que quieres usar
 
     def __init__(self, question: str = "", option_a: str = "", option_b: str = "",
@@ -65,7 +66,6 @@ class Game:
         topics_left = [t for t in self.topics if t not in prev_topics]
 
         return random.sample(topics_left, 2)
-
 
     def validate_question(self, option):
         next_question = False
@@ -139,14 +139,14 @@ class Game:
         else:
             return "No se puede usar el comodin porque ya ha sido usado"
 
-
-    def deepSeekAnswer(self):
-        api_key = "sk-0c4a68c97ce14b288ec1a6b5b9117e21"
+    def deep_seek_answer(self):
+        api_key = Secrets.DEEP_API_KEY
         api_url = "https://api.deepseek.com/v1/chat/completions"  # Reemplaza con la URL correcta
         message = (
             "Responde a la pregunta: " + self.question +
             "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
-            + "Muestrame SOLO LA LETRA de la solucion, sin negrita ni ningun efecto, solo la letra. Opciones: A, B, C, D."
+            + "Muestrame SOLO LA LETRA de la solucion, ni ningun efecto, ni ningun caracter especial, "
+            "solo la letra. Opciones: A, B, C, D. "
         )
 
         sesion = Session()
@@ -185,25 +185,51 @@ class Game:
             return result
         else:
             return "Error en la solicitud a la API."
-        
-    def openAIAnswer(self):
 
-        """client = openai()
+    def openai_answer(self):
 
-        message = (
-            "Responde a la pregunta: " + self.question +
-            "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
-            + "Muestrame SOLO LA LETRA de la solucion, sin negrita ni ningun efecto, solo la letra. Opciones: A, B, C, D."
+        client = OpenAI(api_key=Secrets.OPEN_API_KEY)
+
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            store=True,
+            messages=[
+                {"role": "user",
+                 "content": "Responde a la pregunta: " + self.question +
+                            "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", "
+                            + self.option_d + "." + "Muestrame SOLO LA LETRA de la solucion, sin negrita "
+                                                    "ni ningun efecto, ni ningun caracter especial, "
+                                                    "solo la letra. Opciones: A, B, C, D."
+                 }
+            ],
+            max_tokens=150,
+            temperature=0.7,
         )
 
-        response = openai.Completion.create(
-        engine="gpt-3.5-turbo",  # Use the desired GPT model
-        prompt=message,
-        max_tokens=150,
-        n=1,
-        stop=None,
-        temperature=0.7,
-        )
-        return response.choices[0].text.strip()"""
-        return "A"
+        print(completion)
+        return completion.choices[0].message.content
 
+    def llama_answer(self):
+        # HAY QUE COMPLETAR ESTA FUNCION
+        client = OpenAI(
+            # This is the default and can be omitted
+            api_key=Secrets.LLAMA_API_KEY,
+            base_url="https://api.llmapi.com/"
+        )
+
+        result = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Responde a la pregunta: " + self.question +
+                               "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " +
+                               self.option_d + "." + "Muestrame SOLO LA LETRA de la solucion, sin negrita "
+                                                     "ni ningun efecto, ni ningun caracter especial, "
+                                                     "solo la letra. Opciones: A, B, C, D."
+                },
+            ],
+            model="llama4-maverick",
+            stream=False
+        )
+
+        return result.choices[0].message.content

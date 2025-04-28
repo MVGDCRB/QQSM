@@ -1,18 +1,17 @@
 import reflex as rx
 from attr.validators import disabled
 from keyring.core import disable
-
-import reflex as rx
-
 from QQSM.states.game_state import GameState
 from QQSM.styles.colors import Colors
 from QQSM.pages.components import *
+
 
 @rx.page(route="/theme")
 def theme_page():
     return rx.box(
         render_upper_panel(),
-        render_progress_indicator(15),#en función del número de circulitos
+        # En función del número de circulitos
+        render_progress_indicator(15),
 
         rx.hstack(
             render_central_panel(),

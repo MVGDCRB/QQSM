@@ -9,11 +9,11 @@ from QQSM.pages.components import *
 def endless_page():
     return rx.box(
         render_upper_panel(),
-        render_progress_indicator(3),#en función del número de circulitos
+        # En función del número de circulitos
+        render_progress_indicator(3),
 
         rx.hstack(
-            render_central_panel
-        (),
+            render_central_panel(),
             spacing="6",
             align="start",
             justify="center"
@@ -65,6 +65,7 @@ def render_central_panel():
         width="66%",
         background_color=Colors.DARK_BLUE
     )
+
 
 def render_right_panel():
     return rx.cond(

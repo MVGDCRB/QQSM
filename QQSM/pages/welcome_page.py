@@ -1,7 +1,4 @@
 import reflex as rx
-from docutils.parsers.rst.directives.tables import align
-
-from QQSM.styles.colors import Colors
 from QQSM.states.register_state import RegisterState
 from QQSM.states.login_state import LoginState
 
