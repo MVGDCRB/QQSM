@@ -43,21 +43,30 @@ def get_gradient_color(index: int, steps: int) -> str:
 
 
 def render_progress_indicator(steps: int):
+    number = GameState.number_question
+
     return rx.hstack(
         *[
             rx.box(
-                rx.text(str(i + 1), font_size="14px", color="gold", text_align="center"),
+                #Numeros de pregunta
+                rx.text(
+                    ((number - 1) // steps) * steps + (i + 1),
+                    font_size="14px",
+                    color="gold",
+                    text_align="center",
+                ),
+                #circulos
                 rx.box(
                     class_name=rx.cond(
-                        i == (GameState.number_question - 1) % steps,
+                        i == (number - 1) % steps,
                         "progress-circle current",
-                        "progress-circle"
+                        "progress-circle",
                     ),
                     background_color=rx.cond(
-                        i < GameState.number_question,
+                        i <= (number - 1) % steps,
                         get_gradient_color(i, steps),
-                        "gray"
-                    )
+                        "gray",
+                    ),
                 ),
                 display="flex",
                 flex_direction="column",
@@ -70,11 +79,8 @@ def render_progress_indicator(steps: int):
         justify="center",
         class_name="progress-container",
         width="100%",
-        margin_bottom="5px"
+        margin_bottom="5px",
     )
-
-
-
 
 
 
