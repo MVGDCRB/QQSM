@@ -3,21 +3,6 @@ from QQSM.states.user_state import UserState
 from QQSM.styles.colors import Colors
 from QQSM.pages.components import render_exit_button
 
-def get_accuracy_border(s: str) -> str:
-    try:
-        pct = int(s.split(';')[3])
-    except:
-        pct = 0
-    if pct < 50:
-        r = 255
-        g = int((pct / 50) * 255)
-        b = 0
-    else:
-        r = int((1 - (pct - 50) / 50) * 255)
-        g = 255
-        b = 0
-    return f"2px solid rgb({r},{g},{b})"
-
 @rx.page("/user", on_load=UserState.load_user_data())
 def user_page():
     return rx.box(
@@ -71,16 +56,14 @@ def user_page():
                                 background_position="center",
                                 **{"data-theme": s.split(';')[0]}
                             ),
-                            rx.hstack(
-                                rx.text("Aciertos:", font_weight="bold"),
-                                rx.text(f"{s.split(';')[1]} ({s.split(';')[3]}%)")
-                            ),
-                            rx.hstack(
-                                rx.text("Fallos:", font_weight="bold"),
-                                rx.text(f"{s.split(';')[2]} ({s.split(';')[4]}%)")
+                            rx.text(
+                                f"Aciertos: {s.split(';')[1]}/{s.split(';')[6]}",
+                                font_weight="bold",
+                                color=Colors.GOLD,
+                                margin_top="10px"
                             ),
                             rx.box(
-                                rx.box(
+                                rx.tooltip(
                                     rx.box(
                                         width="14px",
                                         height="14px",
@@ -91,13 +74,14 @@ def user_page():
                                         top="-4px",
                                         z_index="2",
                                     ),
-                                    width="100%",
-                                    height="10px",
-                                    background="linear-gradient(to right, red, yellow, green)",
-                                    border_radius="5px",
-                                    position="relative",
+                                    label=f"{s.split(';')[3]}% de aciertos",
+                                    position="top"
                                 ),
-                                width="80%",
+                                width="100%",
+                                height="10px",
+                                background="linear-gradient(to right, red, yellow, green)",
+                                border_radius="5px",
+                                position="relative",
                                 margin_top="10px"
                             ),
                             spacing="1",
@@ -106,8 +90,10 @@ def user_page():
                         padding="15px",
                         background_color="#1F2A44",
                         box_shadow="0 0 10px rgba(255, 215, 0, 0.2)",
-                        border=get_accuracy_border(s),
-                        border_radius="8px"
+                        border=f"2px solid {s.split(';')[5]}",
+                        border_radius="8px",
+                        transition="transform 0.3s ease",
+                        _hover={"transform": "scale(1.05)"}
                     )
                 ),
                 columns="3",
