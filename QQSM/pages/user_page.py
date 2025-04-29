@@ -45,6 +45,7 @@ def user_page():
                     UserState.tema_stats,
                     lambda s: rx.box(
                         rx.vstack(
+                            rx.image(src=f"/themes/{s.split(';')[0]}.png", width="50px", height="50px"),
                             rx.text(s.split(";")[0], font_weight="bold", color=Colors.GOLD),
                             rx.hstack(
                                 rx.text("Aciertos:", font_weight="bold"),
@@ -54,7 +55,8 @@ def user_page():
                                 rx.text("Fallos:", font_weight="bold"),
                                 rx.text(f"{s.split(';')[2]} ({s.split(';')[4]}%)")
                             ),
-                            spacing="1"
+                            spacing="1",
+                            align="center"
                         ),
                         padding="15px",
                         background_color="#1F2A44",
