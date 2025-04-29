@@ -201,23 +201,40 @@ def render_public_chart():
 
 def render_call_box():
     return rx.box(
-        rx.text(
-            GameState.call_text,
-            font_size="16px",
-            color="white",
-            white_space="pre-wrap",
-            text_align="left"
+        rx.center(
+            rx.cond(
+                GameState.call_loading,
+                rx.text(
+                    "📞 Llamando...",
+                    font_size="1.1em",
+                    color=Colors.GOLD,
+                    animation="pulse 1.5s infinite",
+                ),
+                rx.text(
+                    GameState.call_text,
+                    font_size="1.1em",
+                    color="white",
+                    text_align="center",
+                    white_space="pre-wrap",
+                    word_break="break-word",
+                )
+            )
         ),
-        width="25vw",
-        height="55vh",
+        width="220px",
+        height="450px",
+        background_color="#111827",
+        padding="20px",
+        border_radius="30px",
+        border=f"2px solid {Colors.GOLD}",
+        box_shadow="0 0 20px rgba(255, 215, 0, 0.5)",
         overflow_y="auto",
-        padding="12px",
-        background_color="#333C57",
-        border_radius="10px",
-        border="2px solid #FFD700",
-        box_shadow="0px 0px 10px rgba(255, 215, 0, 0.5)",
-        style=Style({"direction": "rtl"})
+        display="flex",
+        align_items="center",
+        justify_content="center",
     )
+
+
+
 
 
 def render_joker_call():

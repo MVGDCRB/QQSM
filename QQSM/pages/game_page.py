@@ -66,18 +66,30 @@ def render_central_panel():
     )
 
 
-def render_right_panel():
-    return rx.cond(
-        GameState.public_used,
-        render_public_chart()
-    )
-
-
 def render_left_panel():
-    return rx.cond(
-        GameState.call_used,
-        render_call_box()
+    return rx.box(
+        rx.cond(
+            GameState.show_call_box,
+            render_call_box()
+        ),
+        width="25vw",
+        height="55vh",
+        background_color="transparent",
     )
+
+
+
+def render_right_panel():
+    return rx.box(
+        rx.cond(
+            GameState.public_used & (GameState.public_items != []),
+            render_public_chart()
+        ),
+        width="25vw",
+        height="33vh",
+        background_color="transparent",
+    )
+
 
 
 def render_lower_panel():

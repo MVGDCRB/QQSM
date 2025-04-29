@@ -33,6 +33,10 @@ class GameState(LoginState):
     mode: str = ""
     enable_topic: bool = False
     game_class = ""
+    show_call_box: bool = False
+    call_loading: bool = False
+
+
 
     # Estilos dinámicos de los botones
     button_classes: dict[str, str] = {
@@ -47,6 +51,7 @@ class GameState(LoginState):
         self.fifty_used = False
         self.public_used = False
         self.call_used = False
+        self.show_call_box = False
         self.public_stats = []
         self.call_text = ""
         self.chosen_answer = False
@@ -63,6 +68,7 @@ class GameState(LoginState):
         self.mode = ruta
         self.generate_question()
         return rx.redirect(self.mode)
+
 
     @rx.event
     def set_theme(self, topic: str):
@@ -137,8 +143,11 @@ class GameState(LoginState):
         self.chosen_answer = False
         self.correct_answer = False
         self.feedback = ""
+        self.call_text = ""
+        self.public_stats = []
+        self.public_items = []
+        self.show_call_box = False
 
-        # Resetear estilos de los botones
         self.button_classes = {
             "A": "hex-button",
             "B": "hex-button",
@@ -152,6 +161,7 @@ class GameState(LoginState):
             self.number_question += 1
             self.enable_topic = False
             self.generate_question()
+
 
     @rx.event
     def validate_answer(self, letter: str):
@@ -238,23 +248,59 @@ class GameState(LoginState):
 
     @rx.event
     def use_call_option(self):
-        """Usa el comodín de la llamada y muestra un texto."""
         if not self.call_used:
-            game = Game(
-                question=self.question,
-                option_a=self.option_a,
-                option_b=self.option_b,
-                option_c=self.option_c,
-                option_d=self.option_d,
-                correct=self.correct,
-                number_question=self.number_question
-            )
-
-            text = game.call_option()  # Obtiene el texto de la llamada
-            self.call_text = "\n La opcion correcta es " + text[0] + ". " + text[1]
             self.call_used = True
+            self.show_call_box = True
+            self.call_text = ""
+            self.call_loading = True
+            self.accept_call()
         else:
             self.feedback = "❌ Ya has usado el comodín de la llamada."
+
+
+
+
+    @rx.event
+    def finish_call_loading(self):
+        self.call_ready = True
+
+
+
+    @rx.event
+    def accept_call(self):
+        game = Game(
+            question=self.question,
+            option_a=self.option_a,
+            option_b=self.option_b,
+            option_c=self.option_c,
+            option_d=self.option_d,
+            correct=self.correct,
+            number_question=self.number_question
+        )
+        text = game.call_option()  # Esto tarda
+        self.call_text = "\n La opcion correcta es " + text[0] + ". " + text[1]
+        self.call_loading = False
+
+
+
+
+    @rx.event
+    def load_call_text(self):
+        game = Game(
+            question=self.question,
+            option_a=self.option_a,
+            option_b=self.option_b,
+            option_c=self.option_c,
+            option_d=self.option_d,
+            correct=self.correct,
+            number_question=self.number_question
+        )
+        text = game.call_option()
+        self.call_text = "\n La opcion correcta es " + text[0] + ". " + text[1]
+        self.is_call_loading = False
+        self.call_used = True
+
+
 
     @rx.event
     def deep_seek_answer(self):
