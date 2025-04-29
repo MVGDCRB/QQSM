@@ -45,8 +45,17 @@ def user_page():
                     UserState.tema_stats,
                     lambda s: rx.box(
                         rx.vstack(
-                            rx.image(src=f"/themes/{s.split(';')[0]}.png", width="50px", height="50px"),
-                            rx.text(s.split(";")[0], font_weight="bold", color=Colors.GOLD),
+                            rx.box(
+                                background_image=f"url('/themes/{s.split(';')[0]}.png')",
+                                class_name="theme-icon image",
+                                width="100px",
+                                height="100px",
+                                margin_bottom="5px",
+                                border_radius="50%",
+                                background_size="cover",
+                                background_position="center",
+                                **{"data-theme": s.split(';')[0]}
+                            ),
                             rx.hstack(
                                 rx.text("Aciertos:", font_weight="bold"),
                                 rx.text(f"{s.split(';')[1]} ({s.split(';')[3]}%)")
@@ -54,6 +63,27 @@ def user_page():
                             rx.hstack(
                                 rx.text("Fallos:", font_weight="bold"),
                                 rx.text(f"{s.split(';')[2]} ({s.split(';')[4]}%)")
+                            ),
+                            rx.box(
+                                rx.box(
+                                    rx.box(
+                                        width="14px",
+                                        height="14px",
+                                        background_color="gold",
+                                        border_radius="50%",
+                                        position="absolute",
+                                        left=f"calc({s.split(';')[3]}% - 7px)",
+                                        top="-4px",
+                                        z_index="2",
+                                    ),
+                                    width="100%",
+                                    height="10px",
+                                    background="linear-gradient(to right, red, yellow, green)",
+                                    border_radius="5px",
+                                    position="relative",
+                                ),
+                                width="80%",
+                                margin_top="10px"
                             ),
                             spacing="1",
                             align="center"
