@@ -5,6 +5,9 @@ from QQSM.states.leaderboard_state import LeaderboardState
 
 class UserState(LeaderboardState):
     tema_stats: list[str] = []
+    total_questions: int = -1
+
+
 
     @rx.event
     def load_user_data(self):
@@ -33,4 +36,5 @@ class UserState(LeaderboardState):
 
                 self.tema_stats.append(f"{tema};{correctas};{falladas};{aciertos};{fallos};{color};{total}")
 
+        self.total_questions = sum(int(stat.split(';')[1]) + int(stat.split(';')[2]) for stat in self.tema_stats)
 

@@ -7,17 +7,21 @@ from QQSM.pages.components import render_exit_button
 def user_page():
     return rx.box(
         rx.vstack(
-            rx.hstack(
+            rx.box(
                 render_exit_button(),
-                rx.text("PERFIL DE USUARIO", class_name="title-style"),
-                justify="between",
+                position="absolute",
+                top="20px",
+                left="20px"
+            ),
+            rx.box(
+                rx.text("TU PERFIL", class_name="title-style", text_align="center"),
                 width="100%",
-                padding="10px 20px"
+                margin_top="20px"
             ),
             rx.box(
                 rx.vstack(
                     rx.hstack(
-                        rx.text("Usuario:", font_weight="bold", color=Colors.GOLD),
+                        rx.text("Nombre de usuario:", font_weight="bold", color=Colors.GOLD),
                         rx.text(UserState.username, color="white"),
                         spacing="2"
                     ),
@@ -27,8 +31,13 @@ def user_page():
                         spacing="2"
                     ),
                     rx.hstack(
-                        rx.text("Posición global:", font_weight="bold", color=Colors.GOLD),
+                        rx.text("Posición en el ranking:", font_weight="bold", color=Colors.GOLD),
                         rx.text(UserState.position, color="white"),
+                        spacing="2"
+                    ),
+                    rx.hstack(
+                        rx.text("Preguntas respondidas totales:", font_weight="bold", color=Colors.GOLD),
+                        rx.text(UserState.total_questions, color="white"),
                         spacing="2"
                     ),
                     spacing="3",
@@ -39,13 +48,25 @@ def user_page():
                 width="fit-content",
                 margin="0 auto"
             ),
-            rx.text("Estadísticas por tema", font_size="1.4em", color=Colors.GOLD, margin_top="20px"),
+            rx.text(
+                "Estadísticas por tema",
+                font_size="1.4em",
+                color=Colors.GOLD,
+                margin_top="20px"
+            ),
             rx.grid(
                 rx.foreach(
                     UserState.tema_stats,
                     lambda s: rx.box(
                         rx.box(
                             rx.vstack(
+                                rx.text(
+                                    s.split(';')[0].upper(),
+                                    font_weight="bold",
+                                    color=Colors.GOLD,
+                                    font_size="0.9em",
+                                    margin_bottom="5px"
+                                ),
                                 rx.box(
                                     background_image=f"url('/themes/{s.split(';')[0]}.png')",
                                     class_name="theme-icon image",
@@ -69,6 +90,12 @@ def user_page():
                             ),
                             rx.center(
                                 rx.vstack(
+                                    rx.text(
+                                        s.split(';')[0].upper(),
+                                        font_size="1.2em",
+                                        font_weight="bold",
+                                        color=Colors.GOLD
+                                    ),
                                     rx.text(
                                         "Porcentaje de precisión",
                                         font_size="1.5em",

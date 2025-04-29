@@ -79,8 +79,7 @@ class GameState(LoginState):
 
     @rx.event
     def get_themes(self):
-        self.topic_selection1, self.topic_selection2 = self.game_class.generate_topic_theme_mode(self.topic_selection1,
-                                                                                                 self.topic_selection2)
+        self.topic_selection1, self.topic_selection2 = self.game_class.generate_topic_theme_mode(self.topic_selection1,self.topic_selection2)
 
     @rx.event
     def empty_question(self):
@@ -168,9 +167,9 @@ class GameState(LoginState):
             self.correct_answer = False
             self.button_classes[letter] = "hex-button error"
         
-        if self.mode == "/endless":
-            update_max_score(self.username, self.number_question*10)
+        if self.mode in ["/game", "/theme", "/endless"]:
             # Se actualizan las stats de usuario
+            update_max_score(self.username, self.number_question*10)
             update_user_stats(self.username, self.topic, self.correct_answer)
 
         for key in ["A", "B", "C", "D"]:
