@@ -209,12 +209,13 @@ def render_call_box():
                     font_size="1.1em",
                     color=Colors.GOLD,
                     animation="pulse 1.5s infinite",
+                    text_align="center"
                 ),
                 rx.text(
                     GameState.call_text,
                     font_size="1.1em",
                     color="white",
-                    text_align="center",
+                    text_align="left",  # ← para mejor lectura con scrollbar
                     white_space="pre-wrap",
                     word_break="break-word",
                 )
@@ -227,7 +228,7 @@ def render_call_box():
         border_radius="30px",
         border=f"2px solid {Colors.GOLD}",
         box_shadow="0 0 20px rgba(255, 215, 0, 0.5)",
-        overflow_y="auto",
+        overflow_y="auto",  # ← scroll si el texto es largo
         display="flex",
         align_items="center",
         justify_content="center",

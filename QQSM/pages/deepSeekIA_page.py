@@ -4,7 +4,7 @@ from QQSM.styles.colors import Colors
 from QQSM.pages.components import *
 
 
-@rx.page(route="/game")
+@rx.page(route="/deepSeekIA")
 def deep_seekia_page():
     return rx.box(
         render_upper_panel(),
