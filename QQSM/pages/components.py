@@ -102,46 +102,46 @@ def render_question_title():
 
 
 def render_question_topic():
+    # Obtiene el tema actual; por defecto "arte" para pruebas
+    theme = GameState.topic
     return rx.box(
-        rx.text(GameState.topic, class_name="custom-category"),
+        # Aplica la clase CSS que define forma, borde y sombra
+        class_name="theme-icon image",
+        # Inyecta la imagen del tema de forma dinámica
+        background_image=f"url('/themes/{theme}.png')",
+        **{"data-theme": GameState.topic},
+        # Estas props aseguran el tamaño adecuado
         width="100px",
         height="100px",
-        display="flex",
-        align_items="center",
-        justify_content="center",
-        border_radius="50%",
-        background_color=Colors.GOLD,
-        flex_shrink="0"
+        flex_shrink="0",
     )
 
 
-def render_topic_chooser():
+
+def render_topic_choser():
+    theme1 = GameState.topic_selection1
+    theme2 = GameState.topic_selection2
+
+    def icon_button(theme):
+        return rx.button(
+            rx.box(
+                class_name="theme-icon image",
+                background_image=f"url('/themes/{theme}.png')",
+                **{"data-theme": theme},
+                width="100px",
+                height="100px",
+            ),
+            on_click=GameState.set_theme(theme),
+            disabled=GameState.enable_topic,
+            style={"padding": "0", "border": "none", "background": "none"},
+        )
+
     return rx.hstack(
-        rx.button(
-            f"{GameState.topic_selection1}",
-            on_click=GameState.set_theme(GameState.topic_selection1),
-            class_name="custom-category",
-            width="100px",
-            height="100px",
-            display="flex",
-            align_items="center",
-            justify_content="center",
-            disabled=GameState.enable_topic,
-        ),
-        rx.button(
-            f"{GameState.topic_selection2}",
-            on_click=GameState.set_theme(GameState.topic_selection2),
-            class_name="custom-category",
-            width="100px",
-            height="100px",
-            display="flex",
-            align_items="center",
-            justify_content="center",
-            disabled=GameState.enable_topic,
-        ),
+        icon_button(theme1),
+        icon_button(theme2),
         spacing="5",
         align="center",
-        justify="center"
+        justify="center",
     )
 
 

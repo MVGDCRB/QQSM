@@ -1,3 +1,12 @@
+/* Variables de color */
+:root {
+    --gold-light: #FFD700;
+    --gold-dark: #B8860B;
+    --gold-border: #FFFACD;
+    --gold-shadow: rgba(255, 215, 0, 0.5);
+    --text-color: #000000;
+  }
+
 .hex-button {
     position: relative;
     display: inline-block;
@@ -120,43 +129,6 @@
     right: -20px;
     clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
-
-.custom-category {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100px; /* Tamaño del círculo */
-    height: 100px;
-    background: linear-gradient(to bottom, #FFD700, #B8860B); /* Efecto dorado */
-    color: black;
-    font-size: 0.9em;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-    border-radius: 50%; /* Hace que sea un círculo */
-    border: 3px solid #FFFACD; /* Borde dorado claro */
-    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.5); /* Sombra dorada */
-    transition: all 0.3s ease-in-out;
-    padding: 5px; /* Asegura que el texto no se corte */
-    word-wrap: break-word;
-    text-align: center;
-}
-
-
-/* Efecto hover */
-.custom-category:hover {
-    background: linear-gradient(to bottom, #FFC107, #DAA520);
-    transform: scale(1.1);
-}
-
-/* Para cambiarlo fácilmente por una imagen en el futuro */
-.custom-category.image {
-    background: none;
-    background-size: cover;
-    background-position: center;
-    border: none;
-}
-
 
 .progress-container {
     display: flex;
@@ -526,5 +498,51 @@
     pointer-events: none;
 }
 
+/* theme-icon: muestra texto solo en hover */
+.theme-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(to bottom, var(--gold-light), var(--gold-dark));
+    border-radius: 50%;
+    border: 3px solid var(--gold-border);
+    box-shadow: 0 4px 10px var(--gold-shadow);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
+.theme-icon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--gold-shadow);
+    background: linear-gradient(to bottom, var(--gold-dark), var(--gold-light));
+}
 
+.theme-icon::after {
+    content: attr(data-theme);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-color);
+    font-size: 0.75em;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    word-wrap: break-word;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.theme-icon:hover::after {
+    opacity: 1;
+}
+
+.theme-icon.image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

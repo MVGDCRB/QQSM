@@ -53,7 +53,7 @@ def render_central_panel():
     return rx.vstack(
         rx.hstack(
             render_question_title(),
-            render_topic_chooser(),
+            render_topic_choser(),
             spacing="5",
             align="center",
             justify="center",
