@@ -116,18 +116,41 @@ def render_ias():
 
 
 def render_ia1():
-    return rx.box(
-        rx.text("DeepSeek", class_name="custom-category", on_click=GameState.initialize_game("/deepSeekIA")),
+    return rx.button(
+        rx.box(
+            class_name="theme-icon image",
+            background_image="url('/ias/deepSeek.png')",
+            **{"data-theme": "deepSeek"},
+            width="100px",
+            height="100px",
+        ),
+        on_click=GameState.initialize_game("/deepSeekIA"),
+        style={"padding": "0", "border": "none", "background": "none"},
     )
-
 
 def render_ia2():
-    return rx.box(
-        rx.text("OpenAI", class_name="custom-category", on_click=GameState.initialize_game("/openAI")),
+    return rx.button(
+        rx.box(
+            class_name="theme-icon image",
+            background_image="url('/ias/openAI.png')",
+            **{"data-theme": "openAI"},
+            width="100px",
+            height="100px",
+        ),
+        on_click=GameState.initialize_game("/openAI"),
+        style={"padding": "0", "border": "none", "background": "none"},
     )
-
 
 def render_ia3():
-    return rx.box(
-        rx.text("LlamaIA", class_name="custom-category", on_click=GameState.initialize_game("/llamaIA")),
+    return rx.button(
+        rx.box(
+            class_name="theme-icon image",
+            background_image="url('/ias/llamaIA.png')",
+            **{"data-theme": "llamaIA"},
+            width="100px",
+            height="100px",
+        ),
+        on_click=GameState.initialize_game("/llamaIA"),
+        style={"padding": "0", "border": "none", "background": "none"},
     )
+
