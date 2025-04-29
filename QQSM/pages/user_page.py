@@ -3,6 +3,21 @@ from QQSM.states.user_state import UserState
 from QQSM.styles.colors import Colors
 from QQSM.pages.components import render_exit_button
 
+def get_accuracy_border(s: str) -> str:
+    try:
+        pct = int(s.split(';')[3])
+    except:
+        pct = 0
+    if pct < 50:
+        r = 255
+        g = int((pct / 50) * 255)
+        b = 0
+    else:
+        r = int((1 - (pct - 50) / 50) * 255)
+        g = 255
+        b = 0
+    return f"2px solid rgb({r},{g},{b})"
+
 @rx.page("/user", on_load=UserState.load_user_data())
 def user_page():
     return rx.box(
@@ -90,8 +105,9 @@ def user_page():
                         ),
                         padding="15px",
                         background_color="#1F2A44",
-                        border_radius="8px",
-                        box_shadow="0 0 10px rgba(255, 215, 0, 0.2)"
+                        box_shadow="0 0 10px rgba(255, 215, 0, 0.2)",
+                        border=get_accuracy_border(s),
+                        border_radius="8px"
                     )
                 ),
                 columns="3",
