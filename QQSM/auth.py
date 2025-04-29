@@ -34,7 +34,7 @@ def update_user_stats(username: str, tema: str, acierto: bool):
         else:
             user.tema_stats[tema]["falladas"] += 1
 
-        flag_modified(user, "tema_stats")#Si no no se acualiza la base de datos
+        flag_modified(user, "tema_stats")  # Si no no se acualiza la base de datos
         db.commit()
     finally:
         db.close()
@@ -77,16 +77,13 @@ def get_user_full_stats(username: str):
         db.close()
 
 
-
-
-
 def get_user_position(username: str) -> int:
     """Devuelve la posición global del usuario según: puntuación DESC, orden de inserción."""
     db = SessionLocal()
     try:
         ordered_users = (
             db.query(User.username, User.max_puntuacion)
-            .order_by(User.max_puntuacion.desc(), User.id.asc())# desempate por orden de inserción
+            .order_by(User.max_puntuacion.desc(), User.id.asc())  # desempate por orden de inserción
             .all()
         )
         for idx, (uname, _) in enumerate(ordered_users, start=1):
@@ -98,7 +95,6 @@ def get_user_position(username: str) -> int:
         return -1
     finally:
         db.close()
-
 
 
 def get_top_10_users():
@@ -116,7 +112,6 @@ def get_top_10_users():
         return []
     finally:
         db.close()
-
 
 
 def get_user_leaderboard(username: str):
@@ -171,7 +166,6 @@ def create_user(username: str, password: str, db: Session):
     else:
         db.close()
         raise Exception("El nombre de usuario ya está en uso")
-
 
 
 def login_user(username: str, password: str) -> bool:

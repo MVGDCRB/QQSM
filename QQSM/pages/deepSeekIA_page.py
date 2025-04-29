@@ -1,6 +1,3 @@
-import reflex as rx
-from QQSM.states.game_state import GameState
-from QQSM.styles.colors import Colors
 from QQSM.pages.components import *
 
 
@@ -78,7 +75,6 @@ def render_left_panel():
     )
 
 
-
 def render_right_panel():
     return rx.box(
         rx.cond(
@@ -89,7 +85,6 @@ def render_right_panel():
         height="33vh",
         background_color="transparent",
     )
-
 
 
 def render_lower_panel():

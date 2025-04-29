@@ -2,6 +2,7 @@ import reflex as rx
 from QQSM.states.register_state import RegisterState
 from QQSM.styles.colors import Colors
 
+
 @rx.page("/register")
 def register_page():
     return rx.center(

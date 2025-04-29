@@ -3,6 +3,7 @@ from QQSM.states.user_state import UserState
 from QQSM.styles.colors import Colors
 from QQSM.pages.components import render_exit_button
 
+
 @rx.page("/user", on_load=UserState.load_user_data())
 def user_page():
     return rx.box(

@@ -50,14 +50,14 @@ def render_progress_indicator(steps: int):
     return rx.hstack(
         *[
             rx.box(
-                #Numeros de pregunta
+                # Numeros de pregunta
                 rx.text(
                     ((number - 1) // steps) * steps + (i + 1),
                     font_size="14px",
                     color="gold",
                     text_align="center",
                 ),
-                #circulos
+                # circulos
                 rx.box(
                     class_name=rx.cond(
                         i == (number - 1) % steps,
@@ -115,7 +115,6 @@ def render_question_topic():
         height="100px",
         flex_shrink="0",
     )
-
 
 
 def render_topic_choser():
@@ -233,9 +232,6 @@ def render_call_box():
         align_items="center",
         justify_content="center",
     )
-
-
-
 
 
 def render_joker_call():

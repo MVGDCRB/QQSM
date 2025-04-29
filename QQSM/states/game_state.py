@@ -36,8 +36,6 @@ class GameState(LoginState):
     show_call_box: bool = False
     call_loading: bool = False
 
-
-
     # Estilos dinámicos de los botones
     button_classes: dict[str, str] = {
         "A": "hex-button",
@@ -69,7 +67,6 @@ class GameState(LoginState):
         self.generate_question()
         return rx.redirect(self.mode)
 
-
     @rx.event
     def set_theme(self, topic: str):
         self.chosen_answer = False
@@ -85,7 +82,8 @@ class GameState(LoginState):
 
     @rx.event
     def get_themes(self):
-        self.topic_selection1, self.topic_selection2 = self.game_class.generate_topic_theme_mode(self.topic_selection1,self.topic_selection2)
+        self.topic_selection1, self.topic_selection2 = self.game_class.generate_topic_theme_mode(self.topic_selection1,
+                                                                                                 self.topic_selection2)
 
     @rx.event
     def empty_question(self):
@@ -161,7 +159,6 @@ class GameState(LoginState):
             self.number_question += 1
             self.enable_topic = False
             self.generate_question()
-
 
     @rx.event
     def validate_answer(self, letter: str):
@@ -257,9 +254,6 @@ class GameState(LoginState):
         else:
             self.feedback = "❌ Ya has usado el comodín de la llamada."
 
-
-
-
     @rx.event
     def finish_call_loading(self):
         self.call_ready = True
@@ -299,8 +293,6 @@ class GameState(LoginState):
         self.call_text = "\n La opcion correcta es " + text[0] + ". " + text[1]
         self.is_call_loading = False
         self.call_used = True
-
-
 
     @rx.event
     def deep_seek_answer(self):

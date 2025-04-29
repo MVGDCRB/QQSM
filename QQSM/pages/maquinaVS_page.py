@@ -128,6 +128,7 @@ def render_ia1():
         style={"padding": "0", "border": "none", "background": "none"},
     )
 
+
 def render_ia2():
     return rx.button(
         rx.box(
@@ -141,6 +142,7 @@ def render_ia2():
         style={"padding": "0", "border": "none", "background": "none"},
     )
 
+
 def render_ia3():
     return rx.button(
         rx.box(
@@ -153,4 +155,3 @@ def render_ia3():
         on_click=GameState.initialize_game("/llamaIA"),
         style={"padding": "0", "border": "none", "background": "none"},
     )
-
