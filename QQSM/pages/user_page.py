@@ -44,56 +44,64 @@ def user_page():
                 rx.foreach(
                     UserState.tema_stats,
                     lambda s: rx.box(
-                        rx.vstack(
-                            rx.box(
-                                background_image=f"url('/themes/{s.split(';')[0]}.png')",
-                                class_name="theme-icon image",
-                                width="100px",
-                                height="100px",
-                                margin_bottom="5px",
-                                border_radius="50%",
-                                background_size="cover",
-                                background_position="center",
-                                **{"data-theme": s.split(';')[0]}
-                            ),
-                            rx.text(
-                                f"Aciertos: {s.split(';')[1]}/{s.split(';')[6]}",
-                                font_weight="bold",
-                                color=Colors.GOLD,
-                                margin_top="10px"
-                            ),
-                            rx.box(
-                                rx.tooltip(
-                                    rx.box(
-                                        width="14px",
-                                        height="14px",
-                                        background_color="gold",
-                                        border_radius="50%",
-                                        position="absolute",
-                                        left=f"calc({s.split(';')[3]}% - 7px)",
-                                        top="-4px",
-                                        z_index="2",
-                                    ),
-                                    label=f"{s.split(';')[3]}% de aciertos",
-                                    position="top"
+                        rx.box(
+                            rx.vstack(
+                                rx.box(
+                                    background_image=f"url('/themes/{s.split(';')[0]}.png')",
+                                    class_name="theme-icon image",
+                                    width="100px",
+                                    height="100px",
+                                    margin_bottom="5px",
+                                    border_radius="50%",
+                                    background_size="cover",
+                                    background_position="center",
+                                    **{"data-theme": s.split(';')[0]}
                                 ),
-                                width="100%",
-                                height="10px",
-                                background="linear-gradient(to right, red, yellow, green)",
-                                border_radius="5px",
-                                position="relative",
-                                margin_top="10px"
+                                rx.text(
+                                    f"Aciertos: {s.split(';')[1]}/{s.split(';')[6]}",
+                                    font_weight="bold",
+                                    color=Colors.GOLD,
+                                    margin_top="10px"
+                                ),
+                                spacing="1",
+                                align="center",
+                                id="normal-content"
                             ),
-                            spacing="1",
-                            align="center"
+                            rx.center(
+                                rx.vstack(
+                                    rx.text(
+                                        "Porcentaje de precisión",
+                                        font_size="1.5em",
+                                        font_weight="bold",
+                                        color=Colors.GOLD
+                                    ),
+                                    rx.text(
+                                        f"{s.split(';')[3]}%",
+                                        font_size="3em",
+                                        font_weight="bold",
+                                        color=s.split(';')[5]
+                                    ),
+                                    spacing="2",
+                                    align="center"
+                                ),
+                                display="none",
+                                id="hover-content"
+                            ),
+                            width="100%",
+                            height="100%",
+                            position="relative"
                         ),
                         padding="15px",
                         background_color="#1F2A44",
                         box_shadow="0 0 10px rgba(255, 215, 0, 0.2)",
-                        border=f"2px solid {s.split(';')[5]}",
+                        border=f"4px solid {s.split(';')[5]}",
                         border_radius="8px",
-                        transition="transform 0.3s ease",
-                        _hover={"transform": "scale(1.05)"}
+                        transition="all 0.3s ease",
+                        _hover={
+                            "transform": "scale(1.05)",
+                            "#normal-content": {"display": "none"},
+                            "#hover-content": {"display": "flex"}
+                        }
                     )
                 ),
                 columns="3",
