@@ -14,9 +14,16 @@ def user_page():
                 left="20px"
             ),
             rx.box(
-                rx.text("TU PERFIL", class_name="title-style", text_align="center"),
+                rx.text(
+                    "TU PERFIL",
+                    class_name="title-style",
+                    text_align="center",
+                    background_color="rgba(0,0,0,0.5)",
+                    padding="10px",
+                    border_radius="8px"
+                ),
                 width="100%",
-                margin_top="20px"
+                margin_top="40px"
             ),
             rx.box(
                 rx.vstack(
@@ -48,11 +55,17 @@ def user_page():
                 width="fit-content",
                 margin="0 auto"
             ),
-            rx.text(
-                "Estadísticas por tema",
-                font_size="1.4em",
-                color=Colors.GOLD,
-                margin_top="20px"
+            rx.box(
+                rx.text(
+                    "Estadísticas por tema",
+                    font_size="1.4em",
+                    color=Colors.GOLD,
+                    background_color="rgba(0,0,0,0.5)",
+                    padding="8px",
+                    border_radius="8px"
+                ),
+                margin_top="20px",
+                width="fit-content"
             ),
             rx.grid(
                 rx.foreach(
@@ -147,7 +160,8 @@ def user_page():
         min_height="100vh",
         background_image="url('/welcome_fondo.jpg')",
         background_size="cover",
-        background_position="center",
+        background_position="top center",
+        background_attachment="fixed",
         background_repeat="no-repeat",
         position="relative",
         overflow_y="auto"
