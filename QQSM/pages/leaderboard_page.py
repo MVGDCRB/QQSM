@@ -58,7 +58,10 @@ def leaderboard_page():
         ),
         width="100vw",
         height="100vh",
-        background_color=Colors.DARK_BLUE,
+        background_image="url('/welcome_fondo.jpg')",
+        background_size="cover",
+        background_position="center",
+        background_repeat="no-repeat",
         position="relative",
     )
 

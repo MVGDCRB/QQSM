@@ -236,29 +236,50 @@ def render_call_box():
 
 def render_joker_call():
     return rx.button(
-        "📞",
-        class_name="joker-button",
+        rx.box(
+            class_name="theme-icon image",
+            background_image="url('/buttons/call.png')",
+            **{"data-theme": "Llamada"},
+            width="60px",
+            height="60px",
+        ),
         on_click=GameState.use_call_option,
-        disabled=GameState.call_used | GameState.chosen_answer
+        disabled=GameState.call_used | GameState.chosen_answer,
+        style={"padding": "0", "border": "none", "background": "none"},
     )
 
 
 def render_joker_fifty():
     return rx.button(
-        "50%",
-        class_name="joker-button",
+        rx.box(
+            class_name="theme-icon image",
+            background_image="url('/buttons/fifty.png')",
+            **{"data-theme": "50:50"},
+            width="60px",
+            height="60px",
+        ),
         on_click=GameState.use_fifty_option,
-        disabled=GameState.fifty_used | GameState.chosen_answer
+        disabled=GameState.fifty_used | GameState.chosen_answer,
+        style={"padding": "0", "border": "none", "background": "none"},
+        
     )
 
 
 def render_joker_public():
     return rx.button(
-        "📊",
-        class_name="joker-button",
+        rx.box(
+            class_name="theme-icon image",
+            background_image="url('/buttons/public.png')",
+            **{"data-theme": "Público"},
+            width="60px",
+            height="60px",
+        ),
         on_click=GameState.use_public_option,
-        disabled=GameState.public_used | GameState.chosen_answer
+        disabled=GameState.public_used | GameState.chosen_answer,
+        style={"padding": "0", "border": "none", "background": "none"},
+        
     )
+
 
 
 def render_feedback_line():

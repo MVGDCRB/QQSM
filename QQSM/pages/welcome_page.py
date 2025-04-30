@@ -9,7 +9,7 @@ def welcome_page():
         rx.box(
             rx.form(
                 rx.vstack(
-                    rx.text("¿QUIEN QUIERE SER MILLONARIO?", class_name="title-style"),
+                    rx.text("¿QUIÉN QUIERE SER MILLONARIO?", class_name="title-style"),
                     rx.button("Iniciar Sesión", on_click=LoginState.clear_message,
                               class_name="hex-button"),
                     rx.button("Registrarse", on_click=RegisterState.clear_message,
