@@ -66,7 +66,7 @@ def render_central_panel():
 def render_left_panel():
     return rx.box(
         rx.cond(
-            GameState.show_call_box,
+            GameState.call_used & (GameState.call_text != ""),
             render_call_box()
         ),
         width="25vw",

@@ -549,15 +549,10 @@
     background-repeat: no-repeat;
 }
 
-@keyframes pulse {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-    100% {
-      opacity: 1;
-    }
+
+button:disabled .theme-icon.image {
+    filter: grayscale(100%);
+    opacity: 0.5;
   }
+  
   

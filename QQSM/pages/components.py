@@ -200,25 +200,15 @@ def render_public_chart():
 
 def render_call_box():
     return rx.box(
-        rx.center(
-            rx.cond(
-                GameState.call_loading,
-                rx.text(
-                    "📞 Llamando...",
-                    font_size="1.1em",
-                    color=Colors.GOLD,
-                    animation="pulse 1.5s infinite",
-                    text_align="center"
-                ),
+        rx.center( 
                 rx.text(
                     GameState.call_text,
                     font_size="1.1em",
                     color="white",
-                    text_align="left",  # ← para mejor lectura con scrollbar
+                    text_align="left",
                     white_space="pre-wrap",
                     word_break="break-word",
                 )
-            )
         ),
         width="220px",
         height="450px",
