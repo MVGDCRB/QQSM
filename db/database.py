@@ -5,8 +5,15 @@ from sqlalchemy.orm import sessionmaker
 from db.models import Base
 
 
-# URL de conexión a PostgreSQL 
-DATABASE_URL = "postgresql://postgres:5555@localhost:5432/qqsm_db"
+DB_USER = "postgres"
+DB_PASSWORD = "5555"
+DB_HOST = "localhost"
+DB_PORT = "5432"
+DB_NAME = "qqsm_db"
+
+DATABASE_URL = (
+    f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+)
 
 # Configuración de la base de datos
 engine = create_engine(DATABASE_URL)

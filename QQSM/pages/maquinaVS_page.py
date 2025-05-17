@@ -3,7 +3,7 @@ from QQSM.styles.colors import Colors
 from QQSM.states.game_state import GameState
 
 
-@rx.page(route="/maquinaVS_page")
+@rx.page(route="/maquinaVS")
 def maquina_vs_page():
     return rx.box(
         render_upper_panel(),
