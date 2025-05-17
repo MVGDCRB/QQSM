@@ -1,6 +1,6 @@
 ## Introducción a QQSM
 
-Este proyecto es el Trabajo de Fin de Grado (TFG) de la Universidad Complutense de Madrid (UCM). Se trata de una implementación moderna del conocido concurso **¿Quién quiere ser millonario?**, en la que **todas las preguntas son generadas y verificadas por inteligencia artificial**.
+Este proyecto es el Trabajo de Fin de Grado (TFG) de cuatro alumnos de la facultad de informática de la Universidad Complutense de Madrid (UCM). Se trata de una implementación moderna del conocido concurso **¿Quién quiere ser millonario?**, en la que **todas las preguntas son generadas y verificadas por inteligencia artificial**.
 
 QQSM recolecta estadísticas de juego de cada usuario (aciertos, tiempos, puntuaciones) y ofrece varios modos de juego:
 
