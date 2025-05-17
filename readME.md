@@ -41,7 +41,7 @@ QQSM recolecta estadísticas de juego de cada usuario (aciertos, tiempos, puntua
    * **Windows (PowerShell)**:
 
      ```powershell
-     py -m venv venv
+     python -m venv venv
      venv\Scripts\activate
      ```
    * **macOS / Linux**:
@@ -162,4 +162,3 @@ La aplicación se abrirá por defecto en [http://localhost:3000](http://localhos
 * [cintiacpr](https://github.com/cintiacpr)
 * [MVGDCRB](https://github.com/MVGDCRB)
 
-*Este README ha sido generado como parte del Trabajo de Fin de Grado de la UCM.* ha sido generado como parte del Trabajo de Fin de Grado de la UCM.\* como parte del Trabajo de Fin de Grado de la UCM.\*
