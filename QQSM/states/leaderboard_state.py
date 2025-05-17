@@ -4,7 +4,10 @@ from QQSM.states.login_state import LoginState
 
 
 class LeaderboardState(LoginState):
-
+    """
+    Estado que gestiona la información para la página de la tabla de clasificación (leaderboard).
+    Hereda de LoginState para mantener la información de autenticación del usuario.
+    """
     max_score: int = 0
     top_users: list[tuple[str, int]] = []
     position: int = -1
