@@ -153,7 +153,9 @@ La aplicación se abrirá por defecto en [http://localhost:3000](http://localhos
 
 ## Recursos
 
-* **Carpeta `img/`**: contiene imágenes utilizadas en la interfaz y assets del proyecto.
+- **Carpeta `img/`**: contiene imágenes utilizadas en la interfaz y assets del proyecto.
+- **Vídeo demo**: [Ver demostración](https://youtu.be/XMeuNWvVXZc)
+
 
 ## Autores
 
