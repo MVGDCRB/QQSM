@@ -16,7 +16,7 @@ def menu_page():
         # Contenedor principal centrado con íconos laterales y menú en el centro
         rx.center(
             rx.hstack(
-                # Ícono de perfil (izquierda)
+                # Icono de perfil (izquierda)
                 rx.button(
                     rx.box(
                         class_name="theme-icon image",
@@ -90,7 +90,7 @@ def menu_page():
                     width="fit-content",
                 ),
 
-                # Ícono de ranking (derecha)
+                # Icono de ranking (derecha)
                 rx.button(
                     rx.box(
                         class_name="theme-icon image",

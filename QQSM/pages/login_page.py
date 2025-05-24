@@ -34,7 +34,7 @@ def login_page():
                                 name="usuario",
                                 class_name="custom-input",
                                 width="100%",
-                                margin_bottom="10%",  # separación entre inputs
+                                margin_bottom="10%",
                             ),
                             rx.input(
                                 placeholder="Contraseña",
@@ -49,7 +49,7 @@ def login_page():
                             align_items="center",
                             justify_content="center",
                             width="100%",
-                            margin_bottom="10%",  # separación del bloque siguiente
+                            margin_bottom="10%",
                         ),
                         rx.box(
                             rx.button(
@@ -57,7 +57,7 @@ def login_page():
                                 type="submit",
                                 class_name="hex-button",
                                 width="100%",
-                                margin_bottom="10%",  # separación entre botones
+                                margin_bottom="10%",
                             ),
                             rx.button(
                                 "Volver",
