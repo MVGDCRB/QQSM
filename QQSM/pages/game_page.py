@@ -1,12 +1,15 @@
 from QQSM.pages.components import *
 
+DIFFICULTY_LEVELS: int = 15
+TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO?"
+
+#Esquema general de la página con upper, lower y central panel
 
 @rx.page(route="/game")
 def game_page():
     return rx.box(
         render_upper_panel(),
-        # En función del número de circulitos
-        render_progress_indicator(15),
+        render_progress_indicator(DIFFICULTY_LEVELS),
 
         rx.hstack(
             render_central_panel(),
@@ -31,11 +34,11 @@ def game_page():
         overflow="hidden",
     )
 
-
+#Panel superior con botón de salida, título y botón de siguiente
 def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
-        render_game_header("¿QUIÉN QUIERE SER MILLONARIO?"),
+        render_game_header(TITLE),
         render_next_button(),
         width="100%",
         padding="0px 20px",
@@ -43,7 +46,7 @@ def render_upper_panel():
         justify="between",
     )
 
-
+#Panel central con el enunciado y tema de la pregunta, así como las 4 posibles respuestas
 def render_central_panel():
     return rx.vstack(
         rx.hstack(
@@ -62,7 +65,7 @@ def render_central_panel():
         background_color=Colors.DARK_BLUE
     )
 
-
+#Panel con la caja de texto con la respuesta de la IA a la llamada, si se muestra
 def render_left_panel():
     return rx.box(
         rx.cond(
@@ -74,7 +77,7 @@ def render_left_panel():
         background_color="transparent",
     )
 
-
+#Panel con el gráfico de barras con las respuestas del público, si se muestran
 def render_right_panel():
     return rx.box(
         rx.cond(
@@ -86,7 +89,7 @@ def render_right_panel():
         background_color="transparent",
     )
 
-
+# Panel inferior con los tres botones de comodín
 def render_lower_panel():
     return rx.center(
         rx.hstack(

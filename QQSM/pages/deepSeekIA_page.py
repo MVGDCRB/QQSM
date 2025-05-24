@@ -1,12 +1,15 @@
 from QQSM.pages.components import *
 
+DIFFICULTY_LEVELS: int = 15
+TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO?"
+
+#Esquema general de la página con upper, lower y central panel
 
 @rx.page(route="/deepSeekIA")
 def deep_seekia_page():
     return rx.box(
         render_upper_panel(),
-        # En función del número de circulitos
-        render_progress_indicator(15),
+        render_progress_indicator(DIFFICULTY_LEVELS),
 
         rx.hstack(
             render_central_panel(),
@@ -16,10 +19,6 @@ def deep_seekia_page():
         ),
 
         render_lower_panel(),
-
-        rx.box(render_left_panel(), position="absolute", left="0px", bottom="15px"),
-        rx.box(render_right_panel(), position="absolute", right="50px", bottom="50px"),
-
         render_feedback_line(),
 
         width="100vw",
@@ -31,11 +30,11 @@ def deep_seekia_page():
         overflow="hidden",
     )
 
-
+#Panel superior con botón de salida, título y botón de siguiente
 def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
-        render_game_header("¿QUIÉN QUIERE SER MILLONARIO?"),
+        render_game_header(TITLE),
         render_next_button(),
         width="100%",
         padding="0px 20px",
@@ -43,7 +42,7 @@ def render_upper_panel():
         justify="between",
     )
 
-
+#Panel central con el enunciado y tema de la pregunta, así como las 4 posibles respuestas
 def render_central_panel():
     return rx.vstack(
         rx.hstack(
@@ -62,31 +61,9 @@ def render_central_panel():
         background_color=Colors.DARK_BLUE
     )
 
+#No hay paneles izquierdo ni derecho porque no hay comodines en el modo IA
 
-def render_left_panel():
-    return rx.box(
-        rx.cond(
-            GameState.call_used,
-            render_call_box()
-        ),
-        width="25vw",
-        height="55vh",
-        background_color="transparent",
-    )
-
-
-def render_right_panel():
-    return rx.box(
-        rx.cond(
-            GameState.public_used & (GameState.public_items != []),
-            render_public_chart()
-        ),
-        width="25vw",
-        height="33vh",
-        background_color="transparent",
-    )
-
-
+#Panel inferior, con los iconos de las IAs que están compitiendo y el texto VS costumizado entre ellas
 def render_lower_panel():
     return rx.center(
         rx.hstack(

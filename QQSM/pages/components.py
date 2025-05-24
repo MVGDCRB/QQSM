@@ -1,9 +1,9 @@
 import reflex as rx
 from QQSM.states.game_state import GameState
 from QQSM.styles.colors import Colors
-from reflex import Style
 
 
+#Botón en forma de X con estilo css customizado que vuelve al menú principal
 def render_exit_button():
     return rx.button(
         "✖",
@@ -11,7 +11,7 @@ def render_exit_button():
         class_name="menu-exit-button"
     )
 
-
+#Panel de texto que escribe un título centrado con estilo css customizado
 def render_game_header(text: str):
     return rx.box(
         rx.text(
@@ -24,7 +24,7 @@ def render_game_header(text: str):
         text_align="center"
     )
 
-
+#Botón customizado con forma de flecha que dispara el evento de GameState next_round() para pasar a la siguiente pregunta, si se ha respondido la actual correctamente
 def render_next_button():
     return rx.cond(
         GameState.correct_answer,
@@ -35,7 +35,7 @@ def render_next_button():
         )
     )
 
-
+#Dado un número de pasos de transición y un index para uno de esos pasos se calcula el color intermedio entre el verde y el rojo correspondiente para representar la dificultad
 def get_gradient_color(index: int, steps: int) -> str:
     factor = index / (steps - 1) if steps > 1 else 0
     r = int(factor * 255)
@@ -43,7 +43,7 @@ def get_gradient_color(index: int, steps: int) -> str:
     b = 0
     return f"rgb({r},{g},{b})"
 
-
+#Panel de círculos numerados que indican el grado de dificultad de las preguntas respondidas hasta el momento actual, incluida la actual con un color entre verde y rojo
 def render_progress_indicator(steps: int):
     number = GameState.number_question
 
@@ -84,7 +84,7 @@ def render_progress_indicator(steps: int):
         margin_bottom="5px",
     )
 
-
+#Panel de texto hexagonal que contiene el texto del enunciado de una pregunta.
 def render_question_title():
     return rx.box(
         rx.text(
@@ -100,23 +100,20 @@ def render_question_title():
         border_radius="8px",
     )
 
-
+#Panel circular que muestra con una imagen el tema de la pregunta actual. Cuando se hace hover sobre el muestra el texto del tema en cuestión.
 def render_question_topic():
-    # Obtiene el tema actual; por defecto "arte" para pruebas
     theme = GameState.topic
     return rx.box(
-        # Aplica la clase CSS que define forma, borde y sombra
         class_name="theme-icon image",
         # Inyecta la imagen del tema de forma dinámica
         background_image=f"url('/themes/{theme}.png')",
         **{"data-theme": GameState.topic},
-        # Estas props aseguran el tamaño adecuado
         width="100px",
         height="100px",
         flex_shrink="0",
     )
 
-
+#Doble panel circular de botones temáticos. El primero panel que se pulse establece el tema de la pregunta para esa ronda.
 def render_topic_choser():
     theme1 = GameState.topic_selection1
     theme2 = GameState.topic_selection2
@@ -143,7 +140,7 @@ def render_topic_choser():
         justify="center",
     )
 
-
+#Cuadrícula 2x2 de botones hexagonales para mostras las cuatro posibles respuestas al enunciado de la pregunta. Dan feedback de validación a la respuesta tras ser pulsados.
 def render_answer_options():
     return rx.grid(
         *[
@@ -169,15 +166,15 @@ def render_answer_options():
         margin_top="10px",
     )
 
-
+#Gráfico de barras que muestra el voto del público para las 4 opciones de respuesta para una pregunta dada
 def render_public_chart():
     return rx.hstack(
         rx.foreach(
             GameState.public_items,
             lambda item, idx: rx.vstack(
-                # Mostrar porcentaje encima
+                # Porcentaje de voto
                 rx.text(f"{item[1]}%", font_size="14px", color="white"),
-                # Barra de audiencia
+                # Barra
                 rx.box(
                     width="30px",
                     height=f"{item[1] * 2}px",
@@ -197,7 +194,7 @@ def render_public_chart():
         justify="end",
     )
 
-
+#Panel de texto que se muestra cuando se invoca el comodín de la llamada con la respuesta de la IA
 def render_call_box():
     return rx.box(
         rx.center( 
@@ -217,13 +214,13 @@ def render_call_box():
         border_radius="30px",
         border=f"2px solid {Colors.GOLD}",
         box_shadow="0 0 20px rgba(255, 215, 0, 0.5)",
-        overflow_y="auto",  # ← scroll si el texto es largo
+        overflow_y="auto",
         display="flex",
         align_items="center",
         justify_content="center",
     )
 
-
+#Botón customizado para representar el comodín de la llamada
 def render_joker_call():
     return rx.button(
         rx.box(
@@ -238,7 +235,7 @@ def render_joker_call():
         style={"padding": "0", "border": "none", "background": "none"},
     )
 
-
+#Botón customizado para representar el comodín del 50-50
 def render_joker_fifty():
     return rx.button(
         rx.box(
@@ -254,7 +251,7 @@ def render_joker_fifty():
         
     )
 
-
+#Botón customizado para representar el comodín del público
 def render_joker_public():
     return rx.button(
         rx.box(
@@ -271,7 +268,7 @@ def render_joker_public():
     )
 
 
-
+#Fragmento de texto que se muestra cuando es necesario un feedback adicional al usuario, como errores
 def render_feedback_line():
     return rx.cond(
         GameState.feedback != "",
