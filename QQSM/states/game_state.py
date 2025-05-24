@@ -52,6 +52,8 @@ class GameState(LoginState):
     
     _model = None
 
+    rival: str = ""
+
     # Estilos dinámicos de los botones
     button_classes: dict[str, str] = {}
 
@@ -76,7 +78,19 @@ class GameState(LoginState):
         self.mode = ruta
         self.generate_question()
 
-        return rx.redirect(self.mode)
+        if self.mode == "/deepSeekIA":
+            self.rival = "deepSeek"
+            return rx.redirect("/GeminiVS")
+
+        elif self.mode == "/openAI":
+            self.rival = "openAI"
+            return rx.redirect("/GeminiVS")
+
+        elif self.mode == "/llamaIA":
+            self.rival = "llamaIA"
+            return rx.redirect("/GeminiVS")
+
+        return rx.redirect("self.mode")
 
     @rx.event
     def set_theme(self, topic):

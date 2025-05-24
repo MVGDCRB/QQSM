@@ -5,7 +5,7 @@ TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO?"
 
 #Esquema general de la página con upper, lower y central panel
 
-@rx.page(route="/deepSeekIA")
+@rx.page(route="/GeminiVS")
 def deep_seekia_page():
     return rx.box(
         render_upper_panel(),
@@ -35,7 +35,7 @@ def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
         render_game_header(TITLE),
-        render_next_button(),
+        render_next_button(True),
         width="100%",
         padding="0px 20px",
         align="center",
@@ -46,8 +46,8 @@ def render_upper_panel():
 def render_central_panel():
     return rx.vstack(
         rx.hstack(
-            render_question_title(),
-            render_question_topic(),
+            render_question_title(GameState.question),
+            render_question_topic(GameState.topic),
             spacing="5",
             align="center",
             justify="center",
@@ -61,46 +61,15 @@ def render_central_panel():
         background_color=Colors.DARK_BLUE
     )
 
-#No hay paneles izquierdo ni derecho porque no hay comodines en el modo IA
+#No hay paneles izquierdo ni derecho porque no hay comodines en el modo IA vs
 
-#Panel inferior, con los iconos de las IAs que están compitiendo y el texto VS costumizado entre ellas
+#Panel inferior, con los iconos de las IAs que están compitiendo y el texto VS costumizado entre ellas.Actualmente la primera siempres es Gemini.
 def render_lower_panel():
     return rx.center(
         rx.hstack(
-            rx.box(
-                class_name="theme-icon image",
-                background_image="url('/ias/gemini.png')",
-                **{"data-theme": "gemini"},
-                width="100px",
-                height="100px",
-            ),
-            rx.text(
-                "VS",
-                font_size="4em",
-                font_weight="bold",
-                font_family="Impact, sans-serif",
-                color="transparent",
-                background="linear-gradient(180deg, #FFD700, #FF4500, #8B0000)",
-                background_clip="text",
-                text_shadow=(
-                    "1px 1px 1px black, "
-                    "0 0 4px #FF4500, "
-                    "0 0 8px #FF8C00"
-                ),
-                margin="0 20px",
-                height="100px",
-                line_height="100px",
-                display="flex",
-                align_items="center",
-                justify_content="center",
-            ),
-            rx.box(
-                class_name="theme-icon image",
-                background_image="url('/ias/deepSeek.png')",
-                **{"data-theme": "deepSeek"},
-                width="100px",
-                height="100px",
-            ),
+            render_ia_icon("gemini"),
+            render_vs_text(),
+            render_ia_icon(GameState.rival),
             spacing="6",
             margin_top="10px"
         ),

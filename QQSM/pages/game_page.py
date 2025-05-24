@@ -3,7 +3,7 @@ from QQSM.pages.components import *
 DIFFICULTY_LEVELS: int = 15
 TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO?"
 
-#Esquema general de la página con upper, lower y central panel
+#Esquema general de la página con upper, lower, right, left y central panel
 
 @rx.page(route="/game")
 def game_page():
@@ -39,7 +39,7 @@ def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
         render_game_header(TITLE),
-        render_next_button(),
+        render_next_button(GameState.correct_answer),
         width="100%",
         padding="0px 20px",
         align="center",
@@ -50,8 +50,8 @@ def render_upper_panel():
 def render_central_panel():
     return rx.vstack(
         rx.hstack(
-            render_question_title(),
-            render_question_topic(),
+            render_question_title(GameState.question),
+            render_question_topic(GameState.topic),
             spacing="5",
             align="center",
             justify="center",

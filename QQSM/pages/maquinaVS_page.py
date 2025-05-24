@@ -1,7 +1,13 @@
 import reflex as rx
 from QQSM.styles.colors import Colors
 from QQSM.states.game_state import GameState
+from QQSM.pages.components import *
 
+TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO? IA vs IA"
+
+IA_SELECTION_TEXT = "Elige la IA que vaya a responder la pregunta"
+
+#Esquema general de la página con upper y central panel
 
 @rx.page(route="/maquinaVS")
 def maquina_vs_page():
@@ -9,7 +15,7 @@ def maquina_vs_page():
         render_upper_panel(),
 
         rx.hstack(
-            render_question_section(),
+            render_central_panel(),
             spacing="6",
             align="start",
             justify="center"
@@ -24,134 +30,37 @@ def maquina_vs_page():
         overflow="hidden",
     )
 
-
+#Panel superior con botón de salida y título
 def render_upper_panel():
     return rx.hstack(
         render_exit_button(),
-        render_game_header(),
+        render_game_header(TITLE),
         width="100%",
         padding="0px 20px",
         align="center",
         justify="between",
     )
 
-
-def render_game_header():
-    return rx.box(
-        rx.text(
-            "¿QUIÉN QUIERE SER MILLONARIO? IA vs IA",
-            class_name="title-style",
-            margin="0px"
-        ),
-        width="100%",
-        padding="0px",
-        text_align="center"
-    )
-
-
-def render_exit_button():
-    return rx.button(
-        "✖",
-        on_click=rx.redirect("/menu"),
-        class_name="menu-exit-button"
-    )
-
-
-def get_gradient_color(index):
-    factor = index / 14
-    r = int(0 + factor * 255)
-    g = int(255 - factor * 255)
-    b = 0
-    return f"rgb({r},{g},{b})"
-
-
-def render_question_section():
-    return rx.vstack(
-        rx.hstack(
-            render_text(),
-            spacing="5",
+#Panel central con texto de selección de IAs con los iconos selectores correspondientes de cada IA
+def render_central_panel() -> rx.Component:
+    return rx.center(
+        rx.vstack(
+            rx.hstack(
+                render_question_title(IA_SELECTION_TEXT),
+                align="center",
+                justify="center",
+                width="100%"
+            ),
+            render_ia_chooser(),
+            spacing="8",
             align="center",
             justify="center",
-            width="100%"
+            width="66%",
         ),
-        render_ias(),
-        spacing="4",
-        align="center",
-        justify="center",
-        width="66%",
+        height="80vh",
+        align_items="center",
+        justify_content="center",
+        width="100%",
         background_color=Colors.DARK_BLUE
     )
 
-
-def render_text():
-    return rx.box(
-        rx.text(
-            "Elige la IA que vaya a responder la pregunta",
-            white_space="normal",
-            word_break="break-word",
-            color="white",
-            text_align="center",
-            class_name="custom-title",
-        ),
-        width="70%",
-        padding="5px",
-        border_radius="8px",
-    )
-
-
-def render_ias():
-    return rx.hstack(
-        render_ia1(),
-        render_ia2(),
-        render_ia3(),
-        width="100px",
-        height="100px",
-        display="flex",
-        align_items="center",
-        justify_content="center",
-        border_radius="50%",
-        background_color=Colors.GOLD,
-        flex_shrink="0"
-    )
-
-
-def render_ia1():
-    return rx.button(
-        rx.box(
-            class_name="theme-icon image",
-            background_image="url('/ias/deepSeek.png')",
-            **{"data-theme": "deepSeek"},
-            width="100px",
-            height="100px",
-        ),
-        on_click=GameState.initialize_game("/deepSeekIA"),
-        style={"padding": "0", "border": "none", "background": "none"},
-    )
-
-
-def render_ia2():
-    return rx.button(
-        rx.box(
-            class_name="theme-icon image",
-            background_image="url('/ias/openAI.png')",
-            **{"data-theme": "openAI"},
-            width="100px",
-            height="100px",
-        ),
-        on_click=GameState.initialize_game("/openAI"),
-        style={"padding": "0", "border": "none", "background": "none"},
-    )
-
-
-def render_ia3():
-    return rx.button(
-        rx.box(
-            class_name="theme-icon image",
-            background_image="url('/ias/llamaIA.png')",
-            **{"data-theme": "llamaIA"},
-            width="100px",
-            height="100px",
-        ),
-        on_click=GameState.initialize_game("/llamaIA"),
-        style={"padding": "0", "border": "none", "background": "none"},
-    )

@@ -2,9 +2,10 @@ import reflex as rx
 from QQSM.states.game_state import GameState
 from QQSM.styles.colors import Colors
 
+#Biblioteca de componentes reflex con estilos .css customizados
 
 #Botón en forma de X con estilo css customizado que vuelve al menú principal
-def render_exit_button():
+def render_exit_button() -> rx.Component:
     return rx.button(
         "✖",
         on_click=rx.redirect("/menu"),
@@ -12,7 +13,7 @@ def render_exit_button():
     )
 
 #Panel de texto que escribe un título centrado con estilo css customizado
-def render_game_header(text: str):
+def render_game_header(text: str) -> rx.Component:
     return rx.box(
         rx.text(
             text,
@@ -24,10 +25,10 @@ def render_game_header(text: str):
         text_align="center"
     )
 
-#Botón customizado con forma de flecha que dispara el evento de GameState next_round() para pasar a la siguiente pregunta, si se ha respondido la actual correctamente
-def render_next_button():
+#Botón customizado con forma de flecha que dispara el evento de GameState next_round() para pasar a la siguiente pregunta, si se cumple la condicion show
+def render_next_button(show: bool) -> rx.Component:
     return rx.cond(
-        GameState.correct_answer,
+        show,
         rx.button(
             "➜",
             on_click=GameState.next_round.debounce(1000),
@@ -35,6 +36,7 @@ def render_next_button():
         )
     )
 
+#Función auxiliar de render_progress_indicator
 #Dado un número de pasos de transición y un index para uno de esos pasos se calcula el color intermedio entre el verde y el rojo correspondiente para representar la dificultad
 def get_gradient_color(index: int, steps: int) -> str:
     factor = index / (steps - 1) if steps > 1 else 0
@@ -44,7 +46,7 @@ def get_gradient_color(index: int, steps: int) -> str:
     return f"rgb({r},{g},{b})"
 
 #Panel de círculos numerados que indican el grado de dificultad de las preguntas respondidas hasta el momento actual, incluida la actual con un color entre verde y rojo
-def render_progress_indicator(steps: int):
+def render_progress_indicator(steps: int) -> rx.Component:
     number = GameState.number_question
 
     return rx.hstack(
@@ -85,10 +87,10 @@ def render_progress_indicator(steps: int):
     )
 
 #Panel de texto hexagonal que contiene el texto del enunciado de una pregunta.
-def render_question_title():
+def render_question_title(question_title: str) -> rx.Component:
     return rx.box(
         rx.text(
-            GameState.question,
+            question_title,
             white_space="normal",
             word_break="break-word",
             color="white",
@@ -101,32 +103,22 @@ def render_question_title():
     )
 
 #Panel circular que muestra con una imagen el tema de la pregunta actual. Cuando se hace hover sobre el muestra el texto del tema en cuestión.
-def render_question_topic():
-    theme = GameState.topic
+def render_question_topic(theme: str) -> rx.Component:
     return rx.box(
         class_name="theme-icon image",
-        # Inyecta la imagen del tema de forma dinámica
         background_image=f"url('/themes/{theme}.png')",
-        **{"data-theme": GameState.topic},
+        **{"data-theme": theme},
         width="100px",
         height="100px",
         flex_shrink="0",
     )
 
 #Doble panel circular de botones temáticos. El primero panel que se pulse establece el tema de la pregunta para esa ronda.
-def render_topic_choser():
-    theme1 = GameState.topic_selection1
-    theme2 = GameState.topic_selection2
+def render_topic_choser(theme1: str, theme2:str) -> rx.Component:
 
-    def icon_button(theme):
+    def icon_button(theme) -> rx.Component:
         return rx.button(
-            rx.box(
-                class_name="theme-icon image",
-                background_image=f"url('/themes/{theme}.png')",
-                **{"data-theme": theme},
-                width="100px",
-                height="100px",
-            ),
+            render_question_topic(theme),
             on_click=GameState.set_theme(theme),
             disabled=GameState.enable_topic,
             style={"padding": "0", "border": "none", "background": "none"},
@@ -141,7 +133,7 @@ def render_topic_choser():
     )
 
 #Cuadrícula 2x2 de botones hexagonales para mostras las cuatro posibles respuestas al enunciado de la pregunta. Dan feedback de validación a la respuesta tras ser pulsados.
-def render_answer_options():
+def render_answer_options() -> rx.Component:
     return rx.grid(
         *[
             rx.button(
@@ -167,7 +159,7 @@ def render_answer_options():
     )
 
 #Gráfico de barras que muestra el voto del público para las 4 opciones de respuesta para una pregunta dada
-def render_public_chart():
+def render_public_chart() -> rx.Component:
     return rx.hstack(
         rx.foreach(
             GameState.public_items,
@@ -195,7 +187,7 @@ def render_public_chart():
     )
 
 #Panel de texto que se muestra cuando se invoca el comodín de la llamada con la respuesta de la IA
-def render_call_box():
+def render_call_box() -> rx.Component:
     return rx.box(
         rx.center( 
                 rx.text(
@@ -221,7 +213,7 @@ def render_call_box():
     )
 
 #Botón customizado para representar el comodín de la llamada
-def render_joker_call():
+def render_joker_call() -> rx.Component:
     return rx.button(
         rx.box(
             class_name="theme-icon image",
@@ -236,7 +228,7 @@ def render_joker_call():
     )
 
 #Botón customizado para representar el comodín del 50-50
-def render_joker_fifty():
+def render_joker_fifty() -> rx.Component:
     return rx.button(
         rx.box(
             class_name="theme-icon image",
@@ -252,7 +244,7 @@ def render_joker_fifty():
     )
 
 #Botón customizado para representar el comodín del público
-def render_joker_public():
+def render_joker_public() -> rx.Component:
     return rx.button(
         rx.box(
             class_name="theme-icon image",
@@ -269,7 +261,7 @@ def render_joker_public():
 
 
 #Fragmento de texto que se muestra cuando es necesario un feedback adicional al usuario, como errores
-def render_feedback_line():
+def render_feedback_line() -> rx.Component:
     return rx.cond(
         GameState.feedback != "",
         rx.box(
@@ -286,3 +278,62 @@ def render_feedback_line():
             text_align="center"
         )
     )
+
+# Componente parametrizado para mostrar un logo de IA según tema
+def render_ia_icon(ia_name: str) -> rx.Component:
+    image_url = f"/ias/{ia_name}.png"
+    return rx.box(
+        class_name="theme-icon image",
+        background_image=f"url('{image_url}')",
+        **{"data-theme": ia_name},
+        width="100px",
+        height="100px",
+    )
+
+#Botón circular que muestra render_ia_icon de la IA correspondiente y lanza la ruta al clicar.
+def render_ia_button(ia_name: str, route: str) -> rx.Component:
+    return rx.button(
+        render_ia_icon(ia_name),
+        on_click=GameState.initialize_game(route),
+        style={"padding": "0", "border": "none", "background": "none"},
+    )
+
+#Panel que muestra tres render_ia_button que permiten elegir a la IA rival
+def render_ia_chooser() -> rx.Component:
+    
+    return rx.hstack(
+        render_ia_button("deepSeek", "/deepSeekIA"),
+        render_ia_button("openAI", "/openAI"),
+        render_ia_button("llamaIA", "/llamaIA"),
+        spacing="6",
+        align="center",
+        justify="center",
+        width="100%",
+        margin_top="10px",
+    )
+
+
+# Componente para mostrar el texto 'VS' con efecto degradado y sombra.
+def render_vs_text() -> rx.Component:
+    return rx.text(
+        "VS",
+        font_size="4em",
+        font_weight="bold",
+        font_family="Impact, sans-serif",
+        color="transparent",
+        background="linear-gradient(180deg, #FFD700, #FF4500, #8B0000)",
+        background_clip="text",
+        text_shadow=(
+            "1px 1px 1px black, "
+            "0 0 4px #FF4500, "
+            "0 0 8px #FF8C00"
+        ),
+        margin="0 20px",
+        height="100px",
+        line_height="100px",
+        display="flex",
+        align_items="center",
+        justify_content="center",
+    )
+
+
