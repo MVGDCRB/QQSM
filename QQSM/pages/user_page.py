@@ -3,6 +3,7 @@ from QQSM.states.user_state import UserState
 from QQSM.styles.colors import Colors
 from QQSM.pages.components import render_exit_button
 
+#Página que muestra para el usuario loggeado sus datos de perfil y sus estadísticas por tema de las preguntas respondidas
 
 @rx.page("/user", on_load=UserState.load_user_data())
 def user_page():
@@ -14,6 +15,24 @@ def user_page():
                 top="20px",
                 left="20px"
             ),
+            render_profile_data(),
+            render_profile_stats(),
+        ),
+        width="100vw",
+        min_height="100vh",
+        background_image="url('/welcome_fondo.jpg')",
+        background_size="cover",
+        background_position="top center",
+        background_attachment="fixed",
+        background_repeat="no-repeat",
+        position="relative",
+        overflow_y="auto"
+    )
+
+
+#Componente que muestra los datos de perfil: nombre, puntuación, ranking, y preguntas respondidas totales
+def render_profile_data() -> rx.Component:
+    return rx.vstack(
             rx.box(
                 rx.text(
                     "TU PERFIL",
@@ -56,6 +75,16 @@ def user_page():
                 width="fit-content",
                 margin="0 auto"
             ),
+            spacing="5",
+            width="100%",
+            padding="30px",
+            align="center",
+            justify="start"
+    )
+
+#Componente que muestra una cuadrícula con las estadísticas de aciertos por cada tema
+def render_profile_stats() -> rx.Component:
+    return rx.vstack(
             rx.box(
                 rx.text(
                     "Estadísticas por tema",
@@ -156,14 +185,4 @@ def user_page():
             padding="30px",
             align="center",
             justify="start"
-        ),
-        width="100vw",
-        min_height="100vh",
-        background_image="url('/welcome_fondo.jpg')",
-        background_size="cover",
-        background_position="top center",
-        background_attachment="fixed",
-        background_repeat="no-repeat",
-        position="relative",
-        overflow_y="auto"
     )
