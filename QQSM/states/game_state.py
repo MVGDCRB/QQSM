@@ -235,14 +235,14 @@ class GameState(LoginState):
             
             message = (
                 "En '¿Quién quiere ser millonario?', la pregunta es: " + self.question +
-                "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
+                "Opciones (a,b,c,d): " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
                 + "Usando el comodín de la llamada, muestra solo con el siguiente formato: "
-                "respuesta correcta;descripcion breve."
+                "Saludo simpático-La respuesta correcta es letra) opcion: justificación breve y simpática de por qué es la opción correcta."
             )
 
-            text = AIClient.callGemini(message)
+            text = AIClient.askGemini(message)
 
-            self.call_text = "\n La opcion correcta es " + text[0] + ". " + text[1]
+            self.call_text = text
             self.call_used = True
         else:
             self.feedback = "❌ Ya has usado el comodín de la llamada."
@@ -322,7 +322,6 @@ class GameState(LoginState):
         self.correct = new_question[5]
         self.difficulty = difficulty
         self.feedback = ""
-        self.public_stats = []
         self.call_text = ""
 
         if self.mode == "/deepSeekIA":
@@ -342,7 +341,7 @@ class GameState(LoginState):
                     ". Tambien quiero que el formato este separado por punto y coma donde me muestre la pregunta las "
                     "cuatro respuestas y la pregunta correcta.Como ejemplo Pregunta:;¿cual es la capital de "
                     "España?;Paris;Roma;Madrid;Wansinton;Madrid; Pasame solo el mensaje sin nada extra")
-        answer = AIClient.askAI(question)
+        answer = AIClient.askGemini(question)
         answer = answer.split(";")
         if answer[0] == " " or answer[0] == "":
             del answer[0]
@@ -387,7 +386,7 @@ class GameState(LoginState):
                     "y quiero usar el comodin del publico. Quiero que solo me muestres el texto del comodin del "
                     "publico de la siguiente forma como en el ejemplo : "
                     "Courrèges:15%;Miyake:60%;Ungaro:5%Cardin:20% .Pasame solo el mensaje sin nada extra ")
-            statistics = AIClient.askAI(public)
+            statistics = AIClient.askGemini(public)
             statistics = statistics.split(";")
             if statistics[-1] == "\n":
                 del statistics[-1]

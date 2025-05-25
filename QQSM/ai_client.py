@@ -3,60 +3,59 @@ from requests import Session
 from openai import OpenAI
 import google.generativeai as gia
 from QQSM.secrets import Secrets
+import requests
 
+#Clase que genera la comunicación directa con las IAs
 
 class AIClient:
 
-    # Configuración al importar el módulo
+    #Inicialización del modelo principal Gemini
+
     gia.configure(api_key=Secrets.GIA_API_KEY)
     _model = gia.GenerativeModel("gemini-2.0-flash")
     
-    def askAI(prompt: str): #askGemini?
+
+    #Función que hace llegar un prompt a Gemini y recoge su respuesta
+    def askGemini(prompt: str):
         return AIClient._model.generate_content(prompt).text
 
 
-
+    #Función que hace llegar un prompt a DeepSeek y recoge su respuesta
     def askDeepSeek(prompt: str):
         api_key = Secrets.DEEP_API_KEY
-        api_url = "https://api.deepseek.com/v1/chat/completions"  # Reemplaza con la URL correcta
+        api_url = "https://api.deepseek.com/v1/chat/completions"
         sesion = Session()
 
-        # Configura los headers con tu clave de API
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
         }
 
-        # Define el cuerpo de la solicitud
         data = {
-            "model": "deepseek-chat",  # Reemplaza con el modelo correcto
+            "model": "deepseek-chat",
             "messages": [
                 {
-                    "role": "user",  # El rol del mensaje (en este caso, el usuario)
-                    "content": prompt  # El contenido del mensaje
+                    "role": "user",
+                    "content": prompt
                 }
             ],
-            "max_tokens": 70,  # Ajusta según la longitud esperada de la respuesta, influye en el tiempo
-            "temperature": 1,  # Controla la creatividad de la respuesta
+            "max_tokens": 70,
+            "temperature": 1,
             "stream": False
         }
 
-        # Hacer la solicitud POST a la API
         response = sesion.post(api_url, headers=headers, json=data, timeout=15)
 
-        # Verificar la respuesta
         if response.status_code == 200:
-            # Extraer y mostrar la respuesta
             result = response.json()
             result = result["choices"][0]["message"]["content"]
-            print(result)
 
             sesion.close()
             return result
         else:
             return "Error en la solicitud a la API."
 
-
+    #Función que hace llegar un prompt a OpenAI y recoge su respuesta
     def askOpenAI(prompt: str):
         client = OpenAI(api_key=Secrets.OPEN_API_KEY)
 
@@ -70,13 +69,11 @@ class AIClient:
             temperature=0.7,
         )
 
-        print(completion)
         return completion.choices[0].message.content
 
-    
+    #Función que hace llegar un prompt a LlamaAI y recoge su respuesta
     def askLlamaAI(prompt: str):
         client = OpenAI(
-            # This is the default and can be omitted
             api_key=Secrets.LLAMA_API_KEY,
             base_url="https://api.llmapi.com/"
         )
@@ -94,41 +91,3 @@ class AIClient:
 
         return result.choices[0].message.content
     
-
-    def callGemini(prompt: str):
-        api_key = "sk-0c4a68c97ce14b288ec1a6b5b9117e21"
-        api_url = "https://api.deepseek.com/v1/chat/completions"  # Reemplaza con la URL correcta
-        sesion = Session()
-
-        # Configura los headers con tu clave de API
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        }
-
-        # Define el cuerpo de la solicitud
-        data = {
-            "model": "deepseek-chat",  # Reemplaza con el modelo correcto
-            "messages": [
-                {
-                    "role": "user",  # El rol del mensaje (en este caso, el usuario)
-                    "content": prompt  # El contenido del mensaje
-                }
-            ],
-            "max_tokens": 70,  # Ajusta según la longitud esperada de la respuesta, influye en el tiempo
-            "temperature": 1,  # Controla la creatividad de la respuesta
-            "stream": False
-        }
-
-        # Hacer la solicitud POST a la API
-        response = sesion.post(api_url, headers=headers, json=data, timeout=15)
-
-        # Verificar la respuesta
-        if response.status_code == 200:
-            # Extraer y mostrar la respuesta
-            result = response.json()
-            result = result["choices"][0]["message"]["content"]
-            result = result.split(";")
-            sesion.close()
-            return result
-        return None

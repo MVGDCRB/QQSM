@@ -7,7 +7,7 @@ from sqlalchemy.orm.attributes import flag_modified
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
+#Función que actualiza la puntuación máxima del usuario en la base de datos, usando la puntuación actual del usuario
 def update_max_score(username: str, score: int):
     db = SessionLocal()
     try:
@@ -18,7 +18,7 @@ def update_max_score(username: str, score: int):
     finally:
         db.close()
 
-
+#Función que actualiza las estadísticas de aciertos del usuario en la base de datos, usando el tema de la pregunta respondida por el usuario
 def update_user_stats(username: str, tema: str, acierto: bool):
     db = SessionLocal()
     try:
@@ -39,7 +39,7 @@ def update_user_stats(username: str, tema: str, acierto: bool):
     finally:
         db.close()
 
-
+#Función que recoge las estadísticas actuales del usuario de la base de datos para ser mostradas en el perfil
 def get_user_full_stats(username: str):
     db = SessionLocal()
     try:
@@ -75,9 +75,8 @@ def get_user_full_stats(username: str):
     finally:
         db.close()
 
-
+#Función que devuelve la posición del usuario según su puntuación máxima en el ranking global.
 def get_user_position(username: str) -> int:
-    """Devuelve la posición global del usuario según: puntuación DESC, orden de inserción."""
     db = SessionLocal()
     try:
         ordered_users = (
@@ -95,7 +94,7 @@ def get_user_position(username: str) -> int:
     finally:
         db.close()
 
-
+#Función que devuelve la información de los primeros 10 usuarios del ranking global
 def get_top_10_users():
     db: Session = SessionLocal()
     try:
@@ -112,30 +111,27 @@ def get_top_10_users():
     finally:
         db.close()
 
-
+#Función que devuelve el nombre y la puntuación máxima de un usuario dado
 def get_user_leaderboard(username: str):
     db: Session = SessionLocal()
     try:
-        # Realizar la consulta para obtener el usuario y la puntuacion
         user = db.query(User.username, User.max_puntuacion).filter(User.username == username).all()
         db.close()
-        return user  # Devuelve la lista de usuarios con mayor puntuación
+        return user
     except Exception as e:
         print(f"Error al obtener el usuario: {e}")
         db.close()
         return []
 
-
+#Función que genera un hash para la contraseña de un usuario
 def get_password_hash(password: str) -> str:
-    """Genera un hash de la contraseña."""
     return pwd_context.hash(password)
 
-
+#Función que verifica la contraseña de un usuario usando el hash guardado de dicha contraseña
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verifica la contraseña."""
     return pwd_context.verify(plain_password, hashed_password)
 
-
+#Función que inicializa un nuevo usuario con nombre y contraseña y lo agrega a la base de datos
 def create_user(username: str, password: str, db: Session):
     existing_user = db.query(User).filter(User.username == username).first()
 
@@ -166,9 +162,8 @@ def create_user(username: str, password: str, db: Session):
         db.close()
         raise Exception("El nombre de usuario ya está en uso")
 
-
+#Función que verifica que el login de un usuario tiene los parámetros correctos
 def login_user(username: str, password: str) -> bool:
-    """Verifica si el usuario puede iniciar sesión."""
     db: Session = SessionLocal()
     user = db.query(User).filter(User.username == username).first()
     db.close()
