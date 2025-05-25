@@ -36,7 +36,7 @@ def maquina_vs_page():
 def render_upper_panel():
     return rx.hstack(
         render_exit_button("/menu"),
-        render_game_header(TITLE),
+        render_header(TITLE),
         width="100%",
         padding="0px 20px",
         align="center",

@@ -12,7 +12,7 @@ def welcome_page():
         rx.box(
             rx.form(
                 rx.vstack(
-                    render_game_header(TITLE),
+                    render_header(TITLE),
                     rx.button("Iniciar Sesión", on_click=LoginState.clear_message,class_name="hex-button"),
                     rx.button("Registrarse", on_click=RegisterState.clear_message,class_name="hex-button"),
                     spacing="9",

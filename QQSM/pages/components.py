@@ -13,7 +13,7 @@ def render_exit_button(route: str) -> rx.Component:
     )
 
 #Panel de texto que escribe un título centrado con estilo css customizado
-def render_game_header(text: str) -> rx.Component:
+def render_header(text: str) -> rx.Component:
     return rx.box(
         rx.text(
             text,
@@ -23,6 +23,19 @@ def render_game_header(text: str) -> rx.Component:
         width="100%",
         padding="0px",
         text_align="center"
+    )
+
+#Panel de texto que escribe un subtitulo text con formato customizado
+def render_subheader(txt: str) -> rx.Component:
+    return rx.text(
+        txt,
+        color=Colors.ORANGE_BORDER,
+        font_size="1.5em",
+        font_weight="bold",
+        text_transform="uppercase",
+        text_align="center",
+        letter_spacing="1px",
+        width="100%",
     )
 
 #Botón customizado con forma de flecha que dispara el evento de GameState next_round() para pasar a la siguiente pregunta, si se cumple la condicion show
@@ -102,16 +115,20 @@ def render_question_title(question_title: str) -> rx.Component:
         border_radius="8px",
     )
 
-#Panel circular que muestra con una imagen el tema de la pregunta actual. Cuando se hace hover sobre el muestra el texto del tema en cuestión.
-def render_question_topic(theme: str) -> rx.Component:
+#Componente customizado circular que toma como background image la imagen del directorio /module/submodule y muestra text cuando se realiza hover sobre el icono
+def render_circular_icon(module:str, submodule: str, text: str):
     return rx.box(
         class_name="theme-icon image",
-        background_image=f"url('/themes/{theme}.png')",
-        **{"data-theme": theme},
+        background_image=f"url('/{module}/{submodule}.png')",
+        **{"data-theme": text},
         width="100px",
         height="100px",
         flex_shrink="0",
     )
+
+#Panel circular que muestra con una imagen el tema de la pregunta actual. Cuando se hace hover sobre el muestra el texto del tema en cuestión.
+def render_question_topic(theme: str) -> rx.Component:
+    return render_circular_icon("themes", theme, theme)
 
 #Doble panel circular de botones temáticos. El primero panel que se pulse establece el tema de la pregunta para esa ronda.
 def render_topic_choser(theme1: str, theme2:str) -> rx.Component:
@@ -281,14 +298,7 @@ def render_feedback_line() -> rx.Component:
 
 # Componente parametrizado para mostrar un logo de IA según tema
 def render_ia_icon(ia_name: str) -> rx.Component:
-    image_url = f"/ias/{ia_name}.png"
-    return rx.box(
-        class_name="theme-icon image",
-        background_image=f"url('{image_url}')",
-        **{"data-theme": ia_name},
-        width="100px",
-        height="100px",
-    )
+    return render_circular_icon("ias", ia_name, ia_name)
 
 #Botón circular que muestra render_ia_icon de la IA correspondiente y lanza la ruta al clicar.
 def render_ia_button(ia_name: str, route: str) -> rx.Component:
@@ -341,16 +351,7 @@ def render_form(form_title: str, submit_btn_txt: str, feedback_message: str, on_
     return rx.form(
         rx.vstack(
             rx.box(
-                rx.text(
-                    form_title,
-                    color=Colors.ORANGE_BORDER,
-                    font_size="1.5em",
-                    font_weight="bold",
-                    text_transform="uppercase",
-                    text_align="center",
-                    letter_spacing="1px",
-                    width="100%",
-                ),
+                render_subheader(form_title),
                 height="20%",
                 display="flex",
                 align_items="center",
@@ -360,7 +361,7 @@ def render_form(form_title: str, submit_btn_txt: str, feedback_message: str, on_
             render_user_input(),
             rx.box(
                 render_submit_button(submit_btn_txt),
-                render_return_button("/welcome"),
+                render_return_button("Volver","/welcome"),
                 height="40%",
                 display="flex",
                 flex_direction="column",
@@ -410,15 +411,16 @@ def render_user_input()-> rx.Component:
                 margin_bottom="10%",
             )
 
-#Botón de retorno que carga la ruta cuando es pulsado
-def render_return_button(route: str)-> rx.Component:
+#Botón auxiliar del formulario que carga route cuando es pulsado
+def render_return_button(txt:str, route: str)-> rx.Component:
     return rx.button(
-                    "Volver",
+                    txt,
                     on_click=rx.redirect(route),
                     class_name="hex-button",
                     width="100%",
                 )
 
+#Botón auxiliar del formulario que envia sus campos cuando es pulsado
 def render_submit_button(btn_txt: str)-> rx.Component:
     return rx.button(
                     btn_txt,
@@ -428,6 +430,7 @@ def render_submit_button(btn_txt: str)-> rx.Component:
                     margin_bottom="10%",
                 )
 
+#Mensaje de texto auxiliar del formulario que da contexto sobre el formulario en tiempo real
 def render_feedback_message(message:str)-> rx.Component:
     return rx.box(
                 rx.text(message, class_name="error-message"),
@@ -437,4 +440,19 @@ def render_feedback_message(message:str)-> rx.Component:
                 justify_content="center",
                 width="100%",
             )
+#Botón circular de redirección a route que toma su fondo de /buttons/image y muestra text cuando se hace hover sobre el
+def render_redirect_circular_button(text: str, image:str, route: str):
+    return rx.button(
+        render_circular_icon("buttons", image, text),
+        on_click=rx.redirect(route)
+    )
 
+#Botón customizado hexagonal que inicializa el modo de juego route y presenta el texto txt
+def render_game_mode_button(txt:str, route:str):
+    return rx.button(
+        txt,
+        on_click=GameState.initialize_game(route),
+        class_name="hex-button",
+        width="300px",
+        margin_bottom="10%",
+    )

@@ -37,7 +37,7 @@ def gemini_vs_ia_page():
 def render_upper_panel():
     return rx.hstack(
         render_exit_button("/menu"),
-        render_game_header(TITLE),
+        render_header(TITLE),
         render_next_button(True),
         width="100%",
         padding="0px 20px",
