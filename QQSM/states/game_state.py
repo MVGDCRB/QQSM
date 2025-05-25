@@ -77,7 +77,7 @@ class GameState(LoginState):
         self.enable_topic = False
         self.mode = ruta
         self.generate_question()
-
+        
         if self.mode == "/deepSeekIA":
             self.rival = "deepSeek"
             return rx.redirect("/GeminiVS")
@@ -90,7 +90,7 @@ class GameState(LoginState):
             self.rival = "llamaIA"
             return rx.redirect("/GeminiVS")
 
-        return rx.redirect("self.mode")
+        return rx.redirect(self.mode)
 
     @rx.event
     def set_theme(self, topic):

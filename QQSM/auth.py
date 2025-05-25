@@ -34,7 +34,7 @@ def update_user_stats(username: str, tema: str, acierto: bool):
         else:
             user.tema_stats[tema]["falladas"] += 1
 
-        flag_modified(user, "tema_stats")  # Si no no se acualiza la base de datos
+        flag_modified(user, "tema_stats")  # Actualiza la base de datos
         db.commit()
     finally:
         db.close()
@@ -45,7 +45,6 @@ def get_user_full_stats(username: str):
     try:
         user = db.query(User).filter(User.username == username).first()
         if user:
-            # Se inicializa si no existía porque el user es viejo
             if not user.tema_stats or not isinstance(user.tema_stats, dict) or len(user.tema_stats) < 15:
                 default_stats = {
                     tema: {"correctas": 0, "falladas": 0}
@@ -62,7 +61,7 @@ def get_user_full_stats(username: str):
             for tema, stats in user.tema_stats.items():
                 c = stats["correctas"]
                 f = stats["falladas"]
-                total = c + f if c + f > 0 else 1  # evita división entre 0
+                total = c + f if c + f > 0 else 1
                 acierto_pct = round(c / total * 100)
                 fallo_pct = round(f / total * 100)
                 lista_stats.append(f"{tema};{c};{f};{acierto_pct};{fallo_pct}")
@@ -179,7 +178,3 @@ def login_user(username: str, password: str) -> bool:
     else:
         return False
 
-
-def current_user():
-    """Por ahora, simplemente devuelve un nombre de usuario estático para pruebas."""
-    return "test_user"

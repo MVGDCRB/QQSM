@@ -5,7 +5,7 @@
     --gold-border: #FFFACD;
     --gold-shadow: rgba(255, 215, 0, 0.5);
     --text-color: #000000;
-  }
+}
 
 .hex-button {
     position: relative;
@@ -553,6 +553,5 @@
 button:disabled .theme-icon.image {
     filter: grayscale(100%);
     opacity: 0.5;
-  }
-  
-  
+}
+

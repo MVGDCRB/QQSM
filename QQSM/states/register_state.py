@@ -4,7 +4,6 @@ from db.database import SessionLocal
 
 
 class RegisterState(rx.State):
-    # State handling here
     register_message: str = ""
 
     @rx.event

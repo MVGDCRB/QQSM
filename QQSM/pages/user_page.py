@@ -38,7 +38,7 @@ def render_profile_data() -> rx.Component:
                     "TU PERFIL",
                     class_name="title-style",
                     text_align="center",
-                    background_color="rgba(0,0,0,0.5)",
+                    background_color=Colors.TRANSPARENT_BG,
                     padding="10px",
                     border_radius="8px"
                 ),
@@ -70,7 +70,7 @@ def render_profile_data() -> rx.Component:
                     spacing="3",
                     padding="20px",
                     border_radius="8px",
-                    background_color="#2B3D5F"
+                    background_color=Colors.DARK_BLUE,
                 ),
                 width="fit-content",
                 margin="0 auto"
@@ -82,7 +82,7 @@ def render_profile_data() -> rx.Component:
             justify="start"
     )
 
-#Componente que muestra una cuadrícula con las estadísticas de aciertos por cada tema
+#Componente que muestra una cuadrícula con las estadísticas de aciertos por cada tema, resaltando en color según rando de aciertos
 def render_profile_stats() -> rx.Component:
     return rx.vstack(
             rx.box(
@@ -90,7 +90,7 @@ def render_profile_stats() -> rx.Component:
                     "Estadísticas por tema",
                     font_size="1.4em",
                     color=Colors.GOLD,
-                    background_color="rgba(0,0,0,0.5)",
+                    background_color=Colors.TRANSPARENT_BG,
                     padding="8px",
                     border_radius="8px"
                 ),
@@ -162,8 +162,7 @@ def render_profile_stats() -> rx.Component:
                             position="relative"
                         ),
                         padding="15px",
-                        background_color="#1F2A44",
-                        box_shadow="0 0 10px rgba(255, 215, 0, 0.2)",
+                        background_color=Colors.DARK_BLUE,
                         border=f"4px solid {s.split(';')[5]}",
                         border_radius="8px",
                         transition="all 0.3s ease",
