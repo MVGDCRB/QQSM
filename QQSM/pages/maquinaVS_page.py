@@ -3,14 +3,16 @@ from QQSM.styles.colors import Colors
 from QQSM.states.game_state import GameState
 from QQSM.pages.components import *
 
+#Título de la página
 TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO? IA vs IA"
 
+#Texto del selectori de IA rival
 IA_SELECTION_TEXT = "Elige la IA que vaya a responder la pregunta"
 
-#Esquema general de la página con upper y central panel
-
+#Página reflex que genera la interfaz del selector de IA rival en el modo máquina VS máquina
 @rx.page(route="/maquinaVS")
 def maquina_vs_page():
+    #Esquema general de la página con upper y central panel
     return rx.box(
         render_upper_panel(),
 
@@ -33,7 +35,7 @@ def maquina_vs_page():
 #Panel superior con botón de salida y título
 def render_upper_panel():
     return rx.hstack(
-        render_exit_button(),
+        render_exit_button("/menu"),
         render_game_header(TITLE),
         width="100%",
         padding="0px 20px",

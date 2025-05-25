@@ -3,7 +3,7 @@ from QQSM.auth import get_user_full_stats
 from QQSM.states.leaderboard_state import LeaderboardState
 from QQSM.styles.colors import Colors
 
-#Reflex State de la página user_page, que gestiona los datos que se presentan en dicha página
+#Estado reflex de user_page que gestiona la lógica del perfil del usuario logeado
 
 class UserState(LeaderboardState):
     

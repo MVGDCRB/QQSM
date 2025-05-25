@@ -10,6 +10,7 @@ user_row: rx.Component = None
 #Datos de los 10 usuarios con mayor puntuacion
 top_rows: rx.Component = None
 
+#Página reflex que genera la interfaz del ranking de jugadores
 @rx.page(route="/leaderboard", on_load=LeaderboardState.load())
 def leaderboard_page():
 
@@ -38,7 +39,7 @@ def leaderboard_page():
     return rx.center(
         render_ranking(),
         rx.box(
-            render_exit_button(),
+            render_exit_button("/menu"),
             position="absolute",
             top="20px",
             left="20px",

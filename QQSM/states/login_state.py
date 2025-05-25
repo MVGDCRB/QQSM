@@ -2,27 +2,34 @@ import reflex as rx
 from QQSM.auth import login_user
 from db.database import SessionLocal
 
+#Estado reflex de login_page que genera la lógica del login
 
 class LoginState(rx.State):
+    #Mensaje de feedback durante el login
     login_message: str = ""
+    #Nombre introducido por el usuario
     username: str = ""
+    #Contraseña introducida por el usuario
     password: str = ""
+    #True si el login se efectua correctamente
     is_authenticated: bool = False
 
+    #Función que vacía el mensaje de feedback y recarga la página
     @rx.event
     def clear_message(self):
         self.login_message = ""
         return rx.redirect("/login")
 
+    #Función que vacía el mensaje de feedback y redirige a la página register
     @rx.event
     def clear_and_redirect(self):
         self.login_message = ""
         yield
         return rx.redirect("/register")
 
+    #Evento que procesa el formulario de inicio de sesión.
     @rx.event
     def handle_login(self, form_data: dict):
-        """Evento que procesa el formulario de inicio de sesión."""
         username = form_data["usuario"]
         password = form_data["password"]
 
@@ -33,12 +40,10 @@ class LoginState(rx.State):
             db = SessionLocal()
             try:
                 if login_user(username, password):
-                    # datos de sesión
                     self.username = username
                     self.password = password
                     self.is_authenticated = True
                     self.login_message = f"✅ Usuario '{username}' autenticado correctamente."
-
                     return rx.redirect("/menu")
                 else:
                     self.login_message = "❌ Usuario o contraseña incorrectos."

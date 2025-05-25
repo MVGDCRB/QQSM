@@ -1,12 +1,15 @@
 from QQSM.pages.components import *
 
+#Número de niveles de dificultad
 DIFFICULTY_LEVELS: int = 15
+
+#Título de la página
 TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO?"
 
-#Esquema general de la página con upper, lower, right, left y central panel
-
+#Página reflex que genera la interfaz del modo de juego clásico
 @rx.page(route="/game")
 def game_page():
+    #Esquema general de la página con upper, lower, right, left y central panel
     return rx.box(
         render_upper_panel(),
         render_progress_indicator(DIFFICULTY_LEVELS),
@@ -37,7 +40,7 @@ def game_page():
 #Panel superior con botón de salida, título y botón de siguiente
 def render_upper_panel():
     return rx.hstack(
-        render_exit_button(),
+        render_exit_button("/menu"),
         render_game_header(TITLE),
         render_next_button(GameState.correct_answer),
         width="100%",

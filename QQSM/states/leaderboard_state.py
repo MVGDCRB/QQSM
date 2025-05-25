@@ -3,7 +3,7 @@ from QQSM.auth import get_top_10_users, get_user_leaderboard, get_user_position
 from QQSM.states.login_state import LoginState
 
 
-#Estado reflex que gestiona los datos que se usan para representar leaderboard_page
+#Estado reflex de leaderboard_page que gestiona los datos que se usan para representar leaderboard_page
 
 class LeaderboardState(LoginState):
 

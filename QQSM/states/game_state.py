@@ -7,7 +7,7 @@ from QQSM.secrets import Secrets
 import random
 import re
 
-
+#Estado reflex de game_page que gestiona la lógica del juego
 
 class GameState(LoginState):
 
@@ -17,7 +17,7 @@ class GameState(LoginState):
     question: str = "Presiona un tema para generar una pregunta"
 
     #Posibles respuestas a la pregunta
-    option_a: str = "" 
+    option_a: str = ""
     option_b: str = ""
     option_c: str = ""
     option_d: str = ""

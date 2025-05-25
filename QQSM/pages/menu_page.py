@@ -1,22 +1,15 @@
 import reflex as rx
 from QQSM.states.game_state import GameState
 from QQSM.styles.colors import Colors
+from QQSM.pages.components import*
 
+#Página reflex que genera la interfaz del menú principal de modos de juego
 @rx.page("/menu")
 def menu_page():
     return rx.box(
-        # Botón de salida fijo en la esquina superior izquierda
-        rx.box(
-            rx.button("✖", on_click=rx.redirect("/welcome"), class_name="menu-exit-button"),
-            position="absolute",
-            top="20px",
-            left="20px",
-            z_index="10"
-        ),
-        # Contenedor principal centrado con íconos laterales y menú en el centro
+        render_exit_button("/welcome"),
         rx.center(
             rx.hstack(
-                # Icono de perfil (izquierda)
                 rx.button(
                     rx.box(
                         class_name="theme-icon image",
@@ -28,8 +21,6 @@ def menu_page():
                     on_click=rx.redirect("/user"),
                     style={"padding": "0", "border": "none", "background": "none"},
                 ),
-
-                # Menú central con título y botones
                 rx.box(
                     rx.vstack(
                         rx.box(
@@ -65,7 +56,7 @@ def menu_page():
                             margin_bottom="10%",
                         ),
                         rx.button(
-                            "Modo Elección", #modo temas?
+                            "Modo Elección",
                             on_click=GameState.initialize_game("/theme"),
                             class_name="hex-button",
                             width="300px",
@@ -77,7 +68,7 @@ def menu_page():
                             class_name="hex-button",
                             width="300px"
                         ),
-                        spacing="0",  # espaciado eliminado, usamos margin_bottom
+                        spacing="0",
                         align="center",
                         min_height="0",
                     ),
@@ -89,8 +80,6 @@ def menu_page():
                     overflow_y="hidden",
                     width="fit-content",
                 ),
-
-                # Icono de ranking (derecha)
                 rx.button(
                     rx.box(
                         class_name="theme-icon image",
@@ -102,7 +91,6 @@ def menu_page():
                     on_click=rx.redirect("/leaderboard"),
                     style={"padding": "0", "border": "none", "background": "none"},
                 ),
-
                 spacing="5",
                 align="center",
                 justify="center",

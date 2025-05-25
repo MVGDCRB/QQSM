@@ -1,99 +1,25 @@
 import reflex as rx
 from QQSM.states.login_state import LoginState
 from QQSM.styles.colors import Colors
+from QQSM.pages.components import*
 
+#Título de la página
+TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO?"
 
+#Título del formulario
+FORM_TITLE: str = "¡INICIA SESIÓN!"
+
+#Texto del botón para enviar el formulario
+SUBMIT_BTN_TEXT: str = "Iniciar sesión"
+
+#Página reflex que genera la interfaz del login de usuario
 @rx.page("/login")
 def login_page():
     return rx.center(
         rx.vstack(
-            rx.text("¿QUIÉN QUIERE SER MILLONARIO?", class_name="title-style"),
+            rx.text(TITLE, class_name="title-style"),
             rx.box(
-                rx.form(
-                    rx.vstack(
-                        rx.box(
-                            rx.text(
-                                "¡INICIA SESIÓN!",
-                                color=Colors.ORANGE_BORDER,
-                                font_size="1.5em",
-                                font_weight="bold",
-                                text_transform="uppercase",
-                                text_align="center",
-                                letter_spacing="1px",
-                                width="100%",
-                            ),
-                            height="20%",
-                            display="flex",
-                            align_items="center",
-                            justify_content="center",
-                            width="100%",
-                        ),
-                        rx.box(
-                            rx.input(
-                                placeholder="Usuario",
-                                name="usuario",
-                                class_name="custom-input",
-                                width="100%",
-                                margin_bottom="10%",
-                            ),
-                            rx.input(
-                                placeholder="Contraseña",
-                                type="password",
-                                name="password",
-                                class_name="custom-input",
-                                width="100%",
-                            ),
-                            height="30%",
-                            display="flex",
-                            flex_direction="column",
-                            align_items="center",
-                            justify_content="center",
-                            width="100%",
-                            margin_bottom="10%",
-                        ),
-                        rx.box(
-                            rx.button(
-                                "Entrar",
-                                type="submit",
-                                class_name="hex-button",
-                                width="100%",
-                                margin_bottom="10%",
-                            ),
-                            rx.button(
-                                "Volver",
-                                on_click=rx.redirect("/welcome"),
-                                class_name="hex-button",
-                                width="100%",
-                            ),
-                            height="40%",
-                            display="flex",
-                            flex_direction="column",
-                            align_items="center",
-                            justify_content="center",
-                            width="100%",
-                        ),
-                        rx.box(
-                            rx.text(LoginState.login_message, class_name="error-message"),
-                            height="10%",
-                            display="flex",
-                            align_items="center",
-                            justify_content="center",
-                            width="100%",
-                        ),
-                        height="100%",
-                        width="85%",
-                        margin_left="auto",
-                        margin_right="auto",
-                        align="center",
-                        justify="center",
-                    ),
-                    on_submit=LoginState.handle_login,
-                    reset_on_submit=True,
-                    height="100%",
-                    width="100%",
-                    justify="center",
-                    align="center",
-                ),
+                render_form(FORM_TITLE, SUBMIT_BTN_TEXT, LoginState.login_message, LoginState.handle_login),
                 background_color=Colors.DARK_BLUE,
                 padding="20px",
                 border_radius="10px",

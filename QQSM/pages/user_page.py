@@ -3,14 +3,14 @@ from QQSM.states.user_state import UserState
 from QQSM.styles.colors import Colors
 from QQSM.pages.components import render_exit_button
 
-#Página que muestra para el usuario loggeado sus datos de perfil y sus estadísticas por tema de las preguntas respondidas
+#Página reflex que genera la interfaz del perfil de usuario
 
 @rx.page("/user", on_load=UserState.load_user_data())
 def user_page():
     return rx.box(
         rx.vstack(
             rx.box(
-                render_exit_button(),
+                render_exit_button("/menu"),
                 position="absolute",
                 top="20px",
                 left="20px"

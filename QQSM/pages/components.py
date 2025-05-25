@@ -5,10 +5,10 @@ from QQSM.styles.colors import Colors
 #Biblioteca de componentes reflex con estilos .css customizados
 
 #Botón en forma de X con estilo css customizado que vuelve al menú principal
-def render_exit_button() -> rx.Component:
+def render_exit_button(route: str) -> rx.Component:
     return rx.button(
         "✖",
-        on_click=rx.redirect("/menu"),
+        on_click=rx.redirect(route),
         class_name="menu-exit-button"
     )
 
@@ -336,4 +336,105 @@ def render_vs_text() -> rx.Component:
         justify_content="center",
     )
 
+#Dado un titulo, un texto de submit, un mensaje dinámico de feedback y un evento de submit, se genera un formulario
+def render_form(form_title: str, submit_btn_txt: str, feedback_message: str, on_submit_event)-> rx.Component:
+    return rx.form(
+        rx.vstack(
+            rx.box(
+                rx.text(
+                    form_title,
+                    color=Colors.ORANGE_BORDER,
+                    font_size="1.5em",
+                    font_weight="bold",
+                    text_transform="uppercase",
+                    text_align="center",
+                    letter_spacing="1px",
+                    width="100%",
+                ),
+                height="20%",
+                display="flex",
+                align_items="center",
+                justify_content="center",
+                width="100%",
+            ),
+            render_user_input(),
+            rx.box(
+                render_submit_button(submit_btn_txt),
+                render_return_button("/welcome"),
+                height="40%",
+                display="flex",
+                flex_direction="column",
+                align_items="center",
+                justify_content="center",
+                width="100%",
+            ),
+            render_feedback_message(feedback_message),
+            height="100%",
+            width="85%",
+            margin_left="auto",
+            margin_right="auto",
+            align="center",
+            justify="center",
+        ),
+        on_submit=on_submit_event,
+        reset_on_submit=True,
+        height="100%",
+        width="100%",
+        justify="center",
+        align="center",
+    )
+
+#Componente auxiliar del formulario con los dos campos de texto input usuario y contraseña
+def render_user_input()-> rx.Component:
+    return rx.box(
+                rx.input(
+                    placeholder="Usuario",
+                    name="usuario",
+                    class_name="custom-input",
+                    width="100%",
+                    margin_bottom="10%",
+                ),
+                rx.input(
+                    placeholder="Contraseña",
+                    type="password",
+                    name="password",
+                    class_name="custom-input",
+                    width="100%",
+                ),
+                height="30%",
+                display="flex",
+                flex_direction="column",
+                align_items="center",
+                justify_content="center",
+                width="100%",
+                margin_bottom="10%",
+            )
+
+#Botón de retorno que carga la ruta cuando es pulsado
+def render_return_button(route: str)-> rx.Component:
+    return rx.button(
+                    "Volver",
+                    on_click=rx.redirect(route),
+                    class_name="hex-button",
+                    width="100%",
+                )
+
+def render_submit_button(btn_txt: str)-> rx.Component:
+    return rx.button(
+                    btn_txt,
+                    type="submit",
+                    class_name="hex-button",
+                    width="100%",
+                    margin_bottom="10%",
+                )
+
+def render_feedback_message(message:str)-> rx.Component:
+    return rx.box(
+                rx.text(message, class_name="error-message"),
+                height="10%",
+                display="flex",
+                align_items="center",
+                justify_content="center",
+                width="100%",
+            )
 
