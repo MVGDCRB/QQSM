@@ -11,58 +11,79 @@ import re
 
 class GameState(LoginState):
 
-    # Variables del juego
+    # Variables de gestión del juego
+
+    #Enunciado de la pregunta
     question: str = "Presiona un tema para generar una pregunta"
 
+    #Posibles respuestas a la pregunta
     option_a: str = "" 
     option_b: str = ""
     option_c: str = ""
     option_d: str = ""
 
+    #Respuesta correcta a la pregunta
     correct: str = ""
+
+    #True si se ha elegido una respuesta
     chosen_answer: bool = False
+
+    #True si se ha elegido la respuesta correcta
     correct_answer: bool = False
 
+    #Índice de la pregunta actual
     number_question: int = 1
 
+    #Posibles temáticas de las preguntas
     topics = ["arte", "fisica", "historia", "quimica", "musica", "matematicas",
                        "literatura", "biologia", "historia de la television", "videojuegos",
                        "moda", "tecnologia", "cocina", "deportes", "geografia"]
+    
+    #Tema de la pregunta actual
     topic: str = ""
+
+    #Posibles temas a elegir en el modo temático
     topic_selection1: str = ""
     topic_selection2: str = ""
+
+    #Se fija a True cuando se elige un tema
     enable_topic: bool = False
 
+    #Niveles de dificultad parametrizados para el prompt de la IA
     difficulties_NM = [5, 12, 20, 30, 38, 45, 52, 60, 68, 75, 80, 85, 90, 95, 100]
+
+    #Nivel de dificultad actual
     difficulty: int = 0
 
+    #Campo de texto para mostrar al usuario en caso de error o información adicional
     feedback: str = ""
 
+    #True cuando se consume cada uno de los posibles comodines
     fifty_used: bool = False
     public_used: bool = False
     call_used: bool = False
 
-    public_stats: list[int] = []
+    #Lista que almacena las 4 respuestas posibles asociadas a su porcentaje de voto del público
     public_items: list[tuple[str, int]] = []
 
+    #Texto generado por la IA que se muestra en el comodín de la llamada
     call_text: str = ""
-    text_answer: str = ""
 
+    #Modo de juego actual
     mode: str = ""
     
-    _model = None
-
+    #IA rival cuando se está jugando el modo máquina VS máquina
     rival: str = ""
 
-    # Estilos dinámicos de los botones
+    # Estilos css dinámicos de los botones según validez de respuesta
     button_classes: dict[str, str] = {}
 
+    #Función que inicializa las variables de estado según el modo de juego de una nueva partida
     @rx.event
     def initialize_game(self, ruta: str):
         self.fifty_used = False
         self.public_used = False
         self.call_used = False
-        self.public_stats = []
         self.call_text = ""
         self.chosen_answer = False
         self.correct_answer = False
@@ -92,6 +113,7 @@ class GameState(LoginState):
 
         return rx.redirect(self.mode)
 
+    #Función que fija el tema elegido en el modo temático y genera la pregunta asociada a dicho tema
     @rx.event
     def set_theme(self, topic):
         self.topic = topic
@@ -105,23 +127,24 @@ class GameState(LoginState):
         self.option_d = new_question[4]
         self.correct = new_question[5]
 
+    #Función que recoge dos nuevos temas al azar para la siguiente elección del modo temático
     @rx.event
     def get_themes(self):
         self.topic_selection1, self.topic_selection2 = self.generate_topic_theme_mode()
 
+    #Función que inicializa el estado de la pregunta en cada elección del modo temático
     @rx.event
     def empty_question(self):
         self.chosen_answer = True
         return ["Presiona un tema para generar una pregunta", "", "", "", "", ""]
 
-
+    #Función que prepara el estado de las variables para la siguiente pregunta
     @rx.event
     def next_round(self):
         self.chosen_answer = False
         self.correct_answer = False
         self.feedback = ""
         self.call_text = ""
-        self.public_stats = []
         self.public_items = []
 
         self.button_classes = {
@@ -138,9 +161,10 @@ class GameState(LoginState):
             self.enable_topic = False
             self.generate_question()
 
+    #Función que valida la respuesta dada a la pregunta y actualiza las clases .css de los botones de respuesta, así como las estadísticas del usuario
     @rx.event
     def validate_answer(self, letter: str):
-        """Valida la respuesta y actualiza los colores de los botones."""
+        
         self.chosen_answer = True
         selected_option = getattr(self, f"option_{letter.lower()}")
 
@@ -153,7 +177,6 @@ class GameState(LoginState):
             self.button_classes[letter] = "hex-button error"
         
         if self.mode in ["/game", "/theme", "/endless"]:
-            # Se actualizan las stats de usuario
             update_max_score(self.username, self.number_question*10)
             update_user_stats(self.username, self.topic, self.correct_answer)
 
@@ -161,17 +184,15 @@ class GameState(LoginState):
             if getattr(self, f"option_{key.lower()}") == self.correct:
                 self.button_classes[key] = "hex-button success"
 
+    #Función que actualiza el estado de los botones al usuar el comodín 50:50 deshabilitando dos de las opciones
     @rx.event
     def use_fifty_option(self):
-        """Usa el comodín 50:50 para marcar dos respuestas incorrectas como erróneas."""
         if not self.fifty_used:
             opciones = ["A", "B", "C", "D"]
             incorrectas = [op for op in opciones if getattr(self, f"option_{op.lower()}") != self.correct]
 
-            # Seleccionar dos opciones incorrectas al azar
             eliminadas = random.sample(incorrectas, 2)
 
-            # Marcar los botones eliminados como incorrectos en gris
             for op in eliminadas:
                 self.button_classes[op] = "hex-button disabled"
 
@@ -179,9 +200,9 @@ class GameState(LoginState):
         else:
             self.feedback = "❌ Ya has usado el comodín 50:50."
 
+    #Función que actualiza el estado de los botones al usuar el comodín del público, generando el valor de public_items tras consultar a la IA
     @rx.event
     def use_public_option(self):
-        """Usa el comodín del público y guarda los porcentajes como lista de tuplas."""
         if self.public_used:
             self.feedback = "❌ Ya has usado el comodín del público."
             return
@@ -189,20 +210,13 @@ class GameState(LoginState):
         stats = self.askPublic()
 
         if isinstance(stats, str):
-            # Mensaje de error
             self.feedback = stats
         else:
-            # Unir trozos para obtener el texto íntegro
             full_text = ";".join(stats)
-            # Extraer todos los números antes de '%'
             nums = re.findall(r"(\d+)%", full_text)
 
             percentages = [int(n) for n in nums]
 
-            # Guardar en public_stats
-            self.public_stats = percentages
-
-            # Mapear letras A–D a cada porcentaje
             letters = ["A", "B", "C", "D"]
             self.public_items = [
                 (letters[i], percentages[i])
@@ -212,9 +226,7 @@ class GameState(LoginState):
         self.public_used = True
 
 
-    
-
-
+    #Función que actualiza el estado de los botones al usuar el comodín de la llamada, generando el valor de call_text tras consultar a la IA
     @rx.event
     def use_call_option(self):
         if not self.call_used:
@@ -225,7 +237,7 @@ class GameState(LoginState):
                 "En '¿Quién quiere ser millonario?', la pregunta es: " + self.question +
                 "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
                 + "Usando el comodín de la llamada, muestra solo con el siguiente formato: "
-                  "respuesta correcta;descripcion breve."
+                "respuesta correcta;descripcion breve."
             )
 
             text = AIClient.callGemini(message)
@@ -236,12 +248,9 @@ class GameState(LoginState):
             self.feedback = "❌ Ya has usado el comodín de la llamada."
         
 
-
+    #Función que hace llegar la pregunta actual a DeepSeek y obtiene su respuesta en formato letra
     @rx.event
     def deep_seek_answer(self):
-        """Mostrar la respuesta de DeepSeek."""
-        print("DeepSeek Answer (game_state.py)")
-        
         
         message = (
             "Responde a la pregunta: " + self.question +
@@ -252,14 +261,11 @@ class GameState(LoginState):
 
         answer = AIClient.askDeepSeek(message)
 
-        print(answer)
-        return answer  # Devuelve la respuesta para su uso posterior   
+        return answer
         
-
+    #Función que hace llegar la pregunta actual a OpenAI y obtiene su respuesta en formato letra
     @rx.event
     def openai_answer(self):
-        """Mostrar la respuesta de OpenAI."""
-        print("OpenAI Answer (game_state.py)")
 
         message = ("Responde a la pregunta: " + self.question +
                             "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", "
@@ -270,41 +276,34 @@ class GameState(LoginState):
 
         answer = AIClient.askOpenAI(message)
 
-        print(answer)
-        return answer  # Devuelve la respuesta para su uso posterior        
+        return answer
     
-
-    
-
-
+    #Función que hace llegar la pregunta actual a LLamaAI y obtiene su respuesta en formato letra
     @rx.event
     def llama_answer(self):
-        """Mostrar la respuesta de LlamaIA."""
-        print("LlamaIA Answer (game_state.py)")
-       
         
         message = ("Responde a la pregunta: " + self.question +
-                               "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " +
-                               self.option_d + "." + "Muestrame SOLO LA LETRA de la solucion, sin negrita "
-                                                     "ni ningun efecto, ni ningun caracter especial, "
-                                                     "solo la letra. Opciones: A, B, C, D."
+                    "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " +
+                            self.option_d + "." + "Muestrame SOLO LA LETRA de la solucion, sin negrita "
+                                    "ni ningun efecto, ni ningun caracter especial, "
+                                                    "solo la letra. Opciones: A, B, C, D."
         )
         answer = AIClient.askLlamaAI(message)
         
         print(answer)
-        return answer  # Devuelve la respuesta para su uso posterior
+        return answer
     
+    #Función que actualiza las variables de estado para generar una nueva pregunta según el modo de juego
     @rx.event
     def generate_question(self):
-        """Genera una nueva pregunta"""
 
-        # Primero se generan los temas en funcion de si hacen falta 1 o 2
+        # Generación de nuevo tema
         if self.mode == "/theme":
             self.get_themes()
         else:
             self.topic = self.generate_topic_normal_mode()
 
-        # Despues se genera la dificultad y la pregunta en funcion del modo de juego
+        # Generacion de dificultad y pregunta
         if self.mode in ["/deepSeekIA", "/openAI", "/llamaIA", "/game"]:
             difficulty = self.generate_difficulty_normal_mode()
             new_question = self.getAIanswer()
@@ -315,7 +314,6 @@ class GameState(LoginState):
             difficulty = self.generate_difficulty_normal_mode()
             new_question = self.empty_question()
 
-        # Actualiza el estado con la nueva pregunta
         self.question = new_question[0]
         self.option_a = new_question[1]
         self.option_b = new_question[2]
@@ -337,6 +335,7 @@ class GameState(LoginState):
             answer = self.llama_answer()
             self.validate_answer(answer)
 
+    #Función que solicita a GeminiAI que genere una pregunta para el tema y dificultad actual y traduce la respuesta a un array con las opciones de respuesta y la respuesta correcta
     def getAIanswer(self):
         question = ("Quiero que me hagas una pregunta como si fuera quien quiere ser millonario con una dificultad " +
                     str(self.difficulty) + "/100 y que el tema de la pregunta sea " + self.topic +
@@ -353,15 +352,18 @@ class GameState(LoginState):
         answer[-1] = answer[-1].replace("\n", "")
         return answer
 
+    #Función que asigna la dificultad correspondiente al indice de la pregunta actual en el modo clásico
     def generate_difficulty_normal_mode(self):
         return self.difficulties_NM[self.number_question - 1]
 
+    #Función que asigna la dificultad correspondiente al indice de la pregunta actual en el modo infinito
     def generate_difficulty_endless_mode(self):
         if 4 * self.number_question < 100:
             return 4 * self.number_question
         else:
             return 100
 
+    #Función que genere un nuevo tema al azar para la siguiente pregunta del modo clásico sin repetir el anterior
     def generate_topic_normal_mode(self):
         random_topic = random.choice(self.topics)
         if self.topic != "":
@@ -369,30 +371,22 @@ class GameState(LoginState):
                 random_topic = random.choice(self.topics)
         return random_topic
 
+    #Función que genere dos nuevos temas al azar para la siguiente pregunta del modo temático sin repetir los anteriores
     def generate_topic_theme_mode(self):
-        # Si los anteriores eran válidos, no repetirlos
         topic1,topic2 = self.topic_selection1, self.topic_selection2
         prev_topics = {topic1, topic2} if topic1 != "" and topic2 != "" and topic1 != topic2 else set()
 
-        # Elegir dos nuevos temas diferentes entre sí y diferentes de los anteriores
         topics_left = [t for t in self.topics if t not in prev_topics]
 
         return random.sample(topics_left, 2)
 
-    def validate_question(self, option):
-        next_question = False
-        if option == self.correct:
-            self.number_question += 1
-            next_question = True
-        return next_question
-
+    #Función que hace llegar a Gemini la pregunta actual para que genere las posibles respuestas del comodín del público en el formato array adecuado
     def askPublic(self):
-        if not self.public_used:
             public = ("Estoy jugando a quien quiere ser millonario y me preguntan" + self.question +
-                      "con estas posibles respuestas" + self.option_a + self.option_b + self.option_c + self.option_d +
-                      "y quiero usar el comodin del publico. Quero que solo me muestres el texto del comodin del "
-                      "publico de la siguiente forma como en el ejemplo : "
-                      "Courrèges:15%;Miyake:60%;Ungaro:5%Cardin:20% .Pasame solo el mensaje sin nada extra ")
+                    "con estas posibles respuestas" + self.option_a + self.option_b + self.option_c + self.option_d +
+                    "y quiero usar el comodin del publico. Quiero que solo me muestres el texto del comodin del "
+                    "publico de la siguiente forma como en el ejemplo : "
+                    "Courrèges:15%;Miyake:60%;Ungaro:5%Cardin:20% .Pasame solo el mensaje sin nada extra ")
             statistics = AIClient.askAI(public)
             statistics = statistics.split(";")
             if statistics[-1] == "\n":
@@ -400,7 +394,4 @@ class GameState(LoginState):
             statistics[-1] = statistics[-1].replace("\n", "")
             self.public_used = True
             return statistics
-        else:
-            return "No se puede usar el comodin porque ya ha sido usado"
-        
 
