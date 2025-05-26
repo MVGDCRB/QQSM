@@ -112,16 +112,17 @@ class GameState(LoginState):
     #Función que fija el tema elegido en el modo temático y genera la pregunta asociada a dicho tema
     @rx.event
     def set_theme(self, topic):
-        self.topic = topic
-        self.chosen_answer = False
-        self.enable_topic = True
-        new_question = self.getAIanswer()
-        self.question = new_question[0]
-        self.option_a = new_question[1]
-        self.option_b = new_question[2]
-        self.option_c = new_question[3]
-        self.option_d = new_question[4]
-        self.correct = new_question[5]
+        if topic != self.topic:
+            self.topic = topic
+            self.chosen_answer = False
+            self.enable_topic = True
+            new_question = self.getAIanswer()
+            self.question = new_question[0]
+            self.option_a = new_question[1]
+            self.option_b = new_question[2]
+            self.option_c = new_question[3]
+            self.option_d = new_question[4]
+            self.correct = new_question[5]
 
     #Función que recoge dos nuevos temas al azar para la siguiente elección del modo temático
     @rx.event

@@ -132,7 +132,7 @@ def render_topic_choser(theme1: str, theme2:str) -> rx.Component:
         return rx.button(
             render_question_topic(theme),
             on_click=GameState.set_theme(theme),
-            disabled=GameState.enable_topic,
+            disabled=GameState.enable_topic & (GameState.topic != theme),
             style={"padding": "0", "border": "none", "background": "none"},
         )
 
@@ -201,18 +201,18 @@ def render_public_chart() -> rx.Component:
 #Panel de texto que se muestra cuando se invoca el comodín de la llamada con la respuesta de la IA
 def render_call_box() -> rx.Component:
     return rx.box(
-        rx.center( 
-                rx.text(
-                    GameState.call_text,
-                    font_size="1.1em",
-                    color="white",
-                    text_align="left",
-                    white_space="pre-wrap",
-                    word_break="break-word",
-                )
+        rx.center(
+            rx.text(
+                GameState.call_text,
+                font_size="1.1em",
+                color="white",
+                text_align="left",
+                white_space="pre-wrap",
+                word_break="break-word",
+            )
         ),
-        width="220px",
-        height="450px",
+        width="20vw",
+        height="80vh",
         background_color="#111827",
         padding="20px",
         border_radius="30px",
@@ -220,8 +220,10 @@ def render_call_box() -> rx.Component:
         box_shadow="0 0 20px rgba(255, 215, 0, 0.5)",
         overflow_y="auto",
         display="flex",
-        align_items="center",
-        justify_content="center",
+        align_items="flex-start",
+        justify_content="flex-start",
+        position="relative",
+        top="-30vh"
     )
 
 #Botón customizado para representar el comodín de la llamada
@@ -339,6 +341,11 @@ def render_vs_text() -> rx.Component:
         display="flex",
         align_items="center",
         justify_content="center",
+        _hover={
+            "transform": "scale(1.1)",
+            "filter": "brightness(1.2)",
+            "cursor": "pointer",
+        }
     )
 
 #Dado un titulo, un texto de submit, un mensaje dinámico de feedback y un evento de submit, se genera un formulario
@@ -354,15 +361,17 @@ def render_form(form_title: str, submit_btn_txt: str, feedback_message: str, on_
                 width="100%",
             ),
             render_user_input(),
-            rx.box(
+            rx.vstack(
                 render_submit_button(submit_btn_txt),
                 render_return_button("Volver","/welcome"),
+                spacing="0",
                 height="40%",
                 display="flex",
                 flex_direction="column",
                 align_items="center",
                 justify_content="center",
                 width="100%",
+                margin_top="5vh",
             ),
             render_feedback_message(feedback_message),
             height="100%",
@@ -410,6 +419,7 @@ def render_user_input()-> rx.Component:
 def render_return_button(txt:str, route: str)-> rx.Component:
     return rx.button(
                     txt,
+                    type="button",
                     on_click=rx.redirect(route),
                     class_name="hex-button subheader-style",
                     width="100%",

@@ -36,41 +36,63 @@ def leaderboard_page() -> rx.Component:
         )
     )
 
-    return rx.center(
-        render_ranking(),
+    return rx.box(
+        rx.box(
+            render_ranking(),
+            height="90vh",
+        ),
         rx.box(
             render_exit_button("/menu"),
             position="absolute",
-            top="20px",
-            left="20px",
+            top="5%",
+            left="5%",
         ),
+        display="flex",
+        flex_direction="column",
+        align_items="center",
+        justify_content="center",
+        position="relative",
         width="100vw",
         height="100vh",
         overflow="hidden",
         background_image=qqsm_background,
         background_position="center",
         background_repeat="no-repeat",
-        position="relative",
     )
 
 # Tabla del top 10
 def render_ranking()-> rx.Component:
         return rx.box(
             rx.vstack(
-                rx.text("🏆 LEADERBOARD", font_size="2em", color=Colors.GOLD),
-
                 rx.box(
-                    rx.vstack(top_rows, spacing="0", align="stretch"),
-                    max_height="400px",
-                    overflow_y="auto",
+                    rx.text("🏆 LEADERBOARD", font_size="2em", color=Colors.GOLD),
+                    height="10%",
+                    display="flex",
+                    align_items="center",
+                    justify_content="center",
                     width="100%",
                 ),
 
-                user_row,
-                spacing="4",
+                rx.box(
+                    rx.vstack(top_rows, spacing="0", align="stretch"),
+                    height="85%",
+                    width="100%",
+                ),
+
+                rx.box(
+                    user_row,
+                    height="5%",
+                    width="100%",
+                    margin_top="5%"
+                ),
+                height="100%",
+                spacing="0",
+                display="flex",
+                flex_direction="column",
+                align_items="stretch",
             ),
             width="400px",
-            padding="40px",
+            padding="10px",
             background_color=Colors.DARK_BLUE,
             border_radius="10px",
             border=f"2px solid {Colors.GOLD}",
@@ -102,4 +124,12 @@ def render_row(pos, username, score, highlight=False) -> rx.Component:
         padding="4px 8px",
         background_color=rx.cond(highlight, Colors.LEADERBOARD_ROW_HIGHLIGHT, Colors.LEADERBOARD_ROW_BG),
         border_radius="6px",
+        transition="transform 0.2s ease-in-out",
+        _hover={
+            "transform": "scale(1.02)",
+            "filter": "drop-shadow(0 0 4px rgba(255,215,0,0.7)) "
+            "drop-shadow(0 0 8px rgba(255,215,0,0.5))",
+            "border": "1px solid white",
+            "cursor": "pointer",
+        },
     )

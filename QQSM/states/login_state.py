@@ -14,18 +14,10 @@ class LoginState(rx.State):
     #True si el login se efectua correctamente
     is_authenticated: bool = False
 
-    #Función que vacía el mensaje de feedback y recarga la página
+    #Función que vacía el mensaje de feedback
     @rx.event
     def clear_message(self):
         self.login_message = ""
-        return rx.redirect("/login")
-
-    #Función que vacía el mensaje de feedback y redirige a la página register
-    @rx.event
-    def clear_and_redirect(self):
-        self.login_message = ""
-        yield
-        return rx.redirect("/register")
 
     #Evento que procesa el formulario de inicio de sesión.
     @rx.event

@@ -126,6 +126,10 @@
     clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
+.custom-title:hover {
+    transform: scale(1.05);
+}
+
 .progress-container {
     display: flex;
     justify-content: center;
@@ -197,7 +201,7 @@
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-family: 'Helvetica', sans-serif;
+    font-family: 'Copperplate', sans-serif;
     color: #FFCC80;
     text-align: center;
     margin: 0.5em 0;

@@ -13,11 +13,17 @@ FORM_TITLE: str = "¡INICIA SESIÓN!"
 SUBMIT_BTN_TEXT: str = "Iniciar sesión"
 
 #Página reflex que genera la interfaz del login de usuario
-@rx.page("/login")
+@rx.page("/login",  on_load=LoginState.clear_message())
 def login_page() -> rx.Component:
     return rx.center(
         rx.vstack(
-            rx.text(TITLE, class_name="title-style"),
+            rx.box(
+                rx.text(TITLE, class_name="title-style"),
+                height="10vh",
+                display="flex",
+                align_items="center",
+                justify_content="center"
+            ),
             rx.box(
                 render_form(FORM_TITLE, SUBMIT_BTN_TEXT, LoginState.login_message, LoginState.handle_login),
                 background_color=Colors.DARK_BLUE,
@@ -25,7 +31,7 @@ def login_page() -> rx.Component:
                 border_radius="10px",
                 border=f"2px solid {Colors.GOLD}",
                 width="33vw",
-                height="80vh",
+                height="85vh",
                 display="flex",
                 align_items="center",
                 justify_content="center",

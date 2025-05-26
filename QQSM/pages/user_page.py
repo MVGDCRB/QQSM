@@ -19,10 +19,9 @@ def user_page() -> rx.Component:
             render_profile_stats(),
         ),
         width="100vw",
-        min_height="100vh",
+        height="100vh",
         background_image=qqsm_background,
-        background_position="top center",
-        background_attachment="fixed",
+        background_position="center",
         background_repeat="no-repeat",
         position="relative",
         overflow_y="auto"
@@ -36,13 +35,14 @@ def render_profile_data() -> rx.Component:
                 rx.text(
                     "TU PERFIL",
                     class_name="title-style",
-                    text_align="center",
                     background_color=Colors.TRANSPARENT_BG,
                     padding="10px",
-                    border_radius="8px"
+                    border_radius="8px",
                 ),
                 width="100%",
-                margin_top="40px"
+                margin_top="40px",
+                display="flex",
+                justify_content="center",
             ),
             rx.box(
                 rx.vstack(
@@ -87,15 +87,16 @@ def render_profile_stats() -> rx.Component:
     return rx.vstack(
             rx.box(
                 rx.text(
-                    "Estadísticas por tema",
-                    font_size="1.4em",
-                    color=Colors.GOLD,
+                    "ESTADÍSTICAS POR TEMAS",
+                    class_name="title-style",
                     background_color=Colors.TRANSPARENT_BG,
-                    padding="8px",
-                    border_radius="8px"
+                    padding="10px",
+                    border_radius="8px",
                 ),
-                margin_top="20px",
-                width="fit-content"
+                width="100%",
+                margin_top="40px",
+                display="flex",
+                justify_content="center",
             ),
             rx.grid(
                 rx.foreach(

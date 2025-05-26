@@ -9,11 +9,10 @@ class RegisterState(rx.State):
     #Mensaje de feedback durante el registro del usuario
     register_message: str = ""
 
-    #Función que vacía el mensaje de feedback y recarga la página
+    #Función que vacía el mensaje de feedback
     @rx.event
     def clear_message(self):
         self.register_message = ""
-        return rx.redirect("/register")
 
     #Evento que procesa el formulario de registro del usuario.
     @rx.event
