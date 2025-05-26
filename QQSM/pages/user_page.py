@@ -1,12 +1,12 @@
 import reflex as rx
 from QQSM.states.user_state import UserState
-from QQSM.styles.colors import Colors
+from QQSM.styles.styles import *
 from QQSM.pages.components import render_exit_button
 
 #Página reflex que genera la interfaz del perfil de usuario
 
 @rx.page("/user", on_load=UserState.load_user_data())
-def user_page():
+def user_page() -> rx.Component:
     return rx.box(
         rx.vstack(
             rx.box(
@@ -20,8 +20,7 @@ def user_page():
         ),
         width="100vw",
         min_height="100vh",
-        background_image="url('/welcome_fondo.jpg')",
-        background_size="cover",
+        background_image=qqsm_background,
         background_position="top center",
         background_attachment="fixed",
         background_repeat="no-repeat",
@@ -69,7 +68,8 @@ def render_profile_data() -> rx.Component:
                     ),
                     spacing="3",
                     padding="20px",
-                    border_radius="8px",
+                    border_radius="10px",
+                    border=f"2px solid {Colors.GOLD}",
                     background_color=Colors.DARK_BLUE,
                 ),
                 width="fit-content",

@@ -1,7 +1,7 @@
 import reflex as rx
 from QQSM.auth import get_user_full_stats
 from QQSM.states.leaderboard_state import LeaderboardState
-from QQSM.styles.colors import Colors
+from QQSM.styles.styles import Colors
 
 #Estado reflex de user_page que gestiona la lógica del perfil del usuario logeado
 

@@ -1,6 +1,6 @@
 import reflex as rx
 from QQSM.states.game_state import GameState
-from QQSM.styles.colors import Colors
+from QQSM.styles.styles import*
 from QQSM.pages.components import*
 
 #Título del menú
@@ -8,7 +8,7 @@ TITLE: str = "¡JUEGA!"
 
 #Página reflex que genera la interfaz del menú principal de modos de juego
 @rx.page("/menu")
-def menu_page():
+def menu_page() -> rx.Component:
     return rx.box(
         render_exit_button("/welcome"),
         rx.center(
@@ -50,8 +50,7 @@ def menu_page():
         ),
         width="100vw",
         height="100vh",
-        background_image="url('/welcome_fondo.jpg')",
-        background_size="cover",
+        background_image=qqsm_background,
         background_position="center",
         background_repeat="no-repeat",
         position="relative",

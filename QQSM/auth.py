@@ -5,7 +5,13 @@ from db.database import SessionLocal
 from datetime import datetime
 from sqlalchemy.orm.attributes import flag_modified
 
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+#Posibles temáticas de las preguntas
+topics = ["arte", "fisica", "historia", "quimica", "musica", "matematicas",
+        "literatura", "biologia", "historia de la television", "videojuegos",
+        "moda", "tecnologia", "cocina", "deportes", "geografia"]
 
 #Función que actualiza la puntuación máxima del usuario en la base de datos, usando la puntuación actual del usuario
 def update_max_score(username: str, score: int):
@@ -48,11 +54,7 @@ def get_user_full_stats(username: str):
             if not user.tema_stats or not isinstance(user.tema_stats, dict) or len(user.tema_stats) < 15:
                 default_stats = {
                     tema: {"correctas": 0, "falladas": 0}
-                    for tema in [
-                        "arte", "fisica", "historia", "quimica", "musica", "matematicas",
-                        "literatura", "biologia", "historia de la television", "videojuegos",
-                        "moda", "tecnologia", "cocina", "deportes", "geografia"
-                    ]
+                    for tema in topics
                 }
                 user.tema_stats = default_stats
                 db.commit() 
@@ -140,11 +142,8 @@ def create_user(username: str, password: str, db: Session):
         
         tema_stats_default = {
             tema: {"correctas": 0, "falladas": 0}
-            for tema in [
-                "arte", "fisica", "historia", "quimica", "musica", "matematicas",
-                "literatura", "biologia", "historia de la television", "videojuegos",
-                "moda", "tecnologia", "cocina", "deportes", "geografia"
-            ]
+            for tema in topics
+
         }
 
         new_user = User(

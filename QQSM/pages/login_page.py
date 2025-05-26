@@ -1,6 +1,6 @@
 import reflex as rx
 from QQSM.states.login_state import LoginState
-from QQSM.styles.colors import Colors
+from QQSM.styles.styles import *
 from QQSM.pages.components import*
 
 #Título de la página
@@ -14,7 +14,7 @@ SUBMIT_BTN_TEXT: str = "Iniciar sesión"
 
 #Página reflex que genera la interfaz del login de usuario
 @rx.page("/login")
-def login_page():
+def login_page() -> rx.Component:
     return rx.center(
         rx.vstack(
             rx.text(TITLE, class_name="title-style"),
@@ -24,7 +24,6 @@ def login_page():
                 padding="20px",
                 border_radius="10px",
                 border=f"2px solid {Colors.GOLD}",
-                box_shadow="0px 0px 15px rgba(255, 255, 255, 0.2)",
                 width="33vw",
                 height="80vh",
                 display="flex",
@@ -37,8 +36,7 @@ def login_page():
         ),
         width="100vw",
         height="100vh",
-        background_image="url('/welcome_fondo.jpg')",
-        background_size="cover",
+        background_image=qqsm_background,
         background_position="center",
         background_repeat="no-repeat",
         display="flex",

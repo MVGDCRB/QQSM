@@ -1,6 +1,6 @@
 import reflex as rx
 from QQSM.states.register_state import RegisterState
-from QQSM.styles.colors import Colors
+from QQSM.styles.styles import *
 from QQSM.pages.components import *
 
 #Título de la página
@@ -14,7 +14,7 @@ SUBMIT_BTN_TEXT: str = "Registrar usuario"
 
 #Página reflex que genera la interfaz del registro de usuario
 @rx.page("/register")
-def register_page():
+def register_page() -> rx.Component:
     return rx.center(
         rx.vstack(
             rx.text(TITLE, class_name="title-style"),
@@ -37,8 +37,7 @@ def register_page():
         ),
         width="100vw",
         height="100vh",
-        background_image="url('/welcome_fondo.jpg')",
-        background_size="cover",
+        background_image=qqsm_background,
         background_position="center",
         background_repeat="no-repeat",
         display="flex",

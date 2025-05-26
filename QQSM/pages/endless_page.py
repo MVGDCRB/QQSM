@@ -8,7 +8,7 @@ TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO?"
 
 #Página reflex que genera la interfaz del modo de juego endless
 @rx.page(route="/endless")
-def endless_page():
+def endless_page() -> rx.Component:
     #Esquema general de la página con upper, lower, right, left y central panel
     return rx.box(
         render_upper_panel(),
@@ -39,7 +39,7 @@ def endless_page():
 
 #Panel superior con botón de salida, título y botón de siguiente
 
-def render_upper_panel():
+def render_upper_panel() -> rx.Component:
     return rx.hstack(
         render_exit_button("/menu"),
         render_header("¿QUIÉN QUIERE SER MILLONARIO?"),
@@ -51,7 +51,7 @@ def render_upper_panel():
     )
 
 #Panel central con el enunciado y tema de la pregunta, así como las 4 posibles respuestas
-def render_central_panel():
+def render_central_panel() -> rx.Component:
     return rx.vstack(
         rx.hstack(
             render_question_title(GameState.question),
@@ -70,21 +70,21 @@ def render_central_panel():
     )
 
 #Panel con el gráfico de barras con las respuestas del público, si se muestran
-def render_right_panel():
+def render_right_panel() -> rx.Component:
     return rx.cond(
         GameState.public_used,
         render_public_chart()
     )
 
 #Panel con la caja de texto con la respuesta de la IA a la llamada, si se muestra
-def render_left_panel():
+def render_left_panel() -> rx.Component:
     return rx.cond(
         GameState.call_used,
         render_call_box()
     )
 
 # Panel inferior con los tres botones de comodín
-def render_lower_panel():
+def render_lower_panel() -> rx.Component:
     return rx.center(
         rx.hstack(
             render_joker_call(),

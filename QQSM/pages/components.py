@@ -1,6 +1,6 @@
 import reflex as rx
 from QQSM.states.game_state import GameState
-from QQSM.styles.colors import Colors
+from QQSM.styles.styles import Colors
 
 #Biblioteca de componentes reflex con estilos .css customizados
 
@@ -441,14 +441,14 @@ def render_feedback_message(message:str)-> rx.Component:
                 width="100%",
             )
 #Botón circular de redirección a route que toma su fondo de /buttons/image y muestra text cuando se hace hover sobre el
-def render_redirect_circular_button(text: str, image:str, route: str):
+def render_redirect_circular_button(text: str, image:str, route: str) -> rx.Component:
     return rx.button(
         render_circular_icon("buttons", image, text),
         on_click=rx.redirect(route)
     )
 
 #Botón customizado hexagonal que inicializa el modo de juego route y presenta el texto txt
-def render_game_mode_button(txt:str, route:str):
+def render_game_mode_button(txt:str, route:str) -> rx.Component:
     return rx.button(
         txt,
         on_click=GameState.initialize_game(route),

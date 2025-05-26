@@ -1,11 +1,12 @@
 import reflex as rx
 from QQSM.states.login_state import LoginState
-from QQSM.auth import update_user_stats, update_max_score
+from QQSM.auth import update_user_stats, update_max_score, topics
 from QQSM.ai_client import AIClient
 from openai import OpenAI
 from QQSM.secrets import Secrets
 import random
 import re
+
 
 #Estado reflex de game_page que gestiona la lógica del juego
 
@@ -33,11 +34,6 @@ class GameState(LoginState):
 
     #Índice de la pregunta actual
     number_question: int = 1
-
-    #Posibles temáticas de las preguntas
-    topics = ["arte", "fisica", "historia", "quimica", "musica", "matematicas",
-                       "literatura", "biologia", "historia de la television", "videojuegos",
-                       "moda", "tecnologia", "cocina", "deportes", "geografia"]
     
     #Tema de la pregunta actual
     topic: str = ""
@@ -364,10 +360,10 @@ class GameState(LoginState):
 
     #Función que genere un nuevo tema al azar para la siguiente pregunta del modo clásico sin repetir el anterior
     def generate_topic_normal_mode(self):
-        random_topic = random.choice(self.topics)
+        random_topic = random.choice(topics)
         if self.topic != "":
             while random_topic == self.topic:
-                random_topic = random.choice(self.topics)
+                random_topic = random.choice(topics)
         return random_topic
 
     #Función que genere dos nuevos temas al azar para la siguiente pregunta del modo temático sin repetir los anteriores
@@ -375,7 +371,7 @@ class GameState(LoginState):
         topic1,topic2 = self.topic_selection1, self.topic_selection2
         prev_topics = {topic1, topic2} if topic1 != "" and topic2 != "" and topic1 != topic2 else set()
 
-        topics_left = [t for t in self.topics if t not in prev_topics]
+        topics_left = [t for t in topics if t not in prev_topics]
 
         return random.sample(topics_left, 2)
 

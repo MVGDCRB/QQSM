@@ -1,5 +1,5 @@
 import reflex as rx
-from QQSM.styles.colors import Colors
+from QQSM.styles.styles import Colors
 from QQSM.states.game_state import GameState
 from QQSM.pages.components import *
 
@@ -11,7 +11,7 @@ IA_SELECTION_TEXT = "Elige la IA que vaya a responder la pregunta"
 
 #Página reflex que genera la interfaz del selector de IA rival en el modo máquina VS máquina
 @rx.page(route="/maquinaVS")
-def maquina_vs_page():
+def maquina_vs_page() -> rx.Component:
     #Esquema general de la página con upper y central panel
     return rx.box(
         render_upper_panel(),
@@ -33,7 +33,7 @@ def maquina_vs_page():
     )
 
 #Panel superior con botón de salida y título
-def render_upper_panel():
+def render_upper_panel() -> rx.Component:
     return rx.hstack(
         render_exit_button("/menu"),
         render_header(TITLE),

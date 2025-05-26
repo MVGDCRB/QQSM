@@ -1,7 +1,7 @@
 import reflex as rx
 from QQSM.states.login_state import LoginState
 from QQSM.states.leaderboard_state import LeaderboardState
-from QQSM.styles.colors import Colors
+from QQSM.styles.styles import *
 from QQSM.pages.components import render_exit_button
 
 #Datos del usuario loggeado
@@ -12,7 +12,7 @@ top_rows: rx.Component = None
 
 #Página reflex que genera la interfaz del ranking de jugadores
 @rx.page(route="/leaderboard", on_load=LeaderboardState.load())
-def leaderboard_page():
+def leaderboard_page() -> rx.Component:
 
     global user_row, top_rows
     # Se inicializan los datos del usuario
@@ -47,8 +47,7 @@ def leaderboard_page():
         width="100vw",
         height="100vh",
         overflow="hidden",
-        background_image="url('/welcome_fondo.jpg')",
-        background_size="cover",
+        background_image=qqsm_background,
         background_position="center",
         background_repeat="no-repeat",
         position="relative",
@@ -73,12 +72,13 @@ def render_ranking()-> rx.Component:
             width="400px",
             padding="40px",
             background_color=Colors.DARK_BLUE,
-            border_radius="12px",
+            border_radius="10px",
+            border=f"2px solid {Colors.GOLD}",
             position="relative",
         )
 
 #Render de cada fila de la tabla
-def render_row(pos, username, score, highlight=False):
+def render_row(pos, username, score, highlight=False) -> rx.Component:
     return rx.hstack(
         rx.text(
             f"{pos}.",

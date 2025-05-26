@@ -8,7 +8,7 @@ TITLE: str = "¿QUIÉN QUIERE SER MILLONARIO?"
 
 #Página reflex que genera la interfaz del modo de juego máquina VS máquina
 @rx.page(route="/GeminiVS")
-def gemini_vs_ia_page():
+def gemini_vs_ia_page() -> rx.Component:
     #Esquema general de la página con upper, lower y central panel
     return rx.box(
         render_upper_panel(),
@@ -34,7 +34,7 @@ def gemini_vs_ia_page():
     )
 
 #Panel superior con botón de salida, título y botón de siguiente
-def render_upper_panel():
+def render_upper_panel() -> rx.Component:
     return rx.hstack(
         render_exit_button("/menu"),
         render_header(TITLE),
@@ -46,7 +46,7 @@ def render_upper_panel():
     )
 
 #Panel central con el enunciado y tema de la pregunta, así como las 4 posibles respuestas
-def render_central_panel():
+def render_central_panel() -> rx.Component:
     return rx.vstack(
         rx.hstack(
             render_question_title(GameState.question),
@@ -67,7 +67,7 @@ def render_central_panel():
 #No hay paneles izquierdo ni derecho porque no hay comodines en el modo IA vs
 
 #Panel inferior, con los iconos de las IAs que están compitiendo y el texto VS costumizado entre ellas.Actualmente la primera siempres es Gemini.
-def render_lower_panel():
+def render_lower_panel() -> rx.Component:
     return rx.center(
         rx.hstack(
             render_ia_icon("gemini"),
