@@ -206,7 +206,7 @@ def render_call_box() -> rx.Component:
                 GameState.call_text,
                 font_size="1.1em",
                 color="white",
-                text_align="left",
+                text_align="center",
                 white_space="pre-wrap",
                 word_break="break-word",
             )

@@ -117,7 +117,7 @@ class GameState(LoginState):
             self.chosen_answer = False
             self.enable_topic = True
             new_question = self.getAIanswer()
-            if len(new_question) != 6:
+            if len(new_question) == 6:
                 self.question = new_question[0]
                 self.option_a = new_question[1]
                 self.option_b = new_question[2]
