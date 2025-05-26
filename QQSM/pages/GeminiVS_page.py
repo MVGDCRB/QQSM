@@ -36,7 +36,7 @@ def gemini_vs_ia_page() -> rx.Component:
 #Panel superior con botón de salida, título y botón de siguiente
 def render_upper_panel() -> rx.Component:
     return rx.hstack(
-        render_exit_button("/menu"),
+        render_exit_button("/maquinaVS"),
         render_header(TITLE),
         render_next_button(True),
         width="100%",

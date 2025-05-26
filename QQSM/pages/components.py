@@ -202,7 +202,7 @@ def render_public_chart() -> rx.Component:
 def render_call_box() -> rx.Component:
     return rx.box(
         rx.center(
-            rx.text(
+            rx.markdown(
                 GameState.call_text,
                 font_size="1.1em",
                 color="white",

@@ -117,12 +117,15 @@ class GameState(LoginState):
             self.chosen_answer = False
             self.enable_topic = True
             new_question = self.getAIanswer()
-            self.question = new_question[0]
-            self.option_a = new_question[1]
-            self.option_b = new_question[2]
-            self.option_c = new_question[3]
-            self.option_d = new_question[4]
-            self.correct = new_question[5]
+            if len(new_question) != 6:
+                self.question = new_question[0]
+                self.option_a = new_question[1]
+                self.option_b = new_question[2]
+                self.option_c = new_question[3]
+                self.option_d = new_question[4]
+                self.correct = new_question[5]
+            else:
+                self.handle_generation_error()
 
     #Función que recoge dos nuevos temas al azar para la siguiente elección del modo temático
     @rx.event
@@ -233,10 +236,10 @@ class GameState(LoginState):
             self.call_text = ""
             
             message = (
-                "En '¿Quién quiere ser millonario?', la pregunta es: " + self.question +
-                "Opciones (a,b,c,d): " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
-                + "Usando el comodín de la llamada, muestra solo con el siguiente formato: "
-                "Saludo simpático-La respuesta correcta es letra) opcion: justificación breve y simpática de por qué es la opción correcta."
+                "Te llaman usando el comodín desde '¿Quién quiere ser millonario?', la pregunta es: " + self.question +
+                "Opciones (A,B,C,D): " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
+                + " muestra tu respuesta con el siguiente formato: "
+                "Saludo simpático+La respuesta correcta es: letra)+opcion en negrita markdown+justificación breve y simpática de por qué es la opción correcta."
             )
 
             text = AIClient.askGemini(message)
@@ -245,52 +248,47 @@ class GameState(LoginState):
             self.call_used = True
         else:
             self.feedback = "❌ Ya has usado el comodín de la llamada."
-        
+
+    #Función auxiliar que dada la pregunta y opciones actuales construye un prompt para preguntar a cualquiera de las IAs para recibir una única letra (A,B,C,D) como respuesta
+    def generate_question_prompt(self) -> str:
+        return (
+            f"Responde a la pregunta: {self.question} "
+            f"Con una de las pciones (A, B, C, D): {self.option_a}, {self.option_b}, {self.option_c}, {self.option_d}. "
+            "Muestrame SOLO LA LETRA de la solución, sin negrita ni ningún efecto, "
+            "ni caracter especial, solo la letra(A, B, C o D)."
+        )
 
     #Función que hace llegar la pregunta actual a DeepSeek y obtiene su respuesta en formato letra
     @rx.event
     def deep_seek_answer(self):
-        
-        message = (
-            "Responde a la pregunta: " + self.question +
-            "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " + self.option_d + "."
-            + "Muestrame SOLO LA LETRA de la solucion, ni ningun efecto, ni ningun caracter especial, "
-            "solo la letra. Opciones: A, B, C, D. "
-        )
-
-        answer = AIClient.askDeepSeek(message)
-
-        return answer
+        prompt = self.generate_question_prompt()
+        return self.safe_ai_call(lambda: AIClient.askDeepSeek(prompt))
         
     #Función que hace llegar la pregunta actual a OpenAI y obtiene su respuesta en formato letra
     @rx.event
     def openai_answer(self):
-
-        message = ("Responde a la pregunta: " + self.question +
-                            "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", "
-                            + self.option_d + "." + "Muestrame SOLO LA LETRA de la solucion, sin negrita "
-                                                    "ni ningun efecto, ni ningun caracter especial, "
-                                                    "solo la letra. Opciones: A, B, C, D."
-        )
-
-        answer = AIClient.askOpenAI(message)
-
-        return answer
+        prompt = self.generate_question_prompt()
+        return self.safe_ai_call(lambda: AIClient.askOpenAI(prompt))
     
     #Función que hace llegar la pregunta actual a LLamaAI y obtiene su respuesta en formato letra
     @rx.event
     def llama_answer(self):
+        prompt = self.generate_question_prompt()
+        return self.safe_ai_call(lambda: AIClient.askLlamaAI(prompt))
+    
+    #Ejecuta la llamada a la ai call() capturando y manejando excepciones.
+    def safe_ai_call(self, call) -> str:
+        try:
+            return call()
+        except Exception as e:
+            return self.handle_ai_error(e)
         
-        message = ("Responde a la pregunta: " + self.question +
-                    "Opciones: " + self.option_a + ", " + self.option_b + ", " + self.option_c + ", " +
-                            self.option_d + "." + "Muestrame SOLO LA LETRA de la solucion, sin negrita "
-                                    "ni ningun efecto, ni ningun caracter especial, "
-                                                    "solo la letra. Opciones: A, B, C, D."
-        )
-        answer = AIClient.askLlamaAI(message)
-        
-        print(answer)
-        return answer
+    #Maneja un posible error al llamar a la API de una IA a nivel interfaz
+    def handle_ai_error(self, e:Exception):
+        print("Error en AI call:", e)
+        self.button_classes = {opt: "hex-button disabled" for opt in ("A", "B", "C", "D")}
+        self.feedback = "Se produjo un error al llamar a la API de la IA rival"
+        return None
     
     #Función que actualiza las variables de estado para generar una nueva pregunta según el modo de juego
     @rx.event
@@ -313,42 +311,55 @@ class GameState(LoginState):
             difficulty = self.generate_difficulty_normal_mode()
             new_question = self.empty_question()
 
-        self.question = new_question[0]
-        self.option_a = new_question[1]
-        self.option_b = new_question[2]
-        self.option_c = new_question[3]
-        self.option_d = new_question[4]
-        self.correct = new_question[5]
-        self.difficulty = difficulty
-        self.feedback = ""
-        self.call_text = ""
+        if len(new_question) == 6:
+                self.question = new_question[0]
+                self.option_a = new_question[1]
+                self.option_b = new_question[2]
+                self.option_c = new_question[3]
+                self.option_d = new_question[4]
+                self.correct = new_question[5]
 
-        if self.mode == "/deepSeekIA":
-            answer = self.deep_seek_answer()
-            self.validate_answer(answer)
-        elif self.mode == "/openAI":
-            answer = self.openai_answer()
-            self.validate_answer(answer)
-        elif self.mode == "/llamaIA":
-            answer = self.llama_answer()
-            self.validate_answer(answer)
+                self.difficulty = difficulty
+                self.feedback = ""
+                self.call_text = ""
+                if self.mode == "/deepSeekIA":
+                    answer = self.deep_seek_answer()
+                    if answer:
+                        self.validate_answer(answer)
+                elif self.mode == "/openAI":
+                    answer = self.openai_answer()
+                    if answer:
+                        self.validate_answer(answer)
+                elif self.mode == "/llamaIA":
+                    answer = self.llama_answer()
+                    if answer:
+                        self.validate_answer(answer)
 
+        else:
+                self.handle_generation_error()
+        
     #Función que solicita a GeminiAI que genere una pregunta para el tema y dificultad actual y traduce la respuesta a un array con las opciones de respuesta y la respuesta correcta
     def getAIanswer(self):
-        question = ("Quiero que me hagas una pregunta como si fuera quien quiere ser millonario con una dificultad " +
+        question = ("Eres el presentador del consurso: ¿quien quiere ser millonario?, debes generar una pregunta con una respusta concreta, concisa, directa."
+                    "El nivel de dificultad de la pregunta debe ser depor" +
                     str(self.difficulty) + "/100 y que el tema de la pregunta sea " + self.topic +
-                    ". Tambien quiero que el formato este separado por punto y coma donde me muestre la pregunta las "
-                    "cuatro respuestas y la pregunta correcta.Como ejemplo Pregunta:;¿cual es la capital de "
-                    "España?;Paris;Roma;Madrid;Wansinton;Madrid; Pasame solo el mensaje sin nada extra")
+                    "El formato de la respuesta consta de 6 elementos, y solo 6, separados por ; "
+                    "enunciado de la pregunta entre ¿?, cuatro respuestas no ambiguas, también concisas y la respuesta correcta."
+                    "No debes generar NINGÚN elemento adicional"
+                    "Por ejemplo, para la pregunta:¿Cual es la capital de "
+                    "España? y opciones (Paris, Roma, Madrid, Washington)"
+                    "se devuelve: ¿Cual es la capital de España?;Paris;Roma;Madrid;Washington;Madrid")
         answer = AIClient.askGemini(question)
-        answer = answer.split(";")
-        if answer[0] == " " or answer[0] == "":
-            del answer[0]
-        del answer[0]
-        if answer[-1] == "\n":
-            del answer[-1]
-        answer[-1] = answer[-1].replace("\n", "")
+        answer = answer.strip().split(";")
         return answer
+    
+    #Función que actualiza el estado de la UI si se produce una generación incorrecta de la pregunta
+    def handle_generation_error(self):
+        self.chosen_answer  = True
+        self.correct_answer = True
+        self.feedback = "Se produjo un error interno al generar la pregunta"
+        self.button_classes = {opt: "hex-button disabled" for opt in ("A", "B", "C", "D")}
+
 
     #Función que asigna la dificultad correspondiente al indice de la pregunta actual en el modo clásico
     def generate_difficulty_normal_mode(self):
@@ -381,10 +392,9 @@ class GameState(LoginState):
     #Función que hace llegar a Gemini la pregunta actual para que genere las posibles respuestas del comodín del público en el formato array adecuado
     def askPublic(self):
             public = ("Estoy jugando a quien quiere ser millonario y me preguntan" + self.question +
-                    "con estas posibles respuestas" + self.option_a + self.option_b + self.option_c + self.option_d +
-                    "y quiero usar el comodin del publico. Quiero que solo me muestres el texto del comodin del "
-                    "publico de la siguiente forma como en el ejemplo : "
-                    "Courrèges:15%;Miyake:60%;Ungaro:5%Cardin:20% .Pasame solo el mensaje sin nada extra ")
+                    "con estas posibles respuestas(A,B,C,D)" + self.option_a + self.option_b + self.option_c + self.option_d +
+                    "y quiero usar el comodin del publico. Responde con el formato opcion:porcentaje; como en el ejemplo: "
+                    "Courrèges:15%;Miyake:60%;Ungaro:5%;Cardin:20%.Pasame solo el mensaje sin nada extra ")
             statistics = AIClient.askGemini(public)
             statistics = statistics.split(";")
             if statistics[-1] == "\n":
