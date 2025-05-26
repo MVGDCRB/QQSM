@@ -15,7 +15,7 @@
     padding: 10px 50px;
     background: linear-gradient(to bottom, #1e3a8a, #0a0a1a);
     color: #ffcc80;
-    border: 2px solid #ffffcc; /* Mantiene el borde SOLO en el cuerpo */
+    border: 2px solid #ffffcc;
     text-transform: uppercase;
     font-weight: bold;
     cursor: pointer;
@@ -26,7 +26,7 @@
     display: flex;
     align-items: center;
     transition: all 0.3s ease-in-out;
-    clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0% 50%); /* Ajusta las puntas en un solo elemento */
+    clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0% 50%);
 }
 
 .hex-button.success {
@@ -159,17 +159,61 @@
 }
 
 .title-style {
-    font-size: 29px;
-    font-weight: bold;
-    text-align: center;
-    color: gold;
-    text-shadow:
-        0 0 5px rgba(0, 0, 0, 0.7),
-        0 0 10px rgba(0, 0, 0, 0.6);
+    font-size: 29px;                           /* tamaño original */
+    font-weight: 900;                          /* muy negrita */
+    text-transform: uppercase;                 /* mayúsculas */
+    letter-spacing: 4px;                       /* espacio extra */
     font-family: 'Copperplate', sans-serif;
-    border: none;
-    letter-spacing: 2px;
-    transform: skew(-8deg);
+
+    /* Gradient text */
+    background: linear-gradient(90deg, #CCAA00, #E3B800, #CCAA00);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+
+    text-shadow:
+        0 0 5px rgba(204, 170, 0, 0.8),    /* dorado anaranjado suave */
+        0 0 15px rgba(204, 170, 0, 0.4);   /* dorado tenue muy suave */
+
+    /* Inclinación sutil */
+    transform: skew(-6deg);
+
+    /* Animación de pulso de escala */
+    display: inline-block;
+    animation: scale-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scale-pulse {
+  0%, 100% {
+    transform: skew(-6deg) scale(1);
+  }
+  50% {
+    transform: skew(-6deg) scale(1.05);
+  }
+}
+
+.subheader-style {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Helvetica', sans-serif;
+    color: #FFCC80;
+    text-align: center;
+    margin: 0.5em 0;
+    display: inline-block;
+
+    /* Animación mínima de escala (sin brillos) */
+    animation: sub-scale 2s ease-in-out infinite;
+}
+
+@keyframes sub-scale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
 }
 
 .joker-button {

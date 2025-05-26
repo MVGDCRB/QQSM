@@ -18,7 +18,7 @@ def render_header(text: str) -> rx.Component:
         rx.text(
             text,
             class_name="title-style",
-            margin="0px"
+            margin="0px",
         ),
         width="100%",
         padding="0px",
@@ -29,13 +29,8 @@ def render_header(text: str) -> rx.Component:
 def render_subheader(txt: str) -> rx.Component:
     return rx.text(
         txt,
-        color=Colors.ORANGE_BORDER,
-        font_size="1.5em",
-        font_weight="bold",
-        text_transform="uppercase",
-        text_align="center",
-        letter_spacing="1px",
-        width="100%",
+        class_name="subheader-style",
+        width="100%"
     )
 
 #Botón customizado con forma de flecha que dispara el evento de GameState next_round() para pasar a la siguiente pregunta, si se cumple la condicion show
@@ -416,7 +411,7 @@ def render_return_button(txt:str, route: str)-> rx.Component:
     return rx.button(
                     txt,
                     on_click=rx.redirect(route),
-                    class_name="hex-button",
+                    class_name="hex-button subheader-style",
                     width="100%",
                 )
 
@@ -425,7 +420,7 @@ def render_submit_button(btn_txt: str)-> rx.Component:
     return rx.button(
                     btn_txt,
                     type="submit",
-                    class_name="hex-button",
+                    class_name="hex-button subheader-style",
                     width="100%",
                     margin_bottom="10%",
                 )
@@ -452,7 +447,7 @@ def render_game_mode_button(txt:str, route:str) -> rx.Component:
     return rx.button(
         txt,
         on_click=GameState.initialize_game(route),
-        class_name="hex-button",
+        class_name="hex-button subheader-style",
         width="300px",
         margin_bottom="10%",
     )

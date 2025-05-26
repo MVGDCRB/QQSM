@@ -86,10 +86,10 @@ class GameState(LoginState):
         self.number_question = 1
         self.difficulty = 0
         self.button_classes = {
-            "A": "hex-button",
-            "B": "hex-button",
-            "C": "hex-button",
-            "D": "hex-button",
+            "A": "hex-button subheader-style",
+            "B": "hex-button subheader-style",
+            "C": "hex-button subheader-style",
+            "D": "hex-button subheader-style",
         }
         self.enable_topic = False
         self.mode = ruta
@@ -144,10 +144,10 @@ class GameState(LoginState):
         self.public_items = []
 
         self.button_classes = {
-            "A": "hex-button",
-            "B": "hex-button",
-            "C": "hex-button",
-            "D": "hex-button",
+            "A": "hex-button subheader-style",
+            "B": "hex-button subheader-style",
+            "C": "hex-button subheader-style",
+            "D": "hex-button subheader-style",
         }
 
         if self.number_question == 15 and self.mode in ["/deepSeekIA", "/openAI", "/llamaIA", "/game", "/theme"]:
@@ -179,6 +179,8 @@ class GameState(LoginState):
         for key in ["A", "B", "C", "D"]:
             if getattr(self, f"option_{key.lower()}") == self.correct:
                 self.button_classes[key] = "hex-button success"
+            elif self.button_classes[key] == "hex-button subheader-style":
+                self.button_classes[key] = "hex-button"
 
     #Función que actualiza el estado de los botones al usuar el comodín 50:50 deshabilitando dos de las opciones
     @rx.event

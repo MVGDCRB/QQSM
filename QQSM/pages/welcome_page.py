@@ -14,8 +14,8 @@ def welcome_page() -> rx.Component:
             rx.form(
                 rx.vstack(
                     render_header(TITLE),
-                    rx.button("Iniciar Sesión", on_click=LoginState.clear_message,class_name="hex-button"),
-                    rx.button("Registrarse", on_click=RegisterState.clear_message,class_name="hex-button"),
+                    rx.button("Iniciar Sesión", on_click=LoginState.clear_message,class_name="hex-button subheader-style"),
+                    rx.button("Registrarse", on_click=RegisterState.clear_message,class_name="hex-button subheader-style"),
                     spacing="9",
                     align="center",
                 ),
