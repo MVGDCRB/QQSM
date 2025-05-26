@@ -117,7 +117,7 @@ class GameState(LoginState):
             self.chosen_answer = False
             self.enable_topic = True
             new_question = self.getAIanswer()
-            if len(new_question) == 6:
+            if new_question and len(new_question) == 6:
                 self.question = new_question[0]
                 self.option_a = new_question[1]
                 self.option_b = new_question[2]
@@ -311,7 +311,7 @@ class GameState(LoginState):
             difficulty = self.generate_difficulty_normal_mode()
             new_question = self.empty_question()
 
-        if len(new_question) == 6:
+        if new_question and len(new_question) == 6:
                 self.question = new_question[0]
                 self.option_a = new_question[1]
                 self.option_b = new_question[2]
@@ -340,17 +340,28 @@ class GameState(LoginState):
         
     #Función que solicita a GeminiAI que genere una pregunta para el tema y dificultad actual y traduce la respuesta a un array con las opciones de respuesta y la respuesta correcta
     def getAIanswer(self):
-        question = ("Eres el presentador del consurso: ¿quien quiere ser millonario?, debes generar una pregunta con una respusta concreta, concisa, directa."
-                    "El nivel de dificultad de la pregunta debe ser depor" +
-                    str(self.difficulty) + "/100 y que el tema de la pregunta sea " + self.topic +
+        question = ("Debes generar una pregunta de concurso de cultura general."
+                    "El porcentaje de dificultad de la pregunta es" + str(self.difficulty)+
+                    "El tema de la pregunta es " + self.topic +
                     "El formato de la respuesta consta de 6 elementos, y solo 6, separados por ; "
-                    "enunciado de la pregunta entre ¿?, cuatro respuestas no ambiguas, también concisas y la respuesta correcta."
+                    "enunciado de la pregunta debe ir entre ¿?, cuatro respuestas no ambiguas, también concisas y la respuesta correcta."
+                    "Evita que la respuesta o palabras similares aparezcan ya en el enunciado de la pregunta."
                     "No debes generar NINGÚN elemento adicional"
                     "Por ejemplo, para la pregunta:¿Cual es la capital de "
                     "España? y opciones (Paris, Roma, Madrid, Washington)"
                     "se devuelve: ¿Cual es la capital de España?;Paris;Roma;Madrid;Washington;Madrid")
         answer = AIClient.askGemini(question)
         answer = answer.strip().split(";")
+        prompt_text = answer[0]
+        match = re.search(r'¿[^?]*\?', prompt_text)
+        if match:
+            answer[0] = match.group(0)
+        else:
+            return None
+        correct = answer[-1]
+        if answer.count(correct) < 2:
+            print(f"La respuesta correcta '{correct}' no está repetida en la lista {answer}")
+            return None
         return answer
     
     #Función que actualiza el estado de la UI si se produce una generación incorrecta de la pregunta

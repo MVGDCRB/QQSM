@@ -6,6 +6,8 @@ from QQSM.secrets import Secrets
 import requests
 from typing import Any, Dict
 import time, random
+from google.generativeai.protos import GenerateTextRequest
+
 
 #Clase que genera la comunicación directa con las IAs
 
@@ -21,6 +23,7 @@ class AIClient:
     def askGemini(prompt: str)-> str:
         return AIClient._model.generate_content(prompt).text
 
+    
 
     #Función que hace llegar un prompt a DeepSeek y recoge su respuesta
     def askDeepSeek(prompt: str)-> str:
