@@ -22,6 +22,7 @@ QQSM recolecta estadísticas de juego de cada usuario (aciertos, tiempos, puntua
 * **PostgreSQL**: base de datos relacional para almacenamiento de estadísticas.
 * **SQLAlchemy**: ORM para interacción con la base de datos.
 * **Passlib\[bcrypt]**: gestión de hashing y autenticación segura.
+* **ChatGPT**: generación de imágenes y apoyo en la estructuración y depuración de código.
 
 ## Guía de Instalación
 
@@ -153,8 +154,10 @@ La aplicación se abrirá por defecto en [http://localhost:3000](http://localhos
 
 ## Recursos
 
+- **Repositorio del proyecto**: [https://github.com/MVGDCRB/QQSM](https://github.com/MVGDCRB/QQSM)
 - **Carpeta `img/`**: contiene imágenes utilizadas en la interfaz y assets del proyecto.
 - **Vídeo demo**: [Ver demostración](https://youtu.be/XMeuNWvVXZc)
+
 
 
 ## Autores
